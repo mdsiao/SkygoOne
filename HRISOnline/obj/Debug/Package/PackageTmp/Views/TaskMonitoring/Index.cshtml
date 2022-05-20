@@ -1,0 +1,1272 @@
+﻿@model HRISOnline.Objects.SpartPartsSampling
+
+@{
+    ViewBag.Title = "Task Monitoring";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="~/Content/loadBar/loadme.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+  <style>
+    input[type='number'] { font-size: 25px; }
+</style>
+
+<script>
+    function OpenModal(type) {
+        if (type == 1) {
+            $('.modal-title').html("Confirmation");
+            $('.modal-body').html("Are you sure you want to submit your task monitoring?");
+
+            $('#type-id1').val(type);
+            $('#myModal1').modal();
+        }
+        else if (type == 2) {
+            $('.modal-title').html("Confirmation");
+            $('.modal-body').html("Are you sure you want to submit your task monitoring?");
+
+            $('#type-id2').val(type);
+            $('#myModal2').modal()
+        }
+        else if (type == 3) {
+            $('.modal-title').html("Confirmation");
+            $('.modal-body').html("Are you sure you want to submit your task monitoring?");
+
+            $('#type-id3').val(type);
+            $('#myModal3').modal()
+        }
+        else if (type == 4) {
+            $('.modal-title').html("Confirmation");
+            $('.modal-body').html("Are you sure you want to submit your task monitoring?");
+
+            $('#type-id4').val(type);
+            $('#myModal4').modal()
+        }
+        else if (type == 5) {
+            $('.modal-title').html("Confirmation");
+            $('.modal-body').html("Are you sure you want to submit your task monitoring?");
+
+            $('#type-id5').val(type);
+            $('#myModal5').modal()
+        }
+        else if (type == 6) {
+            $('.modal-title').html("Confirmation");
+            $('.modal-body').html("Are you sure you want to submit your task monitoring?");
+
+            $('#type-id6').val(type);
+            $('#myModal6').modal()
+        }
+        else if (type == 7) {
+            $('.modal-title').html("Confirmation");
+            $('.modal-body').html("Are you sure you want to submit your task monitoring?");
+
+            $('#type-id7').val(type);
+            $('#myModal7').modal()
+        }
+    }
+
+    function CashCountCollection() {
+
+        var EmpID = '@Session["intMstEmpPersonal"]';
+        var CashCountCollectionSKYGO = $('#ccCollectionSKYGO').val();
+        var CashCountAccountabilitySKYGO = $('#ccAccountabilitySKYGO').val();
+        var datCollectionDateSKYGO = $('#CollectionDateSKYGO').val();
+        var CashCountCollectionSNDC = $('#ccCollectionSNDC').val();
+        var CashCountAccountabilitySNDC = $('#ccAccountabilitySNDC').val();
+        var datCollectionDateSNDC = $('#CollectionDateSNDC').val();
+
+
+        var tempCashCountCollection = {
+            "EmployeeID" : EmpID,
+            "intCashCountCollectionSKYGO": CashCountCollectionSKYGO,
+            "intCashCountAccountabilitySKYGO": CashCountAccountabilitySKYGO,
+            "datCollectionDateSKYGO": datCollectionDateSKYGO,
+            "intCashCountCollectionSNDC": CashCountCollectionSNDC,
+            "intCashCountAccountabilitySNDC": CashCountAccountabilitySNDC,
+            "datCollectionDateSNDC": datCollectionDateSNDC
+
+        };
+
+        $.ajax({
+            url: '@Url.Action("SaveCashCountCollection", "TaskMonitoring")',
+            type: 'POST',
+            data: JSON.stringify(tempCashCountCollection),
+            datatype: 'json',
+            contentType: 'application/json',
+            success: function (result) {
+                $('#SystemMessage').addClass('active');
+                $('#SystemMessage').removeClass('hide');
+                $('#SystemMessage1').addClass('active');
+                $('#SystemMessage1').removeClass('hide');
+                $('#loadspinner').show();
+                
+
+                if (result != null && result.success) {
+
+                    $('#SystemMessage').removeClass('bg-danger');
+                    $('#SystemMessage').addClass('bg-success');
+                    $('#SystemMessage1').removeClass('bg-danger');
+                    $('#SystemMessage1').addClass('bg-success');
+
+                    setTimeout(function () {
+                        $('#loadspinner').hide();
+                        $('.modal-title').html("Confirmation");
+                        $('.modal-body').html("You have Sucessfully Saved!");
+                        $('#SuccessErrorMessage').modal();
+                    }, 5000);
+
+
+
+
+                    $('#ccCollectionSKYGO').val('');
+                    $('#ccAccountabilitySKYGO').val('');
+                    $('#CollectionDateSKYGO').val('');
+                    $('#ccCollectionSNDC').val('');
+                    $('#ccAccountabilitySNDC').val('');
+                    $('#CollectionDateSNDC').val('');
+
+                    location.reload();
+                                            
+                }
+                else {
+
+                    $('#SystemMessage').removeClass('bg-success');
+                    $('#SystemMessage').addClass('bg-danger');
+                    $('#SystemMessage1').removeClass('bg-success');
+                    $('#SystemMessage1').addClass('bg-danger');
+
+                    setTimeout(function () {
+                        $('#loadspinner').hide();
+                        $('.modal-title').html("Confirmation");
+                        $('.modal-body').html("You have Failed to Saved!");
+                        $('#SuccessErrorMessage').modal();
+                     
+                    }, 5000);
+
+
+                    
+                }
+            }
+        });
+
+        $('#myModal1').modal('hide');
+    }
+
+    function CashCountPettyCash() {
+
+        var EmpID = '@Session["intMstEmpPersonal"]';
+        var CashCountPettyCashSKYGO = $('#ccPettyCashSKYGO').val();
+        var CashCountExpensesSKYGO = $('#ccExpensesSKYGO').val();
+        var CashCountPettyCashSNDC = $('#ccPettyCashSNDC').val();
+        var CashCountExpensesSNDC = $('#ccExpensesSNDC').val();
+
+        var tempCashCountPettyCash = {
+            "EmployeeID": EmpID,
+            "intCashCountPettyCashSKYGO": CashCountPettyCashSKYGO,
+            "intCashCountExpensesSKYGO": CashCountExpensesSKYGO,
+            "intCashCountPettyCashSNDC": CashCountPettyCashSNDC,
+            "intCashCountExpensesSNDC": CashCountExpensesSNDC,
+        };
+
+        $.ajax({
+            url: '@Url.Action("SaveCashCountPettyCash", "TaskMonitoring")',
+            type: 'POST',
+            data: JSON.stringify(tempCashCountPettyCash),
+            datatype: 'json',
+            contentType: 'application/json',
+            success: function (result) {
+                $('#SystemMessage').addClass('active');
+                $('#SystemMessage').removeClass('hide');
+                $('#SystemMessage1').addClass('active');
+                $('#SystemMessage1').removeClass('hide');
+                $('#loadspinner').show();
+
+                if (result != null && result.success) {
+
+                    $('#SystemMessage').removeClass('bg-danger');
+                    $('#SystemMessage').addClass('bg-success');
+                    $('#SystemMessage1').removeClass('bg-danger');
+                    $('#SystemMessage1').addClass('bg-success');
+
+                    setTimeout(function () {
+                        $('#loadspinner').hide();
+                        $('.modal-title').html("Confirmation");
+                        $('.modal-body').html("You have Sucessfully Saved!");
+                        $('#SuccessErrorMessage').modal();
+                    }, 5000);
+
+                    $('#ccPettyCashSKYGO').val('');
+                    $('#ccExpensesSKYGO').val('');
+                    $('#ccPettyCashSNDC').val('');
+                    $('#ccExpensesSNDC').val('');
+                }
+                else {
+                    $('#SystemMessage').removeClass('bg-success');
+                    $('#SystemMessage').addClass('bg-danger');
+                    $('#SystemMessage1').removeClass('bg-success');
+                    $('#SystemMessage1').addClass('bg-danger');
+
+                    setTimeout(function () {
+                        $('#loadspinner').hide();
+                        $('.modal-title').html("Confirmation");
+                        $('.modal-body').html("You have Failed to Saved!");
+                        $('#SuccessErrorMessage').modal();
+                    }, 5000);
+                }
+            }
+        });
+
+        $('#myModal2').modal('hide');
+    }
+
+    function ReviewVsDeposits() {
+
+        var EmpID = '@Session["intMstEmpPersonal"]';
+        var ReviewVsDepositsCashCountSKYGO = $('#RvsDCashCountedSKYGO').val();
+        var ReviewVsDepositsAccountabilitySKYGO = $('#RvsDAccountabilitySKYGO').val();
+        var datDateReceiptSKYGO = $('#datDateReceiptSKYGO').val();
+
+        var ReviewVsDepositsCashCountSNDC = $('#RvsDCashCountedSNDC').val();
+        var ReviewVsDepositsAccountabilitySNDC = $('#RvsDAccountabilitySNDC').val();
+        var datDateReceiptSNDC = $('#datDateReceiptSNDC').val();
+
+        var tempReviewVsDeposits = {
+            "EmployeeID": EmpID,
+            "intReviewVsDepositsCashCountSKYGO": ReviewVsDepositsCashCountSKYGO,
+            "intReviewVsDepositsAccountabilitySKYGO": ReviewVsDepositsAccountabilitySKYGO,
+            "datDateReceiptSKYGO" : datDateReceiptSKYGO,
+            "intReviewVsDepositsCashCountSNDC": ReviewVsDepositsCashCountSNDC,
+            "intReviewVsDepositsAccountabilitySNDC": ReviewVsDepositsAccountabilitySNDC,
+            "datDateReceiptSNDC": datDateReceiptSNDC
+        };
+
+        $.ajax({
+            url: '@Url.Action("SaveReviewVsDeposits", "TaskMonitoring")',
+            type: 'POST',
+            data: JSON.stringify(tempReviewVsDeposits),
+            datatype: 'json',
+            contentType: 'application/json',
+            success: function (result) {
+                $('#SystemMessage').addClass('active');
+                $('#SystemMessage').removeClass('hide');
+                $('#SystemMessage1').addClass('active');
+                $('#SystemMessage1').removeClass('hide');
+                $('#loadspinner').show();
+
+                if (result != null && result.success) {
+
+                    $('#SystemMessage').removeClass('bg-danger');
+                    $('#SystemMessage').addClass('bg-success');
+                    $('#SystemMessage1').removeClass('bg-danger');
+                    $('#SystemMessage1').addClass('bg-success');
+
+                    setTimeout(function () {
+                        $('#loadspinner').hide();
+                        $('.modal-title').html("Confirmation");
+                        $('.modal-body').html("You have Sucessfully Saved!");
+                        $('#SuccessErrorMessage').modal();
+                    }, 5000);
+
+                    $('#RvsDCashCountedSKYGO').val('');
+                    $('#RvsDAccountabilitySKYGO').val('');
+                    $('#datDateReceiptSKYGO').val('');
+                    $('#RvsDCashCountedSNDC').val('');
+                    $('#RvsDAccountabilitySNDC').val('');
+                    $('#datDateReceiptSNDC').val('');
+                }
+                else {
+                    $('#SystemMessage').removeClass('bg-success');
+                    $('#SystemMessage').addClass('bg-danger');
+                    $('#SystemMessage1').removeClass('bg-success');
+                    $('#SystemMessage1').addClass('bg-danger');
+
+                    setTimeout(function () {
+                        $('#loadspinner').hide();
+                        $('.modal-title').html("Confirmation");
+                        $('.modal-body').html("You have Failed to Saved!");
+                        $('#SuccessErrorMessage').modal();
+                    }, 5000);
+                }
+            }
+        });
+
+        $('#myModal3').modal('hide');
+
+    }
+
+    function VDvsAD() {
+
+        var EmpID = '@Session["intMstEmpPersonal"]';
+        var CashValidatedSKYGO = $('#CashValidatedSKYGO').val();
+        var datValidationDateSKYGO = $('#datValidationDateSKYGO').val();
+        var CashValidatedSNDC = $('#CashValidatedSNDC').val();
+        var datValidationDateSNDC = $('#datValidationDateSNDC').val();
+
+        var tempValidateDepositVsAbstactDeposit = {
+            "EmployeeID": EmpID,
+            "intCashValidatedSKYGO": CashValidatedSKYGO,
+            "datValidationDateSKYGO": datValidationDateSKYGO,
+            "intCashValidatedSNDC": CashValidatedSNDC,
+            "datValidationDateSNDC": datValidationDateSNDC
+        };
+
+        $.ajax({
+            url: '@Url.Action("SaveValidateDepositVsAbstactDeposit", "TaskMonitoring")',
+            type: 'POST',
+            data: JSON.stringify(tempValidateDepositVsAbstactDeposit),
+            datatype: 'json',
+            contentType: 'application/json',
+            success: function (result) {
+                $('#SystemMessage').addClass('active');
+                $('#SystemMessage').removeClass('hide');
+                $('#SystemMessage1').addClass('active');
+                $('#SystemMessage1').removeClass('hide');
+                $('#loadspinner').show();
+
+                if (result != null && result.success) {
+
+                    $('#SystemMessage').removeClass('bg-danger');
+                    $('#SystemMessage').addClass('bg-success');
+                    $('#SystemMessage1').removeClass('bg-danger');
+                    $('#SystemMessage1').addClass('bg-success');
+
+                    setTimeout(function () {
+                        $('#loadspinner').hide();
+                        $('.modal-title').html("Confirmation");
+                        $('.modal-body').html("You have Sucessfully Saved!");
+                        $('#SuccessErrorMessage').modal();
+                    }, 5000);
+
+                    
+
+                    $('#datValidationDateSKYGO').val('');
+                    $('#CashValidatedSKYGO').val('');
+                    $('#datValidationDateSNDC').val('');
+                    $('#CashValidatedSNDC').val('');
+                }
+                else {
+
+                    $('#SystemMessage').removeClass('bg-success');
+                    $('#SystemMessage').addClass('bg-danger');
+                    $('#SystemMessage1').removeClass('bg-success');
+                    $('#SystemMessage1').addClass('bg-danger');
+
+                    setTimeout(function () {
+                        $('#loadspinner').hide();
+                        $('.modal-title').html("Confirmation");
+                        $('.modal-body').html("You have Failed to Saved!");
+                        $('#SuccessErrorMessage').modal();
+                    }, 5000);
+                }
+            }
+        });
+
+        $('#myModal4').modal('hide');
+
+    }
+
+    function PartsCountandRecon() {
+        var EmpID = '@Session["intMstEmpPersonal"]';
+        var totalLineItem = $('#totalLineItem').val();
+        var totalActualQty = $('#totalActualQty').val();
+
+
+
+        var tempPartsCountandRecon = {
+            "EmployeeID": EmpID,
+            "totalLineItem": totalLineItem,
+            "totalActualQty": totalActualQty
+        };
+
+        $.ajax({
+            url: '@Url.Action("SavePartsCountandRecon", "TaskMonitoring")',
+             type: 'POST',
+             data: JSON.stringify(tempPartsCountandRecon),
+             datatype: 'json',
+             contentType: 'application/json',
+             success: function (result) {
+                 $('#SystemMessage').addClass('active');
+                 $('#SystemMessage').removeClass('hide');
+                 $('#SystemMessage1').addClass('active');
+                 $('#SystemMessage1').removeClass('hide');
+                 $('#loadspinner').show();
+
+                 if (result != null && result.success) {
+
+                     $('#SystemMessage').removeClass('bg-danger');
+                     $('#SystemMessage').addClass('bg-success');
+                     $('#SystemMessage1').removeClass('bg-danger');
+                     $('#SystemMessage1').addClass('bg-success');
+
+                     setTimeout(function () {
+                         $('#loadspinner').hide();
+                         $('.modal-title').html("Confirmation");
+                         $('.modal-body').html("You have Sucessfully Saved!");
+                         $('#SuccessErrorMessage').modal();
+                     }, 5000);
+
+                     $('#totalLineItem').val('');
+                     $('#totalActualQty').val('');
+              
+                 }
+                 else {
+                     $('#SystemMessage').removeClass('bg-success');
+                     $('#SystemMessage').addClass('bg-danger');
+                     $('#SystemMessage1').removeClass('bg-success');
+                     $('#SystemMessage1').addClass('bg-danger');
+
+                     setTimeout(function () {
+                         $('#loadspinner').hide();
+                         $('.modal-title').html("Confirmation");
+                         $('.modal-body').html("You have Failed to Saved!");
+                         $('#SuccessErrorMessage').modal();
+                     }, 5000);
+                 }
+             }
+         });
+
+         $('#myModal5').modal('hide');
+    }
+
+    function MCUnitCount() {
+        var EmpID = '@Session["intMstEmpPersonal"]';
+        var MCUnitCount = $('#MCUnitCount').val();
+
+        var tempMCUnitCount = {
+            "EmployeeID": EmpID,
+            "intMCUnitCount": MCUnitCount
+        };
+
+        $.ajax({
+            url: '@Url.Action("SaveMCUnitCount", "TaskMonitoring")',
+            type: 'POST',
+            data: JSON.stringify(tempMCUnitCount),
+            datatype: 'json',
+            contentType: 'application/json',
+            success: function (result) {
+                $('#SystemMessage').addClass('active');
+                $('#SystemMessage').removeClass('hide');
+                $('#SystemMessage1').addClass('active');
+                $('#SystemMessage1').removeClass('hide');
+                $('#loadspinner').show();
+
+                if (result != null && result.success) {
+
+                    $('#SystemMessage').removeClass('bg-danger');
+                    $('#SystemMessage').addClass('bg-success');
+                    $('#SystemMessage1').removeClass('bg-danger');
+                    $('#SystemMessage1').addClass('bg-success');
+
+                    setTimeout(function () {
+                        $('#loadspinner').hide();
+                        $('.modal-title').html("Confirmation");
+                        $('.modal-body').html("You have Sucessfully Saved!");
+                        $('#SuccessErrorMessage').modal();
+                    }, 5000);
+
+                    $('#MCUnitCount').val('');
+
+                }
+                else {
+                    $('#SystemMessage').removeClass('bg-success');
+                    $('#SystemMessage').addClass('bg-danger');
+                    $('#SystemMessage1').removeClass('bg-success');
+                    $('#SystemMessage1').addClass('bg-danger');
+
+                    setTimeout(function () {
+                        $('#loadspinner').hide();
+                        $('.modal-title').html("Confirmation");
+                        $('.modal-body').html("You have Failed to Saved!");
+                        $('#SuccessErrorMessage').modal();
+                    }, 5000);
+                }
+            }
+        });
+
+        $('#myModal6').modal('hide');
+    }
+
+    function SpartPartsSampling() {
+        var EmpID = '@Session["intMstEmpPersonal"]';
+        var datTransationDate = $('#datTransationDate').val();
+        var SparePartSampling = $('#SparePartSampling option:selected').text();
+        var partsDesc = $('#partsDesc').val();
+        var NoItemSampled = $('#NoItemSampled').val();
+
+
+        var tempSpartPartsSampling = {
+            "EmployeeID": EmpID,
+            "datTransationDate": datTransationDate,
+            "strSparePartSampling": SparePartSampling,
+            "strpartsDesc": partsDesc,
+            "intSpartPartsSampling": NoItemSampled
+        };
+
+        $.ajax({
+            url: '@Url.Action("SaveSpartPartsSampling", "TaskMonitoring")',
+            type: 'POST',
+            data: JSON.stringify(tempSpartPartsSampling),
+            datatype: 'json',
+            contentType: 'application/json',
+            success: function (result) {
+                $('#SystemMessage').addClass('active');
+                $('#SystemMessage').removeClass('hide');
+                $('#SystemMessage1').addClass('active');
+                $('#SystemMessage1').removeClass('hide');
+                $('#loadspinner').show();
+
+                if (result != null && result.success) {
+                    $('#SystemMessage').removeClass('bg-danger');
+                    $('#SystemMessage').addClass('bg-success');
+                    $('#SystemMessage1').removeClass('bg-danger');
+                    $('#SystemMessage1').addClass('bg-success');
+
+                    setTimeout(function () {
+                        $('#loadspinner').hide();
+                        $('.modal-title').html("Confirmation");
+                        $('.modal-body').html("You have Sucessfully Saved!");
+                        $('#SuccessErrorMessage').modal();
+                    }, 5000);
+
+                    $('#datTransationDate').val('');
+                    $('#SparePartSampling').val('');
+                    $('#partsDesc').val('');
+                    $('#NoItemSampled').val('');
+
+                }
+                else {
+                    $('#SystemMessage').removeClass('bg-success');
+                    $('#SystemMessage').addClass('bg-danger');
+                    $('#SystemMessage1').removeClass('bg-success');
+                    $('#SystemMessage1').addClass('bg-danger');
+
+                    setTimeout(function () {
+                        $('#loadspinner').hide();
+                        $('.modal-title').html("Confirmation");
+                        $('.modal-body').html("You have Failed to Saved!");
+                        $('#SuccessErrorMessage').modal();
+                    }, 5000);
+                }
+            }
+        });
+
+        $('#myModal7').modal('hide');
+    }
+     
+    $(document).ready(function(){
+        $(function () {
+            $("#SparePartSampling").change(function () {
+                $("#partsDesc").val($(this).val());
+            });
+        });
+    });
+</script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#CollectionDateSKYGO').datepicker();
+            $('#CollectionDateSNDC').datepicker();
+            $('#datDateReceiptSKYGO').datepicker();
+            $('#datDateReceiptSNDC').datepicker();
+            $('#datValidationDateSKYGO').datepicker();
+            $('#datValidationDateSNDC').datepicker();
+            $('#datTransationDate').datepicker();
+            
+
+        });
+        </script>
+
+
+</head> 
+<body>
+<h2>TASK MONITORING</h2>
+<nav class="nav nav-tabs">
+  <div class="container-fluid">
+   
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#1" data-toggle="tab">Cash Count (Collection)</a></li>
+      <li><a href="#2" data-toggle="tab">Cash Count (Petty Cash)</a></li>
+      <li><a href="#3" data-toggle="tab">Receipts vs Deposits</a></li>
+      <li><a href="#4" data-toggle="tab">Validated Deposits</a></li>
+      @*<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">More Tabs (3)<span class="caret"></span></a>*@
+               @*<ul class="dropdown-menu">*@
+                  <li><a href="#5" data-toggle="tab">Spare parts count (monthly)</a></li>
+                  <li><a href="#6" data-toggle="tab">MC Count</a></li>
+                  <li><a href="#7" data-toggle="tab">Spare Parts Sampling</a></li>
+                @*</ul>*@
+       @*</li>*@
+    </ul>
+  </div>
+</nav>
+  
+<div class="container">
+    <div class="tab-content ">
+        <div class="tab-pane active" id="1" style="max-width:1010px; height:480px; border:1px solid #428bca; border-radius:5px;"> @*FIRST TAB*@        
+           @*<h3 style="margin-left:30px;">Cash Count Collection for SKYGO</h3> *@
+            <form style="margin-top:20px;">
+              <div class="form-row">
+                <h3 style="margin-left:30px;">Cash Count Collection for SKYGO</h3> 
+                        
+         
+                    <div class="form-group col-md-12">   
+                           <label for="inputEmail4">Collection Date</label>   
+                          <div class="input-group">                  
+                            <input class="form-control" type="text" id="CollectionDateSKYGO" data-date-format="mm/dd/yy" />                                      
+                         </div>
+                     </div>
+
+                       <div class="form-group col-md-6">   
+                           <label for="inputEmail4">CASH COUNTED</label>   
+                          <div class="input-group">                             
+                              <span class="input-group-addon">PHP</span>
+                              <input type="number" class="form-control form-control-lg" id="ccCollectionSKYGO">
+                         </div>
+                       </div>
+
+                        <div class="form-group col-md-6" style="margin-bottom:50px;">
+                            <label for="inputEmail4">ACCOUNTABILITY</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">PHP</span>
+                                <input type="number" class="form-control form-control-lg" id="ccAccountabilitySKYGO" >
+                            </div>
+                        </div>                      
+              </div>
+           
+                <div class="form-row">
+                     
+                        <h3 style="margin-left:30px;">Cash Count Collection for SNDC</h3> 
+
+                      <div class="form-group col-md-12">   
+                           <label for="inputEmail4">Collection Date</label>   
+                          <div class="input-group">                  
+                            <input class="form-control" type="text" id="CollectionDateSNDC" data-date-format="mm/dd/yy" />                                      
+                         </div>
+                     </div>    
+
+                       <div class="form-group col-md-6">   
+                           <label for="inputEmail4">CASH COUNTED</label>   
+                          <div class="input-group">
+                              <span class="input-group-addon">PHP</span>
+                              <input type="number" class="form-control form-control-lg" id="ccCollectionSNDC">
+                         </div>
+                       </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">ACCOUNTABILITY</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">PHP</span>
+                                <input type="number" class="form-control form-control-lg" id="ccAccountabilitySNDC" >
+                            </div>
+                        </div>               
+              </div>
+
+
+
+               <br /> 
+               <div style="margin-left:300px; margin-right:300px; margin-top:80px;">
+                    <button type="button" class="btn btn-primary btn-lg btn-block" onclick="OpenModal(1);" >Submit</button>
+               </div>
+         </form>
+
+                    <table class="table table-bordered" style="font-size:12px; margin-top: 20px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width:70px;">Date</th>
+                                        <th>Collection Date SKYGO</th>
+                                        <th>Cash Count SKYGO</th>
+                                        <th>Accountability SKYGO</th>
+                                        <th>Time</th>
+                                        <th>Collection Date SNDC</th>
+                                        <th>Cash Count SNDC</th>
+                                        <th>Accountability SNDC</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.TaskCashCountCollection)
+                                   {
+                                    <tr>
+                                        <td>@Html.DisplayFor(a => item.strDate)</td>
+                                        <td>@Html.DisplayFor(a => item.datCollectionDateSKYGO)</td>
+                                        <td>@Html.DisplayFor(a => item.intCashCountCollectionSKYGO)</td>
+                                        <td>@Html.DisplayFor(a => item.intCashCountAccountabilitySKYGO)</td>
+                                        <td>@Html.DisplayFor(a => item.TimeCollectionDateSKYGO)</td>
+                                        <td>@Html.DisplayFor(a => item.datCollectionDateSNDC)</td>
+                                        <td>@Html.DisplayFor(a => item.intCashCountCollectionSNDC)</td>
+                                        <td>@Html.DisplayFor(a => item.intCashCountAccountabilitySNDC)</td>
+                                        <td>@Html.DisplayFor(a => item.TimeCollectionDateSNDC)</td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+        
+        </div>
+
+        <div class="tab-pane" id="2" style="max-width:1010px; height:380px; border:1px solid #428bca; border-radius:5px;">  @*SECOND TAB*@
+             @*<h3 style="margin-left:30px;">Cash Count Petty Cash for SKYGO</h3> *@
+            <form style="margin-top:20px;">
+              <div class="form-row">  
+                  <h3 style="margin-left:30px;">Cash Count Petty Cash for SKYGO</h3>               
+                       <div class="form-group col-md-6">   
+                           <label for="inputEmail4">CASH COUNTED</label>   
+                          <div class="input-group">
+                              <span class="input-group-addon">PHP</span>
+                              <input type="number" class="form-control form-control-lg" id="ccPettyCashSKYGO">
+                         </div>
+                       </div>
+
+                        <div class="form-group col-md-6" style="margin-bottom:50px;">
+                            <label for="inputEmail4">EXPENSES</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">PHP</span>
+                                <input type="number" class="form-control form-control-lg" id="ccExpensesSKYGO" >
+                            </div>
+                        </div>               
+              </div>
+
+              <div class="form-row">   
+                  <h3 style="margin-left:30px;">Cash Count Petty Cash for SNDC</h3>              
+                       <div class="form-group col-md-6">   
+                           <label for="inputEmail4">CASH COUNTED</label>   
+                          <div class="input-group">
+                              <span class="input-group-addon">PHP</span>
+                              <input type="number" class="form-control form-control-lg" id="ccPettyCashSNDC">
+                         </div>
+                       </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">EXPENSES</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">PHP</span>
+                                <input type="number" class="form-control form-control-lg" id="ccExpensesSNDC" >
+                            </div>
+                        </div>               
+              </div>
+
+               <br /> 
+               <div style="margin-left:300px; margin-right:300px; margin-top:80px;">
+                    <button type="button" class="btn btn-primary btn-lg btn-block" onclick="OpenModal(2);" >Submit</button>
+               </div>
+         </form>
+
+            @*<table class="table table-bordered" style="font-size:12px; margin-top: 20px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width:70px;">Date</th>
+                                        <th>Cash Counted SKYGO</th>
+                                        <th>Expenses SKYGO</th>
+                                        <th>Time</th>
+                                        <th>Cash Counted SNDC</th>
+                                        <th>Expenses SNDC</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.TaskCashCountPettyCash)
+                                   {
+                                    <tr>
+                                        <td>@Html.DisplayFor(a => item.intCashCountPettyCashSKYGO)</td>
+                                        <td>@Html.DisplayFor(a => item.intCashCountExpensesSKYGO)</td>
+                                        <td>@Html.DisplayFor(a => item.PettyCashTimeSKYGO)</td>
+
+                                        <td>@Html.DisplayFor(a => item.intCashCountPettyCashSNDC)</td>
+                                        <td>@Html.DisplayFor(a => item.intCashCountExpensesSNDC)</td>
+                                        <td>@Html.DisplayFor(a => item.PettyCashTimeSNDC)</td>
+
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>*@
+
+         </div>
+        <div class="tab-pane" id="3" style="max-width:1010px; height:480px; border:1px solid #428bca; border-radius:5px;">  @*THIRD TAB*@
+            
+           @* <h3 style="margin-left:30px;">Receipts Vs Deposits</h3>*@ 
+            <form style="margin-top:20px;">
+              <div class="form-row"> 
+                   <h3 style="margin-left:30px;">Receipts Vs Deposits for SKYGO</h3>  
+                  
+                     <div class="form-group col-md-12">   
+                           <label for="inputEmail4">Receipt Date</label>   
+                          <div class="input-group">                  
+                            <input class="form-control" type="text" id="datDateReceiptSKYGO" data-date-format="mm/dd/yy" />                                      
+                         </div>
+                     </div>     
+                    
+                       <div class="form-group col-md-6">   
+                           <label for="inputEmail4">TOTAL RECEIPT</label>   
+                          <div class="input-group">
+                              <span class="input-group-addon">PHP</span>
+                              <input type="number" class="form-control form-control-lg" id="RvsDCashCountedSKYGO">
+                         </div>
+                       </div>
+
+                        <div class="form-group col-md-6" style="margin-bottom:50px;">
+                            <label for="inputEmail4">AMOUNT FOR DEPOSIT</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">PHP</span>
+                                <input type="number" class="form-control form-control-lg" id="RvsDAccountabilitySKYGO" >
+                            </div>
+                        </div>               
+              </div>
+
+                <div class="form-row"> 
+                     <h3 style="margin-left:30px;">Receipts Vs Deposits for SNDC</h3>   
+                    
+                       <div class="form-group col-md-12">   
+                           <label for="inputEmail4">Receipt Date</label>   
+                          <div class="input-group">                  
+                            <input class="form-control" type="text" id="datDateReceiptSNDC" data-date-format="mm/dd/yy" />                                      
+                         </div>
+                     </div> 
+                               
+                       <div class="form-group col-md-6">   
+                           <label for="inputEmail4">TOTAL RECEIPT</label>   
+                          <div class="input-group">
+                              <span class="input-group-addon">PHP</span>
+                              <input type="number" class="form-control form-control-lg" id="RvsDCashCountedSNDC">
+                         </div>
+                       </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">AMOUNT FOR DEPOSIT</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">PHP</span>
+                                <input type="number" class="form-control form-control-lg" id="RvsDAccountabilitySNDC" >
+                            </div>
+                        </div>               
+              </div>
+
+               <br /> 
+               <div style="margin-left:300px; margin-right:300px; margin-top:80px;">
+                    <button type="button" class="btn btn-primary btn-lg btn-block" onclick="OpenModal(3);" >Submit</button>
+               </div>
+         </form>
+
+        <div style="margin-top:10px; margin-left:200px; margin-right:200px;">
+            <div class="alert text-center" id="msg3" style="float:left; display:inline; margin-left:150px; margin-right:150px; "></div>
+        </div>
+
+         </div>
+        <div class="tab-pane" id="4" style="max-width:1010px; height:380px; border:1px solid #428bca; border-radius:5px;"> @* FOURTH TAB*@
+            @* <h3 style="margin-left:30px;">Validated Deposit Vs Abstract of Deposit</h3>*@
+            <form style="margin-top:20px;">
+              <div class="form-row"> 
+                   <h3 style="margin-left:30px;">Validated Deposit for SKYGO</h3>    
+                  
+                     <div class="form-group col-md-5">   
+                           <label for="inputEmail4">Validation Date</label>   
+                          <div class="input-group">                  
+                            <input class="form-control" type="text" id="datValidationDateSKYGO" data-date-format="mm/dd/yy" />                                      
+                         </div>
+                     </div>  
+                  
+                             
+                       @*<div class="form-group col-md-6">   
+                           <label for="inputEmail4">CASH DEPOSITED</label>   
+                          <div class="input-group">
+                              <span class="input-group-addon">PHP</span>
+                              <input type="number" class="form-control form-control-lg" id="CashDepositedSKYGO">
+                         </div>
+                       </div>*@
+
+                        <div class="form-group col-md-7" style="margin-bottom:50px;">
+                            <label for="inputEmail4">VALIDATED AMOUNT</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">PHP</span>
+                                <input type="number" class="form-control form-control-lg" id="CashValidatedSKYGO" >
+                            </div>
+                        </div>               
+              </div>
+
+                <div class="form-row"> 
+                     <h3 style="margin-left:30px;">Validated Deposit for SNDC</h3>
+                    
+                     <div class="form-group col-md-5">   
+                           <label for="inputEmail4">Validation Date</label>   
+                          <div class="input-group">                  
+                            <input class="form-control" type="text" id="datValidationDateSNDC" data-date-format="mm/dd/yy" />                                      
+                         </div>
+                     </div>
+                               
+                       @*<div class="form-group col-md-6">   
+                           <label for="inputEmail4">CASH DEPOSITED</label>   
+                          <div class="input-group">
+                              <span class="input-group-addon">PHP</span>
+                              <input type="number" class="form-control form-control-lg" id="CashDepositedSNDC">
+                         </div>
+                       </div>*@
+
+                        <div class="form-group col-md-7">
+                            <label for="inputEmail4">VALIDATED AMOUNT</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">PHP</span>
+                                <input type="number" class="form-control form-control-lg" id="CashValidatedSNDC" >
+                            </div>
+                        </div>               
+              </div>
+
+               <br /> 
+               <div style="margin-left:300px; margin-right:300px; margin-top:80px;">
+                    <button type="button" class="btn btn-primary btn-lg btn-block" onclick="OpenModal(4);" >Submit</button>
+               </div>
+         </form>
+            <div style="margin-top:10px; margin-left:200px; margin-right:200px;">
+            <div class="alert text-center" id="msg4" style="float:left; display:inline; margin-left:150px; margin-right:150px; "></div>
+        </div>
+
+         </div>
+        <div class="tab-pane" id="5" style="max-width:1010px; height:280px; border:1px solid #428bca; border-radius:5px;">  @*FIFTH TAB*@
+             
+             <h3 style="margin-left:30px;">Spare Parts Count (Monthly)</h3>
+            <form style="margin-top:20px;">
+
+               
+              <div class="form-row"> 
+                    
+                      <div class="form-group col-md-5" style="margin-left:70px;">   
+                               <label for="inputEmail4">Total actual line item</label>   
+                              <div class="input-group">
+                                  <span class="input-group-addon">PHP</span>
+                                  <input type="number" class="form-control form-cosntrol-lg" id="totalLineItem">
+                             </div>
+                     </div>
+                                 
+                       <div class="form-group col-md-5">   
+                           <label for="inputEmail4">Total actual quantity</label>   
+                          <div class="input-group">
+                              <span class="input-group-addon">Total</span>
+                              <input type="number" class="form-control form-control-lg" id="totalActualQty">
+                         </div>
+                       </div>                                   
+              </div>
+               <br /> 
+               <div style="margin-left:300px; margin-right:300px; margin-top:80px;">
+                    <button type="button" class="btn btn-primary btn-lg btn-block" onclick="OpenModal(5);" >Submit</button>
+               </div>
+         </form>
+
+            <div style="margin-top:10px; margin-left:200px; margin-right:200px;">
+            <div class="alert text-center" id="msg5" style="float:left; display:inline; margin-left:150px; margin-right:150px; "></div>
+            </div>
+         </div> @*END of FIFITH TAB*@
+        <div class="tab-pane" id="6" style="max-width:1010px; height:320px; border:1px solid #428bca; border-radius:5px;">  @*SIXTH TAB*@
+             <h3 style="margin-left:30px;">MC Count </h3>
+            <form style="margin-top:20px;">
+              <div class="form-row">                
+                       <div class="form-group col-md-6" style="margin-left:250px; margin-right:250px;">   
+                           <label for="inputEmail4">MC Unit Counted</label>   
+                          <div class="input-group">
+                              <span class="input-group-addon">UNIT</span>
+                              <input type="number" class="form-control form-control-lg" id="MCUnitCount">
+                         </div>
+                       </div>                                   
+              </div>
+               <br /> 
+               <div style="margin-left:300px; margin-right:300px; margin-top:80px;">
+                    <button type="button" class="btn btn-primary btn-lg btn-block" onclick="OpenModal(6);" >Submit</button>
+               </div>
+         </form>
+            <div style="margin-top:10px; margin-left:200px; margin-right:200px;">
+            <div class="alert text-center" id="msg6" style="float:left; display:inline; margin-left:150px; margin-right:150px; "></div>
+            </div>
+         </div> @*END of SIXTH TAB*@
+        <div class="tab-pane" id="7" style="max-width:1010px; height:440px; border:1px solid #428bca; border-radius:5px;">  @*SEVENTH TAB*@
+             <h3 style="margin-left:30px;">Spare Parts Sampling</h3>
+        
+            <form style="margin-top:20px;">
+              <div class="form-row"> 
+                  
+                    <div class="form-group col-md-6" style="margin-left:250px; margin-right:250px;">   
+                           <label for="inputEmail4">Transaction Date</label>   
+                          <div class="input-group">                  
+                            <input class="form-control" type="text" id="datTransationDate" data-date-format="mm/dd/yy" />                                      
+                         </div>
+                     </div> 
+                       
+                    <div class="form-group col-md-6" style="margin-left:250px; margin-right:250px;">
+                        <label class="col-sm-3 control-label">Parts</label>
+                        @Html.DropDownListFor(mdl => mdl.strpartsDesc, (SelectList)@ViewBag.emps, new { @class = "js-example-basic-single", @style="width: 100%;", @id = "SparePartSampling" })
+                    </div>   
+                      
+                    <div class="form-group col-md-6" style="margin-left:250px; margin-right:250px;">
+                        <label class="col-sm-3 control-label">Description</label>
+                        @*@Html.TextBox("NameOfTheTextbox", (String)ViewBag.SpartPartsDescription,new { @class = "form-control", @style="width: 100%;" })*@
+                        @Html.TextBox("partsDesc",null, new  { @class = "form-control", @name = "partsDesc", @readonly  = "true", @id = "partsDesc"})
+                    </div>            
+                       <div class="form-group col-md-6" style="margin-left:250px; margin-right:250px;">   
+                           <label for="inputEmail4">Quantity Counted</label>   
+                          <div class="input-group">
+                              <span class="input-group-addon">Qty</span>
+                              <input type="number" class="form-control form-control-lg" id="NoItemSampled">
+                         </div>
+                       </div>                                   
+              </div>
+               <br /> 
+               <div style="margin-left:300px; margin-right:300px; margin-top:80px;">
+                    <button type="button" class="btn btn-primary btn-lg btn-block" onclick="OpenModal(7);" >Submit</button>
+               </div>
+          </form>
+            
+            <div style="margin-top:10px; margin-left:200px; margin-right:200px;">
+            <div class="alert text-center" id="msg7" style="float:left; display:inline; margin-left:150px; margin-right:150px; "></div>
+            </div>
+
+         </div>@*END of SEVENTH TAB*@
+    </div>
+
+
+</div>
+
+</body>
+</html>
+
+@*SuccessErrorMessage*@
+
+<div class="modal fade" id="SuccessErrorMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="SystemMessage1">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        @*<h4 class="modal-title" id="myModalMessage"></h4>*@
+      </div>
+      <div class="modal-body" id="SystemMessage">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@* Cash Count Collection*@
+<input type="text" id="type-id1" class="hide" />
+
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel1"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-lg" onclick="CashCountCollection()">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+ @* End of Cash Count Collection *@
+
+@* Cash Count Petty Cash *@
+
+<input type="text" id="type-id2" class="hide" />
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel2"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-lg" onclick="CashCountPettyCash()">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@* End of Cash Count Petty Cash *@
+
+@* Receipts Vs Deposits *@
+
+<input type="text" id="type-id3" class="hide" />
+
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel3"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-lg" onclick="ReviewVsDeposits()">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@* End of Receipts Vs Deposits *@
+
+
+@* Validated Deposit Vs Abstract of Deposit *@
+
+<input type="text" id="type-id4" class="hide" />
+
+<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel4"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-lg" onclick="VDvsAD()">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@* End of Validate Deposit Vs Abstract of Deposit *@
+
+@* Spare Parts Count and Recon (Monthly) *@
+
+<input type="text" id="type-id5" class="hide" />
+
+<div class="modal fade" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel5"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-lg" onclick="PartsCountandRecon()">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@* End of Spare Parts Count and Recon (Monthly) *@
+
+@* MC Count and Recon *@
+
+<input type="text" id="type-id6" class="hide" />
+
+<div class="modal fade" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel6"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-lg" onclick="MCUnitCount()">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@* End of MC Count and Recon *@
+
+@* Spare Parts Sampling *@
+
+<input type="text" id="type-id7" class="hide" />
+
+<div class="modal fade" id="myModal7" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel7"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-lg" onclick="SpartPartsSampling()">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@* End of Spare Parts Sampling *@
+
+<script type="text/javascript">
+    $(function () {
+        $("[name='SparePartSampling']").change(function () {
+            $("#partsDesc").val($(this).val());
+        });
+    });
+</script>
+
+
+@*LOADING SPINNER*@
+
+<div id="loadspinner" style="display:none;">
+        <div class="loadme-fadingCircle">
+            <div class="loadme-fadingCircle-child1 loadme-fadingCircle-child"></div>
+            <div class="loadme-fadingCircle-child2 loadme-fadingCircle-child"></div>
+            <div class="loadme-fadingCircle-child3 loadme-fadingCircle-child"></div>
+            <div class="loadme-fadingCircle-child4 loadme-fadingCircle-child"></div>
+            <div class="loadme-fadingCircle-child5 loadme-fadingCircle-child"></div>
+            <div class="loadme-fadingCircle-child6 loadme-fadingCircle-child"></div>
+            <div class="loadme-fadingCircle-child7 loadme-fadingCircle-child"></div>
+            <div class="loadme-fadingCircle-child8 loadme-fadingCircle-child"></div>
+            <div class="loadme-fadingCircle-child9 loadme-fadingCircle-child"></div>
+            <div class="loadme-fadingCircle-child10 loadme-fadingCircle-child"></div>
+            <div class="loadme-fadingCircle-child11 loadme-fadingCircle-child"></div>
+            <div class="loadme-fadingCircle-child12 loadme-fadingCircle-child"></div>
+        </div>
+        <div class="loadme-mask"></div>
+</div>
+
+@* END LOADING SPINNER*@
+
+
+@section scripts
+{
+
+    <script type="text/javascript"> 
+
+        $(document).ready(function () {
+            $('.js-example-basic-single').select2();
+        });
+
+        function GetEmployees() {
+
+            var url = '@Url.Content("~/TaskMonitoring/GetData")';
+            //var datax = { "codeMstBranch": "", "intMstDept": "", "intMstPosition": "", "LookFor": "" };
+
+            //datax.codeMstBranch = "";
+            //datax.intMstDept = -1;
+            //datax.intMstPosition = -1;
+            datax.LookFor = 'PartsDescription'
+
+            $.get(
+                url,
+                datax,
+                function (data) {
+
+                    $("#strpartsDesc").html("");
+                    for (var i = 0; i < data.length; i++) {
+                        var item = data[i];
+                        $("#strpartsDesc").append(
+                            $("<option></option>").val(item.DisplayMember).html(item.ValueMember)
+                        );
+                    };
+
+                });
+        }
+    </script> 
+ }

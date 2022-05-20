@@ -1,0 +1,201 @@
+﻿@model HRISOnline.Objects.EmpViewDetails
+@{
+    ViewBag.Title = "ViewDetailLogsLegal";
+}
+
+ <p style="float:right;">
+         @Html.ActionLink(" Back", "myEmployee201Profile", null, new { @class="btn btn-danger" })
+</p> 
+ <br /> <br />
+<div class="panel panel-primary">
+            <div class="panel-heading">
+                General Information
+            </div>
+               <div class="panel-body">
+                   <div class="container">
+                      <div class="row">
+                       <div class="col-xs-12">
+                                          
+                        <div class="table-responsive" >
+
+                       <table class="table table-hover" style="width:auto;">
+                           <thead>
+                               <tr>
+                                  <th style="width:auto;">Legal Information Questions</th>
+                                  <th style="align-items:center;">YES</th>
+                                  <th style="text-align:center;">Circumstance and Details</th>
+                               </tr>
+                           </thead>
+                            <tbody>
+                                @foreach (var item in Model.GeneralInformation)
+                                {                                 
+                                <tr>
+                                    <td>Have you ever been convicted of a crime?</td>
+                                    @if(item.isYes1 == 1)    
+                                    {
+                                        <td style="align-items:center;"><input type="checkbox" checked disabled></td>
+                                    }
+                                    else   
+                                    {
+                                        <td style="align-items:center;"><input type="checkbox" disabled></td>
+                                    }
+                                    <td style="align-content:center;text-align:center;">@Html.DisplayFor(a => item.hasDetail1)</td>                    
+                                </tr>
+                                <tr>
+                                     <td>Have you ever been in a situation that resulted to or lead to a crime but of no intent of yours?</td>
+                                    @if (item.isYes2 == 1)
+                                    {
+                                        <td style="align-items:center;"><input type="checkbox" checked disabled></td>
+                                    }
+                                    else
+                                    {
+                                    <td style="align-items:center;"><input type="checkbox" disabled></td>
+                                    }
+                                    <td style="align-content:center;text-align:center;">@Html.DisplayFor(a => item.hasDetail2)</td>                    
+                                </tr>
+                                <tr>                   
+                                    <td>Have you Syndicated or organized and planned a crime taht caused the loss of life or property?</td>
+                                    @if (item.isYes3 == 1)
+                                    {
+                                        <td style="align-items:center;"><input  type="checkbox" checked disabled></td>
+                                    }
+                                    else
+                                    {
+                                    <td style="align-items:center;"><input  type="checkbox" disabled></td>
+                                    }
+                                    <td style="align-content:center;text-align:center;">@Html.DisplayFor(a => item.hasDetail3)</td>                  
+                                </tr>
+                                <tr>
+                                    <td>Have you ever been Terminiated from employment for just cause?</td>
+                                    @if (item.isYes4 == 1)
+                                    {
+                                        <td style="align-items:center;"><input type="checkbox" checked disabled></td>
+                                    }
+                                    else
+                                    {
+                                        <td style="align-items:center;"><input type="checkbox" disabled></td>
+                                    }
+                                    
+                                    <td style="align-content:center;text-align:center;">@Html.DisplayFor(a => item.hasDetail4)</td>      
+                                </tr>
+                                    
+                                <tr>
+                                    <td>Have you ever been Terminiated from employment for just cause?</td>
+                                    @if(item.isYes5 == 1)
+                                    {
+                                        <td style="align-items:center;"><input type="checkbox" checked disabled></td>
+                                    }
+                                    else
+                                    {
+                                        <td style="align-items:center;"><input type="checkbox" disabled></td>
+                                    }
+                                    <td style="align-content:center;text-align:center;">@Html.DisplayFor(a => item.hasDetail5)</td>                    
+                                </tr>
+                                    
+                                 <tr>
+                                    <td>Is there a pending case current against you?</td>
+                                     @if (item.isYes6 == 1)
+                                     {
+                                         <td style="align-items:center;"><input type="checkbox" checked disabled></td>
+                                     }
+                                     else
+                                     {
+                                         <td style="align-items:center;"><input type="checkbox" disabled></td>
+                                     }
+                                    
+                                    <td style="align-content:center;text-align:center;">@Html.DisplayFor(a => item.hasDetail6)</td>                        
+                                </tr>      
+                                <tr>
+                                    <td>Are you currently involved in a a case against a person/s or corporation/s</td>
+                                    @if (item.isYes7 == 1)
+                                    {
+                                        <td style="align-items:center;"><input type="checkbox" checked disabled></td>
+                                    }
+                                    else
+                                    {
+                                        <td style="align-items:center;"><input type="checkbox" disabled></td>
+                                    }
+                                    
+                                    <td style="align-content:center;text-align:center;">@Html.DisplayFor(a => item.hasDetail7)</td>                    
+                                </tr>  
+                                        
+                                }
+                            </tbody>
+                       </table>
+                            </div>
+                           </div>
+                           </div>
+                   </div>
+               </div>
+             </div>
+
+            <div class="panel panel-primary">
+               <div class="panel-heading">
+                    Approve and Disapprove Information 
+                </div>
+               <div class="panel-body"> 
+                   <table class="table table-bordered">
+                       <thead>
+                           <tr>
+                               <th>First Approval</th>  
+                               <th>Second Approval</th>                        
+                           </tr>
+                           
+                           
+                       </thead>
+                        
+                       <tbody>
+                           <tr>
+                            @foreach (var item in Model.GeneralInformation)
+                            {
+                                if (item.isApprovedFirst == 1)
+                                {
+                                       <td style="color:green;">Approved</td>
+                                }
+                                else if(item.isApprovedFirst == 0)
+                                {
+                                    <td style="color:red;">Disapproved</td>
+                                }  
+                                else
+                                {
+                                    <td></td>
+                                }
+                                
+                                if (item.isApprovedSecond == 1)
+                                {
+                                    <td style="color:green;">Approved</td>
+                                }
+                                if (item.isApprovedSecond == 0)
+                                {
+                                    <td style="color:red;">Disapproved</td>
+                                }
+                                
+                                
+                             }
+                            
+                           </tr>
+                       </tbody>
+                   </table>
+
+                   <table class="table table-bordered">
+                       <thead>
+                           <tr>
+                               <th style="width:457px;">Reason</th>  
+                                                   
+                           </tr>
+                                                
+                       </thead>
+                        <tr>
+                            @foreach (var item in Model.GeneralInformation)
+                            {                        
+                            <td>@Html.DisplayFor(a => item.DisApproveReason)</td>
+                            }
+                        </tr>
+                       <tbody>
+                         
+                       </tbody>
+                   </table>
+
+               </div>
+           </div>
+

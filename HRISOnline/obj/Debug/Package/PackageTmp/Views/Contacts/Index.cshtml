@@ -1,0 +1,135 @@
+﻿@model HRISOnline.Objects.Contacts
+@{
+    ViewBag.Title = ViewBag.MyTitle;
+ }
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />      
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+ @*<link rel="stylesheet" href="@Url.Content("https://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css")">*@
+  <script type="text/javascript" src="@Url.Content("https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css")"></script>       
+ <script>
+     $(document).ready(function () {
+         $('#myTable').dataTable({
+         })
+     });
+
+
+
+</script>
+
+
+                <div class="container-fluid" style="background-color:#ECEEF1; border-radius:5px;" >
+                   
+                        <div class="row" style="font-weight:bold; font-size:large; margin-bottom:10px;  margin-left:10px; margin-top:30px;">
+                                <span class="fa fa-user"></span> My Contact Details   
+                                <div style="float:right; margin-right:30px; font-size:small;">@Html.ActionLink("Edit My Contact Information", "EditDetails", null, new { Id = Model.Id }, new { @class = "btn btn-primary btn-large" })</div>                                                                                    
+                        </div>
+
+                    <table class="table table-bordered" style="font-size:12px;">
+                        <thead>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>Branch</th>
+                                <th>Department</th>
+                                <th>Position</th>
+                                <th>Telephone No.</th>                               
+                                <th>Service Phone No.</th>
+                                <th>Email</th>
+                                <th>Skype Account</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr >
+                                <td>@Html.DisplayFor(model => model.FullName)</td>
+                                <td>@Html.DisplayFor(model => model.Branch)</td>
+                                <td>@Html.DisplayFor(model => model.Department)</td>
+                                <td>@Html.DisplayFor(model => model.Position)</td>
+                                <td>@Html.DisplayFor(model => model.LocalNo)</td>
+                                <td>@Html.DisplayFor(model => model.ServicePhone)</td>
+                                <td>@Html.DisplayFor(model => model.Email)</td>
+                                <td>@Html.DisplayFor(model => model.SkypeEmail)</td>
+                              
+                                 
+                            </tr>
+                        </tbody>
+                    </table>
+                 
+              </div>
+            <br />
+                            
+                
+            <hr>
+                            <div class="row" style="font-weight:bold; font-size:large; margin-bottom:30px;  margin-left:20px; margin-top:20px;">
+                                <span class="fa fa-user"></span> Employee Contact Lists    
+                             </div>
+            <div class="container-fluid">
+               
+                        <table id="myTable" class="table table-striped table-bordered">
+                            <thead>
+                                <tr style="font-size:small">
+                                    
+                                    <th>Ref. No.</th>
+                                    <th>Full Name</th> 
+                                    <th>Company</th>                         
+                                    <th>Branch</th>
+                                    <th>Department</th>
+                                    <th>Position</th>
+                                    <th>Local No.</th>
+                                    <th>Service Phone</th>
+                                    <th>Email</th>
+                                    <th>Skype Account</th>
+                                    @if (Convert.ToBoolean(Session["IsAdmin"]) == true)
+                                    {
+                                        <th>Setting</th>
+                                    }
+                                      
+                       
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    for (int i = 0; i < Model.StoreAllData.Tables[0].Rows.Count; i++)
+                                    {
+                                        
+                                        var EmployeeId = Model.StoreAllData.Tables[0].Rows[i]["EmployeeId"].ToString();
+                                        var FullName = Model.StoreAllData.Tables[0].Rows[i]["FullName"].ToString();
+                                        var Branch = Model.StoreAllData.Tables[0].Rows[i]["BranchName"].ToString();
+                                        var Department = Model.StoreAllData.Tables[0].Rows[i]["DepartmentName"].ToString();
+                                        var Position = Model.StoreAllData.Tables[0].Rows[i]["PositionName"].ToString();
+                                        var LocalNo = Model.StoreAllData.Tables[0].Rows[i]["LocalNo"].ToString();
+                                        var ServicePhone = Model.StoreAllData.Tables[0].Rows[i]["ServicePhone"].ToString();
+                                        var Email = Model.StoreAllData.Tables[0].Rows[i]["Email"].ToString();
+                                        var SkypeEmail = Model.StoreAllData.Tables[0].Rows[i]["SkypeAccount"].ToString();
+                                        var Company = Model.StoreAllData.Tables[0].Rows[i]["CompanyCode"].ToString();
+     
+                                          <tr style="font-size:smaller;">  
+                                              
+                                                <td>@EmployeeId</td>
+                                                <td>@FullName</td> 
+                                                <td>@Company</td> 
+                                                <td>@Branch</td>
+                                                <td>@Department</td>  
+                                                <td>@Position</td>
+                                                <td>@LocalNo</td>
+                                                <td>@ServicePhone</td>
+                                                <td>@Email</td>
+                                                <td>@SkypeEmail</td>
+
+                                              @if (Convert.ToBoolean(Session["IsAdmin"]) == true)
+                                              {
+                                                <td>
+                                                @Html.ActionLink("Edit", "EditDetails", new { Id = Model.StoreAllData.Tables[0].Rows[i]["EmployeeId"].ToString() }, new { @class = "btn btn-primary btn-large" }) 
+                                                </td>
+                                              }
+                                           </tr> 
+                                    } 
+                                 }
+                            </tbody>
+
+                        </table>
+                    
+                </div>
+
+
+
+

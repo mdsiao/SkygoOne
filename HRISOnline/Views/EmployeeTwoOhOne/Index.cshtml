@@ -1,0 +1,2281 @@
+﻿@*@model HRISOnline.Objects.Employee201*@
+@model HRISOnline.Objects.EmpDisplayDetails
+@{
+    ViewBag.Title = ViewBag.MyTitle;
+  
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee 201</title>
+    @* <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+
+   <script src="https://code.jquery.com/jquery-3.1.1.min.js" defer></script>
+  <script src="dist/js/bootstrap-checkbox.min.js" defer></script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>*@
+
+
+    @*  <link href="~/Content/jquery-ui.min.css" rel="stylesheet" />   
+        <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/Content/themes/base/jquery.ui.theme.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+               
+      *@
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        $(function () {
+            $("#datEmployed").datepicker();
+        });
+
+        //$(function () {
+        //    $("#datFrom").datepicker();
+        //});
+        //$(function () {
+        //    $("#datTo").datepicker();
+        //});
+
+   
+        
+     
+
+
+    </script>
+
+    <script>
+        $(function () {
+            $("#datTraining").datepicker();
+        });
+    </script>
+
+    <script>
+        //Personal Information Modal
+        function OpenModalPersonalInfo(type) {
+            if (type == 1) {
+                $('.modal-title').html("Confirmation");
+                $('.modal-body').html("Are you sure you want to update your Personal Information?");
+            }
+            
+            $('#type-id1').val(type);
+            $('#myModal1').modal();
+        }
+
+        function PersonalInfo_Add() {
+
+            var EmployeeId = $('#EmployeeId').val();
+            var EmployeeName = $('#EmployeeName').val();
+            var Email = $('#Email').val();
+            var BloodType = $('#BloodType').val();
+            var HomePhone = $('#HomePhone').val();
+            var MobileNum = $('#Mobile').val();
+            var PermanentAdd = $('#PermanentAdd').val();
+            var PresentAdd = $('#PresentAdd').val();
+            var ProvincialAdd = $('#ProvincialAdd').val();
+            var PersonNotify = $('#PersonNotify').val();
+            var Relation = $('#Relation').val();
+            var ContactNum = $('#ContactNum').val();
+
+
+            var tempPersonalRecord = {
+                "EmployeeId": EmployeeId,
+                "EmployeeName": EmployeeName,
+                "Email": Email,
+                "BloodType" : BloodType,
+                "HomeNum": HomePhone,
+                "MobileNum": MobileNum,
+                "PermanentAdd": PermanentAdd,
+                "PresentAdd": PresentAdd,
+                "ProvincialAdd": ProvincialAdd,
+                "PersonToNofify": PersonNotify,
+                "Relation": Relation,
+                "ContactNum" : ContactNum
+            };
+
+            $.ajax({
+                url: '@Url.Action("UpdatePersonalRecord", "EmployeeTwoOhOne")',
+                type: 'POST',
+                data: JSON.stringify(tempPersonalRecord),
+                datatype: 'json',
+                contentType: 'application/json',
+                success: function (result) {
+                    $('#msg1').addClass('active');
+                    $('#msg1').removeClass('hide');
+
+                    if (result != null && result.success) {
+                        $('#msg1').removeClass('bg-danger');
+                        $('#msg1').addClass('bg-success');
+                        document.getElementById("UpdatePersonal").disabled = true;
+                        $('#msg1').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                        setTimeout('RedirectMe()', 6000);
+                    }
+                    else {
+                        $('#msg1').removeClass('bg-success');
+                        $('#msg1').addClass('bg-danger');
+                        $('#msg1').html(result.responseText).show().slideDown(3000).fadeOut(8000);                     
+                        }
+                     }
+            });
+
+            $('#myModal1').modal('hide');
+
+        }
+
+        //End Personal Information Modal
+
+        
+        //Legal Information
+
+        function OpenModalLegalInfo(type) {
+            if (type == 1) {
+                $('.modal-title').html("Confirmation");
+                $('.modal-body').html("Are you sure you want to Update your Legal Information?");
+            }
+         
+
+            $('#type-id2').val(type);
+            $('#myModal2').modal();
+
+        }
+
+
+        function UpdateLegalInfo() {
+            //Q1
+            var check1 = ($("#check1").is(':checked') ? 1 : 0)
+            var detail1 = $('#detail1').val();
+
+            //Q2
+            var check2 = ($("#check2").is(':checked') ? 1 : 0)
+            var detail2 = $('#detail2').val();
+
+            //Q3
+            var check3 = ($("#check3").is(':checked') ? 1 : 0)
+            var detail3 = $('#detail3').val();
+            //Q4
+            var check4 = ($("#check4").is(':checked') ? 1 : 0)
+            var detail4 = $('#detail4').val();
+
+            //Q5
+            var check5 = ($("#check5").is(':checked') ? 1 : 0)
+            var detail5 = $('#detail5').val();
+            //Q6
+            var check6 = ($("#check6").is(':checked') ? 1 : 0)
+            var detail6 = $('#detail6').val();
+            //Q7
+            var check7 = ($("#check7").is(':checked') ? 1 : 0)
+            var detail7 = $('#detail7').val();
+
+            var tempLegalRecord = {
+
+                'intMstEmpPersonal': document.getElementById('EmployeeId').value,
+                'isYes1': check1,
+                'hasDetail1': detail1,
+                'isYes2': check2,
+                'hasDetail2': detail2,
+                'isYes3': check3,
+                'hasDetail3': detail3,
+                'isYes4': check4,
+                'hasDetail4': detail4,
+                'isYes5': check5,
+                'hasDetail5': detail5,
+                'isYes6': check6,
+                'hasDetail6': detail6,
+                'isYes7': check7,
+                'hasDetail7': detail7,
+            };
+
+            $.ajax({
+                url: '@Url.Action("UpdateLegalInfoRecord", "EmployeeTwoOhOne")',
+                type: 'POST',
+                data: JSON.stringify(tempLegalRecord),
+                datatype: 'json',
+                contentType: 'application/json',
+
+                success: function (result) {
+                    $('#msg2').addClass('active');
+                    $('#msg2').removeClass('hide');
+
+                    if (result != null && result.success) {
+                        $('#msg2').removeClass('bg-danger');
+                        $('#msg2').addClass('bg-success');
+                        document.getElementById("UpdateLegal").disabled = true;
+                        $('#msg2').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                        setTimeout('RedirectMe()', 6000);
+                    }
+                    else {
+                        $('#msg2').removeClass('bg-success');
+                        $('#msg2').addClass('bg-danger');
+                        $('#msg2').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                    }
+
+
+                }
+            });
+
+            $('#myModal2').modal('hide');
+
+
+        }
+         
+
+
+        //End of Legal Information
+
+
+        //EDUCATIONAL ATTAINMENT
+
+        function OpenModal(type) {
+            if (type == 1) {
+                $('.modal-title').html("Confirmation");
+                $('.modal-body').html("Are you sure you want to Update your Educational Attainment?");
+            }
+            else {
+                $('.modal-title').html("Confirmation");
+                $('.modal-body').html("Are you sure you want to Update your Educational Attainment?");
+            }
+
+            $('#type-id').val(type);
+            $('#myModal').modal();
+        }
+
+
+        function educ_rows_add() {
+
+            //var type = $('#type-id').val();
+
+            //if (type == 1) {
+
+                $(document).ready(function () {
+
+                    var school_attained = $("#educ-attained").val();
+                    var name_school = $("#name_school").val();
+                    var degree = $("#educ-degree").val();
+                    //var year_attended = $("#years_attended").val();
+                    var DatFrom = $("#datFrom").val();
+                    var DatTo = $("#datTo").val();
+                    var honors = $("#educ-honors").val();
+
+                    if (school_attained === '') {
+                        $('#msg3').removeClass('bg-success');
+                        $('#msg3').addClass('bg-danger');
+                        $('#msg3').html('Please enter the Educational Attainment!').show().slideDown(3000).fadeOut(8000);
+                        //$("#failedToAddEduc").html('Please enter the Educational Attainment!').fadeIn(2000).slideToggle(5000);
+                        
+                    }
+                    else if (name_school === '') {
+                        $('#msg3').removeClass('bg-success');
+                        $('#msg3').addClass('bg-danger');
+                        $("#msg3").html('Please enter the Name of School!').show().slideDown(3000).fadeOut(8000);
+                        
+                    }
+                    else if (degree === '') {
+                        $('#msg3').removeClass('bg-success');
+                        $('#msg3').addClass('bg-danger');
+                        $("#msg3").html('Please enter the Degree!').show().slideDown(3000).fadeOut(8000);
+                    }
+                    else if (DatFrom === '') {
+                        $('#msg3').removeClass('bg-success');
+                        $('#msg3').addClass('bg-danger');
+                        $("#msg3").html('Please enter the Date From!').show().slideDown(3000).fadeOut(8000);
+                    }
+                    else if (DatTo === '') {
+                        $('#msg3').removeClass('bg-success');
+                        $('#msg3').addClass('bg-danger');
+                        $("#msg3").html('Please enter the Date To!').show().slideDown(3000).fadeOut(8000);
+                    }
+                    else if (honors === '') {
+                        $('#msg3').removeClass('bg-success');
+                        $('#msg3').addClass('bg-danger');
+                        $("#msg3").html('Please enter the Honors fields or Type in None or N/A!').show().slideDown(3000).fadeOut(8000);
+                    }
+                    else {
+                        var markup = "<tr><td><input type='checkbox' name='record' class='chk'></td><td style='display:none;'>0</td><td>" + school_attained + "</td><td>" + name_school + "</td><td>" + degree + "</td><td>" + DatFrom + "</td><td>" + DatTo + "</td><td>" + honors + "</td></tr>";
+
+                        $("#educ1").append(markup);
+                        $("#educ-degree").val("");
+                        $("#educ-attained").val("");
+                        $("#name_school").val("");
+                        //$("#years_attended").val("");
+                        $("#datFrom").val("");
+                        $("#datTo").val("");
+                        $("#educ-honors").val("");
+
+
+                        //var tmpParam = {
+                        //    "ID": 0,
+                        //    "intMstEmpPersonal": document.getElementById('EmployeeId').value,
+                        //    "EducationalAttained": school_attained,
+                        //    "NameOfSchool": name_school,
+                        //    "Degree": degree,
+                        //    "YearAttended": year_attended,
+                        //    "Honors": honors
+                        //};
+
+                        @*$.ajax({
+                            url: '@Url.Action("UpdateEducRecord", "EmployeeTwoOhOne")',
+                            type: 'POST',
+                            data: JSON.stringify(tmpParam),
+                            datatype: 'json',
+                            contentType: 'application/json',
+                            success: function (result) {
+                                $('#msg3').addClass('active');
+                                $('#msg3').removeClass('hide');
+
+                                if (result != null && result.success) {
+                                    $('#msg3').removeClass('bg-danger');
+                                    $('#msg3').addClass('bg-success');
+                                    $('#msg3').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+
+                                }
+                                else {
+                                    $('#msg3').removeClass('bg-success');
+                                    $('#msg3').addClass('bg-danger');
+                                    $('#msg3').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                                }
+
+                            }
+                        });*@
+
+                    }
+
+                });
+            }
+            @*else
+            {
+                var checkbox_value = "";
+                $(".chk:checkbox").each(function () {
+                    var ischecked = $(this).is(":checked");
+                    if (ischecked) {
+                        checkbox_value += $(this).attr("id") + ",";
+                    }
+
+                });
+
+                if (checkbox_value.length == 0) {
+                    $('#msg3').removeClass('hide');
+                    $('#msg3').addClass('active');
+
+                    $('#msg3').removeClass('bg-success');
+                    $('#msg3').addClass('bg-danger');
+                    $('#msg3').html("Please select atleast one(1) item.");
+                }
+                else if ($('#disapproveReason').val() == '') {
+                    $('#msg3').removeClass('hide');
+                    $('#msg3').addClass('active');
+
+                    $('#msg3').removeClass('bg-success');
+                    $('#msg3').addClass('bg-danger');
+                    $('#msg3').html("Please enter your reason for disapproving the transaction(s).");
+                }
+
+                var ID = '';
+                var Educ_attained = '';
+                var Name_School = '';
+                var Degree = '';
+                var DateGrad = '';
+                var Honor = '';
+
+                $('#educ1 tr td:nth-child(2)').each(function () {
+                     ID = ($(this).text());
+                });
+
+                
+
+                var temp = {
+                    'ID': ID,
+                    "intMstEmpPersonal": document.getElementById('EmployeeId').value              
+                };
+
+                if (ID == '0') {
+                    educ_rows_delete();               
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DelEducRecord", "EmployeeTwoOhOne")',
+                        type: 'POST',                   
+                        datatype: 'json',
+                        data: JSON.stringify(temp),
+                        contentType: 'application/json',
+                        success: function (result) {
+                            $('#msg3').addClass('active');
+                            $('#msg3').removeClass('hide');
+
+                            if (result != null && result.success) {
+                                $('#msg3').removeClass('bg-danger');
+                                $('#msg3').addClass('bg-success');
+                                $('#msg3').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+
+                            }
+                            else {
+                                $('#msg3').removeClass('bg-success');
+                                $('#msg3').addClass('bg-danger');
+                                $('#msg3').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                            }
+                        }
+                    });
+                }
+            }
+            $('#myModal').modal('hide');
+        }*@
+
+
+        //educational delete rows
+        function educ_rows_delete() {
+            $(document).ready(function () {
+                $("#educ1").find('input[name="record"]').each(function () {
+                    if ($(this).is(":checked")) {
+                        $(this).parents("tr").remove();
+                    }
+                });
+
+            });
+        }
+
+
+        function Update_educRecord() {
+            $(document).ready(function () {
+
+                var educ_array = Array();
+                educ_array = $("tbody tr", $("#educ_record")).map(function () {
+                    return [$("td", this).map(function () {
+                        return $(this).text();
+                        //this.innerHTML;
+                    }).get()];
+                }).get();
+
+
+              
+                var tempEduc = {
+                    "EducRecord": educ_array,
+                    "intMstEmpPersonal": document.getElementById('EmployeeId').value,
+                };
+           
+                    $.ajax({
+                            url: '@Url.Action("UpdateEducRecord", "EmployeeTwoOhOne")',
+                            type: 'GET',
+                            data: {
+                                values: educ_array.toString(),
+                                intMstEmpPersonal: document.getElementById('EmployeeId').value
+                            },
+                            datatype: 'json',
+                            cache: false,
+                            contentType: "application/json; charset=utf-8",
+                            success: function (result) {
+                                $('#msg3').addClass('active');
+                                $('#msg3').removeClass('hide');
+
+                                if (result != null && result.success) {
+                                    $('#myModal').modal('hide');
+                                    $('#msg3').removeClass('bg-danger');
+                                    $('#msg3').addClass('bg-success');
+                                    document.getElementById("UpdateEducation").disabled = true;
+                                    $('#msg3').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                                    setTimeout('RedirectMe()', 6000);
+                                }
+                                else {
+                                    $('#myModal').modal('hide');
+                                    $('#msg3').removeClass('bg-success');
+                                    $('#msg3').addClass('bg-danger');
+                                    $('#msg3').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                                }
+                            }
+                        });
+                });
+            }
+
+        //END EDUCATIONAL ATTAINMENT
+
+
+        //WORK EXPERIENCE
+
+        function OpenModalWorkExper(type) {
+            if (type == 1) {
+                $('.modal-title').html("Confirmation");
+                $('.modal-body').html("Are you sure you want to add this into your Work Experience?");
+            }
+            else {
+                $('.modal-title').html("Confirmation");
+                $('.modal-body').html("Are you sure that you want to delete this into you Work Experience?");
+            }
+
+            $('#type-id3').val(type);
+            $('#myModal3').modal();
+        }
+
+        function work_rows_add() {
+
+            //var type = $('#type-id3').val();
+
+          
+            //if (type == 1) {
+
+                $(document).ready(function () {
+
+                    var datemployed = $("#datEmployed").val();
+                    var position = $("#position").val();
+                    var employer = $("#employer").val(); 
+                    var emp_num = $("#emp_number").val();
+                    //var emp_status = $("#emp_status").val();
+                    var reason = $("#reason").val();
+
+                    if (datemployed === '') {
+                       
+                        $('#msg4').removeClass('bg-success');
+                        $('#msg4').addClass('bg-danger');
+                        $("#msg4").html('Please enter the Date Employed!').show().slideDown(3000).fadeOut(8000);
+                    }
+                    else if (position === '') {
+                        $('#msg4').removeClass('bg-success');
+                        $('#msg4').addClass('bg-danger');
+                        $("#msg4").html('Please enter the Position!').show().slideDown(3000).fadeOut(8000);
+                    }
+                    else if (employer === '') {
+                        $('#msg4').removeClass('bg-success');
+                        $('#msg4').addClass('bg-danger');
+                        $("#msg4").html('Please enter the Employers Name!').show().slideDown(3000).fadeOut(8000);
+                    }
+                    else if (emp_num === '') {
+                        $('#msg4').removeClass('bg-success');
+                        $('#msg4').addClass('bg-danger');
+                        $("#msg4").html('Please enter the Employer Number!').show().slideDown(3000).fadeOut(8000);
+                    }
+                    else if (reason === '') {
+                        $('#msg4').removeClass('bg-success');
+                        $('#msg4').addClass('bg-danger');
+                        $("#msg4").html('Please enter the Reason!').show().slideDown(3000).fadeOut(8000);
+                    }                                       
+                    else {
+                        var markup = "<tr><td><input type='checkbox' name='record'></td><td style='display:none;'>0</td><td>" + datemployed + "</td><td>" + position + "</td><td>" + employer + "</td><td>" + emp_num + "</td><td>" + reason + "</td></tr>";
+                        $("#work1").append(markup);
+
+                        $("#datEmployed").val("");
+                        $("#position").val("");
+                        $("#employer").val("");
+                        $("#emp_number").val("");
+                        $("#reason").val("");
+
+
+                        //var tempWorkExpRecord = {
+                        //    "ID": 0,
+                        //    "intMstEmpPersonal": document.getElementById('EmployeeId').value,
+                        //    "strDateEmployeed": datemployed,
+                        //    "strPosition": position,
+                        //    "strEmployerName": employer,
+                        //    "strEmploymentStatus": emp_status,
+                        //    "strReason": reason
+                        //};
+
+                       @* $.ajax({
+                            url: '@Url.Action("UpdateWorkExpRecord", "EmployeeTwoOhOne")',
+                            type: 'POST',
+                            data: JSON.stringify(tempWorkExpRecord),
+                            datatype: 'json',
+                            contentType: 'application/json',
+                            success: function (result) {
+                                $('#msg4').addClass('active');
+                                $('#msg4').removeClass('hide');
+
+                                if (result != null && result.success) {
+                                    $('#msg4').removeClass('bg-danger');
+                                    $('#msg4').addClass('bg-success');
+                                    $('#msg4').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                                }
+                                else {
+                                    $('#msg4').removeClass('bg-success');
+                                    $('#msg4').addClass('bg-danger');
+                                    $('#msg4').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                                }
+                            }
+                        });*@
+
+
+                    }
+ 
+                });
+
+            @*}
+            else { //if delete
+
+                var checkbox_value = "";
+                $(".chk:checkbox").each(function () {
+                    var ischecked = $(this).is(":checked");
+                    if (ischecked) {
+                        checkbox_value += $(this).attr("id") + ",";
+                    }
+
+                });
+
+                if (checkbox_value.length == 0) {
+                    $('#msg4').removeClass('hide');
+                    $('#msg4').addClass('active');
+
+                    $('#msg4').removeClass('bg-success');
+                    $('#msg4').addClass('bg-danger');
+                    $('#msg4').html("Please select atleast one(1) item.");
+                }
+                else if ($('#disapproveReason').val() == '') {
+                    $('#msg4').removeClass('hide');
+                    $('#msg4').addClass('active');
+
+                    $('#msg4').removeClass('bg-success');
+                    $('#msg4').addClass('bg-danger');
+                    $('#msg4').html("Please enter your reason for disapproving the transaction(s).");
+                }
+
+                var ID = '';           
+                $('#work1 tr td:nth-child(2)').each(function () {
+                    ID = ($(this).text());
+                });
+
+                var deltempWork = {
+                    'ID': ID,
+                    "intMstEmpPersonal": document.getElementById('EmployeeId').value
+                };
+
+
+                if (ID == '0') {
+                    work_rows_delete();
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DelWorkExp", "EmployeeTwoOhOne")',
+                        type: 'POST',
+                        datatype: 'json',
+                        data: JSON.stringify(deltempWork),
+                        contentType: 'application/json',
+                        success: function (result) {
+                            $('#msg4').addClass('active');
+                            $('#msg4').removeClass('hide');
+
+                            if (result != null && result.success) {
+                                $('#msg4').removeClass('bg-danger');
+                                $('#msg4').addClass('bg-success');
+                                $('#msg4').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                                RedirectYou();
+                            }
+                            else {
+                                $('#msg4').removeClass('bg-success');
+                                $('#msg4').addClass('bg-danger');
+                                $('#msg4').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                                RedirectYou();
+                            }
+
+                        }
+                    });
+                }
+
+
+
+
+            }*@
+
+            //$('#myModal3').modal('hide');
+        }
+
+        function work_rows_delete() {
+            $(document).ready(function () {
+                $("#work1").find('input[name="record"]').each(function () {
+                    if ($(this).is(":checked")) {
+                        $(this).parents("tr").remove();
+                    }
+                });
+
+            });
+        }
+
+
+        function Update_workRecord() {
+            $(document).ready(function () {
+
+                var work_array = [];
+                work_array = $("tbody tr", $("#work_record")).map(function () {
+                    return [$("td", this).map(function () {
+                        return $(this).text();
+                        //this.innerHTML;
+                    }).get()];
+                }).get();
+
+              
+            
+                $.ajax({
+                    url: '@Url.Action("UpdateWorkExpRecord", "EmployeeTwoOhOne")',
+                    type: 'GET',
+                    data: {
+                        values: work_array.toString(),
+                        intMstEmpPersonal: document.getElementById('EmployeeId').value
+                    },
+                    datatype: 'json',
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+                        $('#msg4').addClass('active');
+                        $('#msg4').removeClass('hide');
+
+                        if (result != null && result.success) {
+                            $('#myModal3').modal('hide');
+                            $('#msg4').removeClass('bg-danger');
+                            $('#msg4').addClass('bg-success');
+                            document.getElementById("UpdateWork").disabled = true;
+                            $('#msg4').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                            setTimeout('RedirectMe()', 6000);
+                        }
+                        else {
+                            $('#myModal3').modal('hide');
+                            $('#msg4').removeClass('bg-success');
+                            $('#msg4').addClass('bg-danger');
+                            $('#msg4').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                        }
+
+                    }
+                });
+
+
+
+            });
+        }
+            
+
+        //END OF WORK EXPERIENCE
+
+        //TRAINING AND SEMENARS
+
+        function OpenModalTrainingAndSemenars(type) {
+            if (type == 1) {
+                $('.modal-title').html("Confirmation");
+                $('.modal-body').html("Are you sure you want to add this into your Training And Seminars?");
+            }
+            else {
+                $('.modal-title').html("Confirmation");
+                $('.modal-body').html("Are you sure that you want to delete this into your Training and Seminars?");
+            }
+
+            $('#type-id4').val(type);
+            $('#myModal4').modal();
+
+        }
+
+
+        function training_rows_add() {
+
+            // var type = $('#type-id4').val();
+
+            //if (type == 1)
+            //{
+
+            $(document).ready(function () {
+
+                var training = $("#Traning").val();
+                var sponsor = $("#Sponsor").val();
+                var datTraining = $("#datTraining").val();
+                var place = $("#place").val();
+
+
+                if (training === '') {
+                    $('#msg5').removeClass('bg-success');
+                    $('#msg5').addClass('bg-danger');
+                    $("#msg5").html('Please enter the your Semenar or Training!').show().slideDown(3000).fadeOut(8000);
+                }
+                else if (sponsor === '') {
+                    $('#msg5').removeClass('bg-success');
+                    $('#msg5').addClass('bg-danger');
+                    $("#msg5").html('Please enter the Sponsor or Conducted By!').show().slideDown(3000).fadeOut(8000);
+                }
+                else if (datTraining === '') {
+                    $('#msg5').removeClass('bg-success');
+                    $('#msg5').addClass('bg-danger');
+                    $("#msg5").html('Please enter the Date of Training!').show().slideDown(3000).fadeOut(8000);
+                }
+                else if (place === '') {
+                    $('#msg5').removeClass('bg-success');
+                    $('#msg5').addClass('bg-danger');
+                    $("#msg5").html('Please enter the Place of Training!').show().slideDown(3000).fadeOut(8000);
+                }
+                else {
+
+                    var markup = "<tr><td><input type='checkbox' name='record'></td><td style='display:none;'>0</td><td>" + training + "</td><td>" + sponsor + "</td><td>" + datTraining + "</td><td>" + place + "</td></tr>";
+                    $("#training1").append(markup);
+
+                    $("#Traning").val("");
+                    $("#Sponsor").val("");
+                    $("#datTraining").val("");
+                    $("#place").val("");
+
+                    @*var tempTrainingRecord = {
+                            "ID": 0,
+                            "intMstEmpPersonal": document.getElementById('EmployeeId').value,
+                            "strTraining": training,
+                            "strSponsor": sponsor,
+                            "strDateTraining": datTraining,
+                            "Place": place
+                        };
+
+                        $.ajax({
+                            url: '@Url.Action("UpdateTrainingAndSemenarsRecord", "EmployeeTwoOhOne")',
+                            type: 'POST',
+                            data: JSON.stringify(tempTrainingRecord),
+                            datatype: 'json',
+                            contentType: 'application/json',
+                            success: function (result) {
+                                $('#msg5').addClass('active');
+                                $('#msg5').removeClass('hide');
+
+                                if (result != null && result.success) {
+                                    $('#msg5').removeClass('bg-danger');
+                                    $('#msg5').addClass('bg-success');
+                                    $('#msg5').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                                }
+                                else {
+                                    $('#msg5').removeClass('bg-success');
+                                    $('#msg5').addClass('bg-danger');
+                                    $('#msg5').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                                }
+
+                            }
+                        });*@
+
+                }
+            });
+
+        }
+                   // }
+            @*else 
+            {
+                var checkbox_value = "";
+                $(".chk:checkbox").each(function () {
+                    var ischecked = $(this).is(":checked");
+                    if (ischecked) {
+                        checkbox_value += $(this).attr("id") + ",";
+                    }
+
+                });
+
+                if (checkbox_value.length == 0) {
+                    $('#msg5').removeClass('hide');
+                    $('#msg5').addClass('active');
+
+                    $('#msg5').removeClass('bg-success');
+                    $('#msg5').addClass('bg-danger');
+                    $('#msg5').html("Please select atleast one(1) item.");
+                }
+                else if ($('#disapproveReason').val() == '') {
+                    $('#msg5').removeClass('hide');
+                    $('#msg5').addClass('active');
+
+                    $('#msg5').removeClass('bg-success');
+                    $('#msg5').addClass('bg-danger');
+                    $('#msg5').html("Please enter your reason for disapproving the transaction(s).");
+                }
+
+                var ID = '';
+
+
+                $('#training1 tr td:nth-child(2)').each(function () {
+                    ID = ($(this).text());
+                });
+
+                var delTrainingRecord = {
+                    'ID': ID,
+                    "intMstEmpPersonal": document.getElementById('EmployeeId').value
+                };
+
+
+                if (ID == '0') {
+                    training_rows_delete();
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DelTrainingRecord", "EmployeeTwoOhOne")',
+                        type: 'POST',
+                        datatype: 'json',
+                        data: JSON.stringify(delTrainingRecord),
+                        contentType: 'application/json',
+                        success: function (result) {
+                            $('#msg5').addClass('active');
+                            $('#msg5').removeClass('hide');
+
+                            if (result != null && result.success) {
+                                $('#msg5').removeClass('bg-danger');
+                                $('#msg5').addClass('bg-success');
+                                $('#msg5').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                                RedirectYou();
+                            }
+                            else {
+                                $('#msg5').removeClass('bg-success');
+                                $('#msg5').addClass('bg-danger');
+                                $('#msg5').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                                RedirectYou();
+                            }
+
+                        }
+                    });
+                }
+
+            }*@
+                
+                
+           
+            function training_rows_delete() {
+                $(document).ready(function () {
+                    $("#training1").find('input[name="record"]').each(function () {
+                        if ($(this).is(":checked")) {
+                            $(this).parents("tr").remove();
+                        }
+                    });
+
+                });
+
+            }
+
+            
+            function Update_trainingRecord() {
+                $(document).ready(function () {
+
+                    var training_array = [];
+                    training_array = $("tbody tr", $("#training_record")).map(function () {
+                        return [$("td", this).map(function () {
+                            return $(this).text();
+                            //this.innerHTML;
+                        }).get()];
+                    }).get();
+
+
+                    $.ajax({
+                        url: '@Url.Action("UpdateTrainingAndSemenarsRecord", "EmployeeTwoOhOne")',
+                        type: 'GET',
+                        data: {
+                            values: training_array.toString(),
+                            intMstEmpPersonal: document.getElementById('EmployeeId').value
+                        },
+                        datatype: 'json',
+                        cache: false,
+                        contentType: "application/json; charset=utf-8",
+                        success: function (result) {
+                            $('#msg5').addClass('active');
+                            $('#msg5').removeClass('hide');
+
+                            if (result != null && result.success) {
+                                $('#myModal4').modal('hide');
+                                $('#msg5').removeClass('bg-danger');
+                                $('#msg5').addClass('bg-success');
+                                document.getElementById("UpTraining").disabled = true;
+
+                                $('#msg5').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                                setTimeout('RedirectMe()', 6000);
+                            }
+                            else {
+                                $('#myModal4').modal('hide');
+                                $('#msg5').removeClass('bg-success');
+                                $('#msg5').addClass('bg-danger');
+                                $('#msg5').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                            }
+
+                        }
+                    });
+
+
+
+                });
+            }
+         
+
+            
+
+
+            //END OF TRAINING
+
+    </script>
+
+    <script>
+
+        function UpdateValues() {
+
+            var EmployeeId = $('#EmployeeId').val();
+            var EmployeeName = $('#EmployeeName').val();
+            var Email = $('#Email').val();
+            var BloodType = $('#BloodType').val();
+            var HomePhone = $('#HomePhone').val();
+            var MobileNum = $('#Mobile').val();
+            var PermanentAdd = $('#PermanentAdd').val();
+            var PresentAdd = $('#PresentAdd').val();
+            var ProvincialAdd = $('#ProvincialAdd').val();
+            var PersonNotify = $('#PersonNotify').val();
+            var Relation = $('#Relation').val();
+            var ContactNum = $('#ContactNum').val();
+
+
+
+            var EmployeeRecord = [];
+            EmployeeRecord.push(EmployeeId, EmployeeName, Email, BloodType, HomePhone, MobileNum, PermanentAdd, PresentAdd, ProvincialAdd, PersonNotify, Relation, ContactNum);
+
+
+
+            //Q1
+            var check1 = ($("#check1").is(':checked') ? 1 : 0)
+            var detail1 = $('#detail1').val();
+
+            //Q2
+            var check2 = ($("#check2").is(':checked') ? 1 : 0)
+            var detail2 = $('#detail2').val();
+
+            //Q3
+            var check3 = ($("#check3").is(':checked') ? 1 : 0)
+            var detail3 = $('#detail3').val();
+            //Q4
+            var check4 = ($("#check4").is(':checked') ? 1 : 0)
+            var detail4 = $('#detail4').val();
+
+            //Q5
+            var check5 = ($("#check5").is(':checked') ? 1 : 0)
+            var detail5 = $('#detail5').val();
+            //Q6
+            var check6 = ($("#check6").is(':checked') ? 1 : 0)
+            var detail6 = $('#detail6').val();
+            //Q7
+            var check7 = ($("#check7").is(':checked') ? 1 : 0)
+            var detail7 = $('#detail7').val();
+
+            //PassingValueIntoArray();
+
+
+            var LegalRecord = [];
+            LegalRecord.push(check1, detail1, check2, detail2, check3, detail3, check4, detail4, check5, detail5, check6, detail6, check7, detail7);
+
+
+            //Education
+            var educ_array = Array();
+
+            $("#educ_record tr").each(function (i, v) {
+                educ_array[i] = Array();
+                $(this).children('td').each(function (ii, vv) {
+                    educ_array[i][ii] = $(this).text();
+                });
+
+            });
+
+            //var educ_array = [];
+            //educ_array = $("tbody tr", $("#educ_record")).map(function () {
+            //    return [$("td", this).map(function () {
+            //        return $(this).text();
+            //        //this.innerHTML;
+            //    }).get()];
+            //}).get();
+
+
+
+
+
+
+            //End of Education
+
+            //Work
+
+            //var work_array = Array();
+            //$("#work_record tr").each(function (i, v) {
+            //    work_array[i] = Array();
+            //    $(this).children('td').each(function (ii, vv) {
+            //        work_array[i][ii] = $(this).text();
+            //    });
+            //})
+
+
+            
+
+            var work_array = [];
+            work_array = $("tbody tr", $("#work_record")).map(function () {
+                return [$("td", this).map(function () {
+                    return $(this).text();
+                    //this.innerHTML;
+                }).get()];
+            }).get();
+
+            //End of Work
+
+
+            //Training
+
+            //var training_array = Array();
+
+            //$("#training_record tr").each(function (i, v) {
+            //    training_array[i] = Array();
+            //    $(this).children('td').each(function (ii, vv) {
+            //        training_array[i][ii] = $(this).text();
+            //    });
+            //})
+
+            var training_array = [];
+            training_array = $("tbody tr", $("#training_record")).map(function () {
+                return [$("td", this).map(function () {
+                    return $(this).text();
+                    //this.innerHTML;
+                }).get()];
+            }).get();
+
+            //End of Training
+
+                @*$.ajax({
+                            //url: '/EmployeeTwoOhOne/UpdateInformation?EmployeeId=' + EmployeeId + '&EmployeeRecord=' + EmployeeRecord.toString() + '&LegalRecord=' + LegalRecord.toString() + '&EducValues=' + educ_array.toString() + '&WorkValues=' + work_array.toString() + '&TrainingValues=' + training_array.toString(),
+                            url: '@Url.Action("UpdateInformation", "EmployeeTwoOhOne", new { EmployeeId = "EmployeeId", EmployeeRecord = "EmployeeRecord", LegalRecord = "LegalRecord.toString()", EducValues = "educ_array", WorkValues = "work_array", TrainingValues = "training_array"})',
+                            cache: false,
+                            type: 'POST',
+                            datatype: "json",     
+                            contentType: "application/json; charset=utf-8",
+                            async: true,
+                            success: function (result) {
+                                if (result != null && result.success) {
+                                    //alert(result.responseText);
+
+                                    $("#successResult").html(result.responseText).show().slideDown(5000);
+                                    $("#successResult1").html(result.responseText).show().slideDown(5000);
+                                    setTimeout('RedirectMe()', 5000);
+                                }
+                                else {
+
+                                    //alert(result.responseText);
+                                    $("#failedResult").html(result.responseText).show().slideDown(5000);
+                                    $("#failedResult1").html(result.responseText).show().slideDown(5000);
+                                    setTimeout('RedirectMe()', 5000);
+                                }
+
+                            },
+                            error: function (result) {
+                                alert(result);
+                            }
+                        });
+                    }*@
+
+                var myStore = {
+                    "EmployeeId": "",
+                    "EmployeeName": "",
+                    "Email": "",
+                    "BloodType": "",
+                    "HomePhone": "",
+                    "MobileNum": "",
+                    "PermanentAdd": "",
+                    "PresentAdd": "",
+                    "ProvincialAdd": "",
+                    "PersonNotify": "",
+                    "Relation": "",
+                    "ContactNum": "",
+                    
+
+                    "check1": "",
+                    "detail1": "",
+                    "check2": "",
+                    "detail2": "",
+                    "check3": "",
+                    "detail3": "",
+                    "check4": "",
+                    "detail4": "",
+                    "check5": "",
+                    "detail5": "",
+                    "check6": "",
+                    "detail6": "",
+                    "check7": "",
+                    "detail7": "",
+
+                    "EducRecord": educ_array,
+                    "WorkRecord": "",
+                    "TrainRecord": ""
+
+                };
+
+             
+
+                myStore.EmployeeId = EmployeeId;
+                myStore.EmployeeName = EmployeeName;
+                myStore.Email = Email;
+                myStore.BloodType = BloodType;
+                myStore.HomePhone = HomePhone;
+                myStore.MobileNum = MobileNum;
+                myStore.PermanentAdd = PermanentAdd;
+                myStore.PresentAdd = PresentAdd;
+                myStore.ProvincialAdd = ProvincialAdd;
+                myStore.PersonNotify = PersonNotify;
+                myStore.Relation = Relation;
+                myStore.ContactNum = ContactNum;
+
+                myStore.check1 = check1;
+                myStore.detail1 = detail1;
+                myStore.check2 = check2;
+                myStore.detail2 = detail2;
+                myStore.check3 = check3;
+                myStore.detail3 = detail3;
+                myStore.check4 = check4;
+                myStore.detail4 = detail4;
+                myStore.check5 = check5;
+                myStore.detail5 = detail5;
+                myStore.check6 = check6;
+                myStore.detail6 = detail6;
+                myStore.check7 = check7;
+                myStore.detail7 = detail7;
+
+
+                //myStore.EmpRecord = EmployeeRecord;
+                //myStore.LegalRecord = LegalRecord;
+
+                //myStore.EducRecord = [];
+                myStore.WorkRecord = [];
+                myStore.TrainRecord = [];
+            
+                //$('#educ_record tbody tr td:nth-child(1)').each(function () {
+                //    myStore.EducRecord.push($(this).text());
+                //});
+                
+                //$('#educ_record tbody tr td:nth-child(2)').each(function () {
+                //    myStore.EducRecord.push($(this).text());
+                //});
+
+                //$('#educ_record tbody tr td:nth-child(3)').each(function () {
+                //    myStore.EducRecord.push($(this).text());
+                //});
+
+                //$('#educ_record tbody tr td:nth-child(4)').each(function () {
+                //    myStore.EducRecord.push($(this).text());
+                //});
+
+                //$('#educ_record tbody tr td:nth-child(5)').each(function () {
+                //    myStore.EducRecord.push($(this).text());
+                //});
+
+                //$('#educ_record tbody tr td:nth-child(6)').each(function () {
+                //    myStore.EducRecord.push($(this).text());
+                //});
+
+                //$('#educ_record tbody tr td:nth-child(7)').each(function () {
+                //    myStore.EducRecord.push($(this).text());
+                //})
+
+                //$('#id-manage-list-table tbody tr th:nth-child(2)').each(function () {
+                //    myStore.WorkRecord.push($(this).text());
+                //});
+
+
+
+
+                myStore = JSON.stringify({ 'myStore': myStore });
+
+                $.ajax({
+
+                    //url: '/EmployeeTwoOhOne/UpdateInformation?EmployeeId=' + EmployeeId + '&EmployeeRecord=' + EmployeeRecord.toString() + '&LegalRecord=' + LegalRecord.toString() + '&EducValues=' + educ_array.toString() + '&WorkValues=' + work_array.toString() + '&TrainingValues=' + training_array.toString(),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    url: '@Url.Action("UpdateInformation", "EmployeeTwoOhOne")',
+                    //cache: false,
+                    type: 'POST',
+                    data: myStore,
+                    success: function (result) {
+                        if (result != null && result.success) {
+                            //alert(result.responseText);
+
+                            $("#successResult").html(result.responseText).show().slideDown(5000);
+                            $("#successResult1").html(result.responseText).show().slideDown(5000);
+                            setTimeout('RedirectMe()', 5000);
+                        }
+                        else {
+
+                            //alert(result.responseText);
+                            $("#failedResult").html(result.responseText).show().slideDown(5000);
+                            $("#failedResult1").html(result.responseText).show().slideDown(5000);
+                            setTimeout('RedirectMe()', 5000);
+                        }
+
+                    },
+                    error: function (result) {
+                        alert(result);
+                    }
+                });
+            }
+
+
+
+            function RedirectMe() {
+                window.location.href = "@Url.Content("~/EmployeeTwoOhOne/myEmployee201Profile")";
+            }
+            
+        function RedirectYou() {
+            window.location.href = "@Url.Content("~/EmployeeTwoOhOne/Index")";
+        }
+
+
+    </script>
+
+<style type="text/css">
+body {
+  padding : 10px; 
+  font-size: 14px;  
+}
+
+#exTab1 .tab-content {
+  color : white;
+  background-color: #428bca;
+  padding : 5px 15px;
+  
+}
+
+#exTab2 h3 {
+  color : white;
+  background-color: #428bca;
+  padding : 5px 15px;
+  
+}
+
+/* remove border radius for the tab */
+
+#exTab1 .nav-pills > li > a {
+  border-radius: 0;
+
+}
+
+/* change border radius for the tab , apply corners on top*/
+
+#exTab3 .nav-pills > li > a {
+  border-radius: 4px 4px 0 0 ;
+}
+
+#exTab3 .tab-content {
+  color : white;
+  background-color: #428bca;
+  padding : 5px 15px;
+}
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+
+<div class="container"><h2>Edit Employee 201</h2></div>
+
+<div id="exTab2" class="container">	
+<ul class="nav nav-tabs">
+			<li class="active"><a  href="#1" data-toggle="tab">Personal Information</a>
+			</li>
+			<li><a href="#2" data-toggle="tab">Legal Information</a>
+			</li>
+			<li><a href="#3" data-toggle="tab">Educational Information</a>
+			</li>
+            <li><a href="#4" data-toggle="tab">Work Experience</a>
+			</li>
+            <li><a href="#5" data-toggle="tab">Training And Seminars</a>
+			</li>
+</ul>
+
+		<div class="tab-content ">           
+			 <div class="tab-pane active" id="1" style="max-width:1010px; border:1px solid #428bca; border-radius:5px;"> @*FIRST TAB*@                   
+              <br /> 
+                 
+                 <div class="container" style="max-width:1000px;">
+
+                @foreach (var item in Model.EmpProfile)
+                {
+                    if (item.alreadyupdated == 1)
+                    {
+                        <div class="bg-info" style="height:40px;text-align:center;align-content:center;padding:10px;">
+                        <p class="bg-info">Your personal information is still pending, just wait for the approval of your immediate superior. Thank You!</p>
+                        </div>
+                        <br /><br />
+                        <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Employee ID</label>
+                        <div class="col-sm-5">                         
+                            @Html.TextBoxFor(a => item.EmployeeId, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "EmployeeId", })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Employee Name</label>
+                        <div class="col-sm-5">                          
+                            @Html.TextBoxFor(a => item.EmployeeName, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "EmployeeName" })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Email</label>
+                        <div class="col-sm-3">                          
+                            @Html.TextBoxFor(a => item.Email, null, new { @class = "form-control form-control-lg", @id = "Email", @readonly = true })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Blood Type</label>
+                        <div class="col-sm-3">                           
+                            @Html.TextBoxFor(a => item.BloodType, null, new { @class = "form-control form-control-lg", @id = "BloodType", @readonly = true })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Home Phone No.</label>
+                        <div class="col-sm-3">                           
+                            @Html.TextBoxFor(a => item.HomeNum, null, new { @class = "form-control form-control-lg", @id = "HomePhone", @readonly = true })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Mobile Phone No.</label>
+                        <div class="col-sm-3">                           
+                            @Html.TextBoxFor(a => item.MobileNum, null, new { @class = "form-control form-control-lg", @id = "Mobile", @readonly = true })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Permanent Address</label>
+                        <div class="col-sm-5">                            
+                            @Html.TextBoxFor(a => item.PermanentAdd, null, new { @class = "form-control form-control-lg", @id = "PermanentAdd", @readonly = true })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Present Address</label>
+                        <div class="col-sm-5">                            
+                            @Html.TextBoxFor(a => item.PresentAdd, null, new { @class = "form-control form-control-lg", @id = "PresentAdd", @readonly = true })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Provincial Address</label>
+                        <div class="col-sm-5">                           
+                            @Html.TextBoxFor(a => item.ProvincialAdd, null, new { @class = "form-control form-control-lg", @id = "ProvincialAdd", @readonly = true })
+                        </div>
+                    </div>            
+                
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Person to Notify incase of Emergency</label>
+                        <div class="col-sm-5">                          
+                            @Html.TextBoxFor(a => item.PersonToNofify, null, new { @class = "form-control form-control-lg", @id = "PersonNotify", @readonly = true })
+                        </div>
+                    </div> 
+               
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Relation</label>
+                        <div class="col-sm-3">                           
+                            @Html.TextBoxFor(a => item.Relation, null, new { @class = "form-control form-control-lg", @id = "Relation", @readonly = true })
+                        </div>
+                    </div>  
+               
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Contact Number</label>
+                        <div class="col-sm-3">                          
+                            @Html.TextBoxFor(a => item.ContactNum, null, new { @class = "form-control form-control-lg", @id = "ContactNum", @readonly = true })
+                        </div>
+                    </div>
+                    
+                    }
+                    else
+                    {
+                   
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Employee ID</label>
+                        <div class="col-sm-5">                         
+                            @Html.TextBoxFor(a => item.EmployeeId, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "EmployeeId" })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Employee Name</label>
+                        <div class="col-sm-5">                          
+                            @Html.TextBoxFor(a => item.EmployeeName, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "EmployeeName" })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Email</label>
+                        <div class="col-sm-3">                          
+                            @Html.TextBoxFor(a => item.Email, null, new { @class = "form-control form-control-lg", @id = "Email" })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Blood Type</label>
+                        <div class="col-sm-3">                           
+                            @Html.TextBoxFor(a => item.BloodType, null, new { @class = "form-control form-control-lg", @id = "BloodType" })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Home Phone No.</label>
+                        <div class="col-sm-3">                           
+                            @Html.TextBoxFor(a => item.HomeNum, null, new { @class = "form-control form-control-lg", @id = "HomePhone" })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Mobile Phone No.</label>
+                        <div class="col-sm-3">                           
+                            @Html.TextBoxFor(a => item.MobileNum, null, new { @class = "form-control form-control-lg", @id = "Mobile" })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Permanent Address</label>
+                        <div class="col-sm-5">                            
+                            @Html.TextBoxFor(a => item.PermanentAdd, null, new { @class = "form-control form-control-lg", @id = "PermanentAdd" })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Present Address</label>
+                        <div class="col-sm-5">                            
+                            @Html.TextBoxFor(a => item.PresentAdd, null, new { @class = "form-control form-control-lg", @id = "PresentAdd" })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Provincial Address</label>
+                        <div class="col-sm-5">                           
+                            @Html.TextBoxFor(a => item.ProvincialAdd, null, new { @class = "form-control form-control-lg", @id = "ProvincialAdd" })
+                        </div>
+                    </div>            
+                
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Person to Notify incase of Emergency</label>
+                        <div class="col-sm-5">                          
+                            @Html.TextBoxFor(a => item.PersonToNofify, null, new { @class = "form-control form-control-lg", @id = "PersonNotify" })
+                        </div>
+                    </div> 
+               
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Relation</label>
+                        <div class="col-sm-3">                           
+                            @Html.TextBoxFor(a => item.Relation, null, new { @class = "form-control form-control-lg", @id = "Relation" })
+                        </div>
+                    </div>  
+               
+                    <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Contact Number</label>
+                        <div class="col-sm-3">                          
+                            @Html.TextBoxFor(a => item.ContactNum, null, new { @class = "form-control form-control-lg", @id = "ContactNum" })
+                        </div>
+                    </div>
+                    }
+                }
+                <br />
+                 @foreach (var item in Model.EmpProfile)
+                 {
+                     if (item.alreadyupdated == 1)
+                     {
+                       <div style="float:right; display:inline;margin-right:150px;">
+                          <input type="button" class="btn btn-success"  value="Update Personal Information" style="margin-bottom:20px;"  disabled/>
+                       </div>
+                     }
+                     else
+                     {
+                      <div class="alert text-center" id="msg1" style="float:left; display:inline; width:auto;"></div>
+                      <div style="float:right; display:inline;margin-right:150px;">
+                        <input type="button" class="btn btn-success"  value="Update Personal Information" onclick="OpenModalPersonalInfo(1)" style="margin-bottom:20px;" id="UpdatePersonal" />
+                      </div>
+                     }
+                 }
+                
+                <br /><br /><br />
+                     </div>
+             
+                </div>
+			  <div class="tab-pane" id="2" style="max-width:1010px; border:1px solid #428bca; border-radius:5px;">  @*SECOND TAB*@
+         		
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="container">
+
+                        <div class="table-responsive" style="max-width:1000px;">
+                            <br />
+
+                            @foreach (var item6 in Model.EmpUpdateLogings)
+                            {
+                                if (item6.alreadyUpdateLegal == 1)
+                                {
+                                  <div class="bg-info" style="height:40px;text-align:center;align-content:center;padding:10px;">
+                                     <p class="bg-info">Your legal information is still pending, just wait for the approval of your immediate superior. Thank You!</p>
+                                  </div>
+                                   <br /><br />
+                                }
+                               
+                                
+                            }
+
+                        
+
+                            <table class="table table-bordered" id="legal_record" style="width: auto;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: auto;">Legal Information Questions</th>
+                                        <th style="text-align: center;">YES</th>
+                                        <th style="text-align: center;">Circumstance and Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @if (Model.EmpGenInfo.Count == 0)
+                                    {                       
+                                        <tr>
+                                            <td>Have you ever been convicted of a crime?</td>
+                                            <td style="align-content: center; text-align: center;">
+                                                <input id="check1" type="checkbox"></td>
+                                            <td>
+                                                <textarea name="detail1" id="detail1" style="width: 300px;"></textarea></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Have you ever been in a situation that resulted to or lead to a crime but of no intent of yours?</td>
+                                            <td style="align-content: center; text-align: center;">
+                                                <input id="check2" type="checkbox"></td>
+                                            <td>
+                                                <textarea name="detail2" id="detail2" style="width: 300px;"></textarea></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Have you syndicated or organized and planned a crime that caused the loss of life or property?</td>
+                                            <td style="align-content: center; text-align: center;">
+                                                <input id="check3" type="checkbox"></td>
+                                            <td>
+                                                <textarea name="detail3" id="detail3" style="width: 300px;"></textarea></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Have you ever been terminated from employment for just cause?</td>
+                                            <td style="align-content: center; text-align: center;">
+                                                <input id="check4" type="checkbox"></td>
+                                            <td>
+                                                <textarea name="detail4" id="detail4" style="width: 300px;"></textarea></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Have you ever been terminated from employment for just cause?</td>
+                                            <td style="align-content: center; text-align: center;">
+                                                <input id="check5" type="checkbox"></td>
+                                            <td>
+                                                <textarea name="detail5" id="detail5" style="width: 300px;"></textarea></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Is there a pending case (current) against you?</td>
+                                            <td style="align-content: center; text-align: center;">
+                                                <input id="check6" type="checkbox"></td>
+                                            <td>
+                                                <textarea name="detail6" id="detail6" style="width: 300px;"></textarea></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Are you currently involved in a a case against a person/s or corporation/s?</td>
+                                            <td style="align-content: center; text-align: center;">
+                                                <input id="check7" type="checkbox"></td>
+                                            <td>
+                                                <textarea name="detail7" id="detail7" style="width: 300px;"></textarea></td>
+                                        </tr>
+                                    }
+
+                                    @foreach (var item in Model.EmpGenInfo)
+                                    {
+                                        
+                                        <tr>
+                                            <td>Have you ever been convicted of a crime?</td>
+                                            <td style="align-content: center; text-align: center;">@Html.CheckBoxFor(x => item.isYes1, new { @checked = "checked", @id = "check1" })</td>
+                                            <td>@Html.TextAreaFor(a => item.hasDetail1, new { @class = "form-control form-control-lg", @id = "detail1", @style = "width:300px;" })</td>                                                  
+                                        </tr>                 
+                                        <tr>
+                                            <td>Have you ever been in a situation that resulted to or lead to a crime but of no intent of yours?</td>                                      
+                                            <td style="align-content: center; text-align: center;">@Html.CheckBoxFor(a => item.isYes2, new { @id = "check2" })</td>  
+                                            <td>@Html.TextAreaFor(a => item.hasDetail2, new { @class = "form-control form-control-lg", @id = "detail2", @style = "width:300px;" })</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Have you syndicated or organized and planned a crime that caused the loss of life or property?</td>
+                                            <td style="align-content: center; text-align: center;">@Html.CheckBoxFor(a => item.isYes3, new { @id = "check3" })</td>
+                                            <td>@Html.TextAreaFor(a => item.hasDetail3, new { @class = "form-control form-control-lg", @id = "detail3", @style = "width:300px;" })</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Have you ever been terminated from employment for just cause?</td>
+                                            <td style="align-content: center; text-align: center;">@Html.CheckBoxFor(a => item.isYes4, new { @id = "check4" })</td>
+                                            <td>@Html.TextAreaFor(a => item.hasDetail4, new { @class = "form-control form-control-lg", @id = "detail4", @style = "width:300px;" })</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Have you ever been terminated from employment for just cause?</td>
+                                            <td style="align-content: center; text-align: center;">@Html.CheckBoxFor(a => item.isYes5, new { @id = "check5" })</td>
+                                            <td>@Html.TextAreaFor(a => item.hasDetail5, new { @class = "form-control form-control-lg", @id = "detail5", @style = "width:300px;" })</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Is there a pending case (current) against you?</td>
+                                            <td style="align-content: center; text-align: center;">@Html.CheckBoxFor(a => item.isYes6, new { @id = "check6" })</td>
+                                            <td>@Html.TextAreaFor(a => item.hasDetail6, new { @class = "form-control form-control-lg", @id = "detail6", @style = "width:300px;" })</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Are you currently involved in a a case against a person/s or corporation/s?</td>
+                                            <td style="align-content: center; text-align: center;">@Html.CheckBoxFor(a => item.isYes7, new { @id = "check7" })</td>
+                                            <td style="align-content: center; text-align: center;">@Html.TextAreaFor(a => item.hasDetail7, new { @class = "form-control form-control-lg", @id = "detail7", @style = "width:300px;" })</td>
+                                        </tr>
+                                        
+                                    }
+                                </tbody>
+                            </table>
+                            
+                            @foreach (var item in Model.EmpUpdateLogings)
+                            {
+                                if (item.alreadyUpdateLegal == 1)
+                                {
+                                   
+                                    <div style="float:right; display:inline; margin-right:30px; ">
+                                    <input type="button" class="btn btn-success"  value="Update Legal Information Information"  style="margin-bottom:20px;" disabled />
+                                    </div>
+                                <br /><br /><br />
+                                }
+                                else
+                                {
+                                <div class="alert text-center" id="msg2" style="float:left; display:inline; margin-left:20px;"></div>
+                                    <div style="float:right; display:inline; margin-right:30px;">
+                                    <input type="button" class="btn btn-success"  value="Update Legal Information" onclick="OpenModalLegalInfo(1)" style="margin-bottom:20px;" id="UpdateLegal"/>
+                                </div>
+                                <br /><br /><br /><br /><br /><br />
+                                }
+                            }
+                                    
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+
+				</div> @*END OF SECOND TAB*@
+          <div class="tab-pane" id="3" style="max-width:1010px; border:1px solid #428bca; border-radius:5px;"> @*THIRD TAB *@
+          			
+        @* Education Attainment *@
+            
+        
+        @*<div class="alert text-center" id="msg3" style="width:auto; display:none;"></div>*@
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="table-responsive" style="max-width:1000px;">
+                           <br /><br />
+                              @foreach (var EmpItems in Model.EmpUpdateLogings)
+                              {
+                                  if (EmpItems.alreadyUpdateEducational == 1)
+                                  {
+                                     <div class="bg-info" style="height:40px;text-align:center;align-content:center;padding:10px; width:980px;">
+                                        <p class="bg-info">Your educational information is still pending, just wait for the approval of your immediate superior. Thank You!</p>
+                                     </div>
+                                   <br /><br />
+                                  }
+                              }
+                            <table class="table table-bordered table-hover" style="width: 990px;">
+                                <tr>
+                                    @foreach (var EmpItems in Model.EmpUpdateLogings)
+                                    {
+                                        if (EmpItems.alreadyUpdateEducational == 1)
+                                        {
+                                           <td>
+                                                <input type="text"  placeholder="Educational Attained" class="form-control" readonly="true"></td>
+                                            <td>
+                                                <input type="text"  placeholder="Name of School" class="form-control" readonly="true"></td>
+                                            <td>
+                                                <input type="text"  placeholder="Degree" class="form-control" readonly="true"></td>
+                                            <td>
+                                                @*<input type="text"  placeholder="Years Attended" class="form-control" readonly="true">*@
+                                                <input type="text"  class="form-control" placeholder="Date From" readonly="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"  class="form-control" placeholder="Date To" readonly="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"  placeholder="Honors" class="form-control" readonly="true"></td>
+                                            <td>
+                                               @* <input type="button" class="add btn btn-success" value="Add" onclick="OpenModal(1);" /></td>*@
+                                                <input type="button" class="add btn btn-success" value="Add" onclick="educ_rows_add();" disabled /></td>
+                                            <td> 
+                                                @*<button type="button" class="add btn btn-danger" onclick="OpenModal(2);">Delete</button></td>*@
+                                                <button type="button" class="add btn btn-danger" onclick="educ_rows_delete();" disabled>Delete</button></td> 
+                                        }
+                                        else
+                                        {
+                                            
+                                    <td>
+                                        <input type="text" id="educ-attained" placeholder="Educational Attained" class="form-control"></td>
+                                    <td>
+                                        <input type="text" id="name_school" placeholder="Name of School" class="form-control"></td>
+                                    <td>
+                                        <input type="text" id="educ-degree" placeholder="Degree" class="form-control"></td>
+                                    <td>
+                                        @*<input type="text" id="years_attended" placeholder="Years Attended" class="form-control"></td>*@
+                                        @*<input type="text" id="datFrom" class="form-control" placeholder="Date From"></td>*@      
+                                          <input type="text" id="datFrom" class="form-control" placeholder="Year From"></td>
+             
+                                    <td>
+                                        <input type="text" id="datTo" class="form-control" placeholder="Year To">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="educ-honors" placeholder="Honors" class="form-control"></td>
+                                    <td>
+                                       @* <input type="button" class="add btn btn-success" value="Add" onclick="OpenModal(1);" /></td>*@
+                                        <input type="button" class="add btn btn-success" value="Add" onclick="educ_rows_add();" /></td>
+                                    <td> 
+                                        @*<button type="button" class="add btn btn-danger" onclick="OpenModal(2);">Delete</button></td>*@
+                                        <button type="button" class="add btn btn-danger" onclick="educ_rows_delete();">Delete</button></td>
+                                        }
+                                    }
+                                </tr>
+                                        
+                            </table>
+
+                            <table id="educ_record" class="table table-bordered table-hover" style="width: 990px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20px;">Select</th>
+                                        <th style="display: none;">ID</th>
+                                        <th>Educational Attained</th>
+                                        <th>Name of School</th>
+                                        <th>Degree</th>
+                                        <th>Year From</th>
+                                        <th>Year To</th>
+                                        <th>Honors</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody id="educ1">
+                                    @foreach (var items in Model.EmpEducational)
+                                    {
+                                        <tr>
+                                            <td><input type='checkbox' name='record' class="chk"></td>
+                                            <td style="display: none;">@Html.DisplayFor(a => items.ID)</td>
+                                            <td>@Html.DisplayFor(a => items.EducationalAttained)</td>
+                                            <td>@Html.DisplayFor(a => items.NameOfSchool)</td>
+                                            <td>@Html.DisplayFor(a => items.Degree)</td>
+                                            <td>@Html.DisplayFor(a => items.DateFrom)</td>
+                                            <td>@Html.DisplayFor(a => items.DateTo)</td>
+                                            <td>@Html.DisplayFor(a => items.Honors)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                                <br /><br /><br />
+
+                           @foreach (var items in Model.EmpUpdateLogings)
+                           {
+                               if (items.alreadyUpdateEducational == 1)
+                               {
+                                    <div style="float:right; margin-right:20px; margin-bottom:20px;">
+                                        <input type="button" class="btn btn-success"  value="Update Educational" onclick="OpenModal();"  disabled/>
+                                    </div> 
+                               }
+                               else
+                               {
+                          
+
+                            <div class="text-center alert alert-danger" role="alert" id="failedToAddEduc" hidden style="display:none;"></div>
+                            <div class="alert text-center" id="msg3" style="float:left; display:none; margin-left:20px;"></div>
+                            <div style="float:right; margin-right:20px; margin-bottom:20px;">
+                                <input type="button" class="btn btn-success"  value="Update Educational" onclick="OpenModal();" id="UpdateEducation" />
+                            </div> 
+                               }
+                           }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                  
+       
+    @* End of Educational Attainment *@
+
+				</div> @*END OF THIRD TAB*@
+
+                <div class="tab-pane" id="4" style="max-width:1010px; border:1px solid #428bca; border-radius:5px;"> @*FORTH TAB *@
+          			
+                    @* WORK EXPERIENCE *@
+        
+        <div class="text-center alert alert-danger" role="alert" id="failedToAddWork" hidden></div>      
+         
+       
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="table-responsive" style="max-width:1000px;">
+                            <br /><br />
+                            @foreach (var item1 in Model.EmpUpdateLogings)
+                            {
+                                if (item1.alreadyUpdateWork == 1)
+                                {
+                                     <div class="bg-info" style="height:40px;text-align:center;align-content:center;padding:10px; width:980px;">
+                                        <p class="bg-info">Your work experience is still pending, just wait for the approval of your immediate superior. Thank You!</p>
+                                     </div>
+                                   <br /><br />
+                                }
+                            }
+
+
+                            <table class="table table-bordered" style="width: 990px;">
+                                <tr>
+                                 @foreach (var item1 in Model.EmpUpdateLogings)
+                                 {
+                                     if (item1.alreadyUpdateWork == 1)
+                                     {
+                                         @*<td><input type="text" id="datEmployed" placeholder="Date Employed" class="form-control"></td>*@
+                                    <td>
+                                        <input type="text"  class="form-control" placeholder="Date Employed" readonly="true"></td>
+                                    <td>
+                                        <input type="text"  placeholder="Position" class="form-control" readonly="true"></td>
+                                    <td>
+                                        <input type="text"  placeholder="Employer Name" class="form-control" readonly="true"></td>
+                                    <td>
+                                        <input type="text"  placeholder="Employer Number" class="form-control" readonly="true"></td>
+                                    <td>
+                                        <input type="text"  placeholder="Reason to leave" class="form-control" readonly="true"></td>
+                                    <td>
+                                        <input type="button" class="add btn btn-success" value="Add" onclick="work_rows_add();" disabled /></td>
+                                    <td>
+                                        <button type="button" class="add btn btn-danger" onclick="work_rows_delete();" disabled>Delete</button></td>
+                                     }
+                                     else
+                                     {
+                                         @*<td><input type="text" id="datEmployed" placeholder="Date Employed" class="form-control"></td>*@
+                                    <td>
+                                        <input type="text" id="datEmployed" class="form-control" placeholder="Date Employed"></td>
+                                    <td>
+                                        <input type="text" id="position" placeholder="Position" class="form-control"></td>
+                                    <td>
+                                        <input type="text" id="employer" placeholder="Employer Name" class="form-control"></td>
+                                    <td>
+                                        <input type="text" id="emp_number" placeholder="Employer Number" class="form-control"></td>
+                                    <td>
+                                        <input type="text" id="reason" placeholder="Reason to leave" class="form-control"></td>
+                                    <td>
+                                        <input type="button" class="add btn btn-success" value="Add" onclick="work_rows_add();" /></td>
+                                    <td>
+                                        <button type="button" class="add btn btn-danger" onclick="work_rows_delete();">Delete</button></td>
+                                     }
+                                 }
+
+                                    
+                                </tr>
+                            </table>
+
+                            <table id="work_record" class="table table-bordered table-hover" style="width: 990px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20px;">Select</th>
+                                        <th style="display: none;">ID</th>
+                                        <th scope="row">Date Employed</th>
+                                        <th scope="row">Position</th>
+                                        <th scope="row">Employer</th>
+                                        <th scope="row">Employer Number</th>
+                                        <th scope="row">Reason for Leaving</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="work1">
+                                    @foreach (var item2 in Model.EmpWorkExp)
+                                    {
+                                        <tr>
+                                            <td><input type='checkbox' name='record'></td>
+                                            <td style="display: none;">@Html.DisplayFor(a => item2.ID)</td>
+                                            <td>@Html.DisplayFor(a => item2.strDateEmployeed)</td>
+                                            <td>@Html.DisplayFor(a => item2.strPosition)</td>
+                                            <td>@Html.DisplayFor(a => item2.strEmployerName)</td>
+                                            <td>@Html.DisplayFor(a => item2.EmployerContact)</td>
+                                            <td>@Html.DisplayFor(a => item2.strReason)</td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+
+                            </table>
+                            @foreach (var item3 in Model.EmpUpdateLogings)
+                            {
+                                if (item3.alreadyUpdateWork == 1)
+                                {
+
+                            <br /><br />                                                  
+                            <div style="float:right; margin-right:20px; margin-bottom:20px;">
+                                <input type="button" class="btn btn-success"  value="Update Work Experience" onclick="OpenModalWorkExper(1);" />
+                            </div> 
+                                }
+                                else
+                                {                                   
+                            <br /><br />
+                            <div class="alert text-center" id="msg4" style="float:left; display:none; margin-left:20px;"></div>                          
+                            <div style="float:right; margin-right:20px; margin-bottom:20px;">
+                                <input type="button" class="btn btn-success"  value="Update Work Experience" onclick="OpenModalWorkExper(1);" id="UpdateWork" />
+                            </div> 
+                            <br /><br /><br />
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+ 
+    @* end for working experience *@
+
+				</div> @*END OF FORTH TAB*@
+
+                <div class="tab-pane" id="5" style="max-width:1010px; border:1px solid #428bca; border-radius:5px;"> @*FIFTH TAB *@
+          			@* Start of Training And Semenar Atteneded  *@
+     
+            @*<div class="alert text-center" id="msg5" style="width:auto; display:none;"></div>*@
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="table-responsive" style="max-width:1000px;">
+                            <br /><br />
+                            @foreach (var item3 in Model.EmpUpdateLogings)
+                            {
+                                if (item3.alreadyUpdateTraining == 1)
+                                { 
+                                    <div class="bg-info" style="height:40px;text-align:center;align-content:center;padding:10px; width:980px;">
+                                        <p class="bg-info">Your training and seminars information is still pending, just wait for the approval of your immediate superior. Thank You!</p>
+                                     </div>
+                                   <br /><br />
+                                }
+                            }
+
+                            <table class="table" style="width: 990px;">
+                                <tr>
+                                    @foreach (var item3 in Model.EmpUpdateLogings)
+                                    {
+                                        if (item3.alreadyUpdateTraining == 1)
+                                        {
+                                            <td>
+                                                <input type="text" placeholder="Training/Seminars" class="form-control" readonly="true" />
+                                            </td>
+                                            <td>
+                                                <input type="text" placeholder="Conducted By/Sponsor" class="form-control" readonly="true" />
+                                            </td>
+                                    
+                                            <td>
+                                                <input type="text" class="form-control" placeholder="Date of Training/Seminar" readonly="true" />
+                                            </td>
+                                            <td>
+                                                <input type="text" placeholder="Place" class="form-control" readonly="true" />
+                                            </td>
+
+                                            <td>
+                                                <input type="button" class="add btn btn-success" value="Add" onclick="training_rows_add();" disabled/>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="add btn btn-danger" onclick="training_rows_delete();" disabled>Delete</button>
+                                            </td> 
+                                        }
+                                        else
+                                        {
+                                           <td>
+                                        <input type="text" id="Traning" placeholder="Training/Seminars" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="Sponsor" placeholder="Conducted By/Sponsor" class="form-control">
+                                    </td>
+                                    
+                                    <td>
+                                        <input type="text" id="datTraining" class="form-control" placeholder="Date of Training/Seminar">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="place" placeholder="Place" class="form-control">
+                                    </td>
+
+                                    <td>
+                                        <input type="button" class="add btn btn-success" value="Add" onclick="training_rows_add();" />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="add btn btn-danger" onclick="training_rows_delete();">Delete</button>
+                                    </td> 
+                                        }
+                                    }
+                                    
+                                </tr>
+                            </table>
+
+
+
+                            <table id="training_record" class="table " style="width: 990px;">
+                                <thead>
+                                    <tr>
+                                        <th>Select</th>
+                                        <th style="display: none;">ID</th>
+                                        <th scope="row">Title of Training/Seminars</th>
+                                        <th scope="row">Conducted By/Sponsor</th>
+                                        <th scope="row">Date of Training/Seminar</th>
+                                        <th scope="row">Place</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody id="training1">
+                                    @foreach (var item4 in Model.EmpTraining)
+                                    {
+                                        <tr>
+                                            <td><input type='checkbox' name='record'></td>
+                                            <td style="display: none;">@Html.DisplayFor(a => item4.ID)</td>
+                                            <td>@Html.DisplayFor(a => item4.strTraining)</td>
+                                            <td>@Html.DisplayFor(a => item4.strSponsor)</td>
+                                            <td>@Html.DisplayFor(a => item4.strDateTraining)</td>
+                                            <td>@Html.DisplayFor(a => item4.Place)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            @foreach (var item5 in Model.EmpUpdateLogings)
+                            {
+                                if (item5.alreadyUpdateTraining == 1)
+                                {
+                                    <br /><br />
+                                <div style="float:right; margin-right:20px; margin-bottom:20px;">
+                                <input type="button" class="btn btn-success"  value="Update Training and Seminars"  disabled/>
+                                    <br /><br />
+                            </div> 
+                                }
+                                else
+                                {
+                                    <br /><br />
+                            <div class="alert text-center" id="msg5" style="float:left; display:none; margin-left:20px;"></div>                       
+                            <div style="float:right; margin-right:20px; margin-bottom:20px;">
+                                <input type="button" class="btn btn-success"  value="Update Training and Seminars" onclick="OpenModalTrainingAndSemenars(1);" id="UpTraining" />
+                            </div> 
+                                <br /><br />
+                                }
+                            }
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+
+          @* End of Training And Semenar Attended *@
+
+  
+				</div>
+			</div>
+  </div>
+
+    <br />
+    <br />
+    
+    @*<div class="text-center alert alert-success" role="alert" id="successResult" hidden></div>
+    <div class="text-center alert alert-danger" role="alert" id="failedResult" hidden></div>*@
+
+    <br />
+    <br />
+        @*<button type="button" class="btn btn-primary btn-lg btn-block">SAVE</button>*@
+        @*<input type="button" class="btn btn-success btn-lg" onclick="UpdateValues();" value="UPDATE EMPLOYEE 201" />*@
+   
+    <br />
+    <br />
+
+ @* Personal Modal *@
+<input type="text" id="type-id1" class="hide" />
+
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel1"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-lg" onclick="PersonalInfo_Add();">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+ @* End of Personal Modal *@
+
+
+ @* LEgal Information Modal *@
+<input type="text" id="type-id2" class="hide" />
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel2"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-lg" onclick="UpdateLegalInfo();">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+ @* End of Legal Information Modal *@
+
+
+ @* Educational Modal *@
+<input type="text" id="type-id" class="hide" />
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-lg" onclick="Update_educRecord();">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+ @* End of Educational Modal *@
+
+
+@* Work Experience Modal *@
+<input type="text" id="type-id3" class="hide" />
+
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel3"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-lg" onclick="Update_workRecord();">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+ @* End of Work Experience Modal *@
+
+
+    @* Training And Semenars *@
+<input type="text" id="type-id4" class="hide" />
+
+<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel4"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-lg" onclick="Update_trainingRecord();">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    @* End of Training and Semenars *@
+
+</body>
+</html>

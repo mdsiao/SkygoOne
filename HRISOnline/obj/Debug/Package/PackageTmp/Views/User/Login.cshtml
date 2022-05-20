@@ -1,0 +1,66 @@
+﻿@model HRISOnline.Objects.sysUser
+
+@{
+    ViewBag.Title = "LogIn";
+    Layout = "~/Views/Shared/_Login.cshtml";
+}
+
+<div class="container-fluid">
+   <div id="page-login" class="row">                
+        <div class="col-xs-12 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">                                           
+            <div class="box">
+                <div class="box-content">
+                    <div class="text-left">
+                        <h3 class="page-header">SKYGO Login Page
+                            <span class="pull-right" id="datetime"></span>
+                        </h3>                       
+                    </div>
+                    
+
+                    @using (Html.BeginForm())
+                    { 
+                    
+                    if((@ViewBag.ErrorMsg != "") && (@ViewBag.ErrorMsg != null))
+                    {
+                        <div class="alert alert-danger text-center">
+                            @ViewBag.ErrorMsg
+                        </div>
+                    }
+                    <div class="form-group">
+                        <label class="control-label">Username</label>
+                        @Html.TextBoxFor(Model => Model.Username, new { @class = "form-control", @placeholder = "Username", @required="required" })
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Password</label>
+                        @Html.PasswordFor(Model => Model.UserPassword, new { @class = "form-control", @placeholder = "Password", @required="required" })
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">&nbsp;&nbsp;&nbsp;Sign In&nbsp;&nbsp;&nbsp;</button>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+
+@section scripts{
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#Username").focus();
+
+        //getTime();
+        setInterval(function () { getTime() }, 1000);
+    });
+
+    function getTime()
+    {
+        var url = '@Url.Action("getTime")';
+
+        $.get(url, function (time) {
+            $("#datetime").html(time.datetime);
+        });
+    }
+</script>
+}

@@ -1,0 +1,143 @@
+﻿@model IEnumerable<HRISOnline.Objects.DTRAdjList>
+
+@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+@*@section breadcrumb{
+    <div class="row">
+        <div id="breadcrumb" class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">DTR Adjustment</a></li>
+                <li><a href="#">@ViewBag.MyTitle</a></li>
+            </ol>
+        </div>
+    </div>
+}*@
+
+@*<div class="col-sm-12">*@
+    <div class="alert text-center" id="msg"></div>
+
+    <div class="panel panel-primary">
+        @*<div class="panel-heading">
+            <h3>@ViewBag.MyTitle</h3>
+        </div>*@
+
+        <div class="panel-body">
+            <table class="table table-bordered table-heading" id="adj-table">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1 text-center">Date Filed</th>
+                        <th class="col-sm-1 text-center">Adjustment Date</th>
+                        <th class="col-sm-2 text-center">Time In - Time Out</th>
+                        <th class="col-sm-1 text-center">No. of Hours</th>
+                        <th>Reason</th>
+                        <th class="col-sm-1 text-center">Status</th>
+                        <th class="col-sm-1 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    { 
+                        <tr>
+                            <td class="text-center">@item.DateFiled.ToShortDateString()</td>
+                            <td class="text-center"><a href="@Url.Content("~/DTRAdjustment/Details/" + item.intOlnDTRAdjustment)">@item.AdjustmentDate.ToShortDateString()</a></td>
+                            <td class="text-center">@item.DTRAdjTime</td>
+                            <td class="text-center">@item.NoOfHours</td>
+                            <td>@item.Reason</td>
+                            @if (@item.Status.ToString() == "APPROVED")
+                                {<td class="text-center" style="color: green; font-size:12px; font-weight:bold;">@item.Status</td>}
+                            else
+                                {<td class="text-center" style="color: red; font-size:12px; font-weight:bold;">@item.Status</td>}
+                                
+                            <td class="text-center">
+                                @if ((item.isCancelled == false) && (item.isDisapproved == false))
+                                { 
+                                    @*<a href="@Url.Content("~/DTRAdjustment/Edit/" + item.intOlnDTRAdjustment)" class="btn btn-success btn-xs">Edit</a>                                *@
+                                    <button type="button" onclick="SetID(@item.intOlnDTRAdjustment);" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal">Cancel</button>
+                                }                                
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+@*</div>*@
+
+<input type="text" id="cancel-id" class="hide" />
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Cancel DTR Adjustment</h4>
+      </div>
+      <div class="modal-body">
+        Do you want to cancel this transaction?
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-success btn-lg" onclick="CancelDTRAdjustment();">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#adj-table").dataTable();
+
+            $('#msg').removeClass('active');
+            $('#msg').addClass('hide');
+        });
+
+        function RedirectMe() {
+            window.location.href = "@Url.Content("~/DTRAdjustment")";
+        }
+
+        function SetID(id) {
+            $('#cancel-id').val(id);
+        }
+
+        function CancelDTRAdjustment() {
+            var url = '@Url.Action("CancelDTRAdjustment")';
+            var data = { "intOlnDTRAdjustment": 0 };
+
+            data.intOlnDTRAdjustment = $('#cancel-id').val();
+
+            $.ajax({
+                url: url,
+                data: JSON.stringify(data),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+
+                    $('#msg').addClass('active');
+                    $('#msg').removeClass('hide');
+
+                    if (result.success == "True") {
+                        $('#msg').removeClass('bg-danger');
+                        $('#msg').addClass('bg-success');
+                        setTimeout('RedirectMe()', 500);
+                        $('#myModal').modal('hide');
+                    }
+                    else {
+                        $('#msg').removeClass('bg-success');
+                        $('#msg').addClass('bg-danger');
+                    }
+
+                    $('#msg').html(result.msg);
+
+                }
+            });
+
+        }
+    </script>    
+}

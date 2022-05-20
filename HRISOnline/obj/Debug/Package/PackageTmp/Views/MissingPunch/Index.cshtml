@@ -1,0 +1,627 @@
+﻿@model HRISOnline.Objects.MissingPunch
+@{
+    ViewBag.Title = "Appyl for Missing Punch";
+}
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+@section scripts
+{
+
+    <script src="@Url.Content("~/Scripts/myScripts.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.maskedinput.js")"></script>
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        GetShifts();
+        $("#DatActualDate").datepicker();
+        //$("#DatActualDateEnd").datepicker();
+        $('#ActualTimeFrom').timepicker();
+        $('#ActualTimeTo').timepicker();
+        //$("#HolidayDate").datepicker();
+
+        $('#MissedTimeIn').timepicker();
+        $('#MissedTimeOut').timepicker();
+        
+        
+        $("#ActualTimeFrom, #ActualTimeTo").on('change', function (ev) {
+
+            var url = '@Url.Action("SetDates")';
+            var datax = { "gpDate": "", "TimeIn": "", "TimeOut": "" };
+            var durationSplit;
+            var durationH = 0;
+            var durationM = 0;
+
+            datax.gpDate = $('#DatActualDate').val();
+            datax.TimeOut = $("#ActualTimeFrom").val();
+            datax.TimeIn = $("#ActualTimeTo").val();
+
+            $.get(
+                   url,
+                   datax,
+                   function (data) {
+
+                      
+                       //$('#ActualTimeFrom').val(data.shiftIn);
+                
+                       //$('#ActualTimeTo').val(data.shiftOut);
+                     
+
+                       $('#ActualNoOfHours').val(data.NoOfHrs);
+                       durationSplit = data.NoOfHrs.toString().split('.');
+                       durationH = durationSplit[0].toString();
+
+                       if (typeof (durationSplit[1]) === "undefined")
+                       { }
+                       else {
+
+                           durationM = parseFloat(durationSplit[1].toString());
+
+                           switch (durationSplit[1]) {
+                               case "1":
+                               case "2":
+                               case "3":
+                               case "4":
+                               case "5":
+                               case "6":
+                                   durationM = durationM * 10;
+                                   break;
+                           }
+                       }
+
+                       $('#duration').val(durationH + " h " + ((durationM.toString() != "0") ? durationM.toString() + " m" : ""));
+                   });
+        });
+
+
+
+    });
+
+
+    function GetShifts() {
+        var url = '@Url.Action("GetShifts")';
+        var datax = { "gpDate": "" };
+
+        datax.gpDate = $('#DatActualDate').val();
+
+        $.get(
+            url,
+            datax,
+            function (data) {
+                $('#MissedTimeIn').val(data.startOfTime);
+                $('#MissedTimeOut').val(data.endOfTime);
+
+
+            });
+    }
+
+
+    $(document).ready(function () {
+
+        $("#MissedTimeIn, #MissedTimeOut").on('change', function (ev) {
+
+            var url = '@Url.Action("SetDatesMissed")';
+            var datax = { "gpDate": "", "TimeIn": "", "TimeOut": "" };
+            var durationSplit;
+            var durationH = 0;
+            var durationM = 0;
+
+            datax.gpDate = $('#DatActualDate').val();
+            datax.TimeOut = $("#MissedTimeIn").val();
+            datax.TimeIn = $("#MissedTimeOut").val();
+
+            $.get(
+                       url,
+                       datax,
+                       function (data) {
+
+                           if (data.datanum == "1") {
+                               $('#MissedTimeIn').val(data.shift);
+                           }
+                           else if (data.datanum == "2") {
+                               $('#MissedTimeOut').val(data.shift);
+                           }
+
+                           $('#MissedNoOfHours').val(data.NoOfHrs);
+                           durationSplit = data.NoOfHrs.toString().split('.');
+                           durationH = durationSplit[0].toString();
+
+                           if (typeof (durationSplit[1]) === "undefined")
+                           { }
+                           else {
+
+                               durationM = parseFloat(durationSplit[1].toString());
+
+                               switch (durationSplit[1]) {
+                                   case "1":
+                                   case "2":
+                                   case "3":
+                                   case "4":
+                                   case "5":
+                                   case "6":
+                                       durationM = durationM * 10;
+                                       break;
+                               }
+                           }
+
+                           $('#MissedNoOfHour').val(durationH + " h " + ((durationM.toString() != "0") ? durationM.toString() + " m" : ""));
+                       });
+        });
+    });
+
+
+
+
+    $(function () {
+        $("#AdjustmentType").change(function () {
+            var selectedText = $(this).find("option:selected").text();
+            var selectedValue = $(this).val();
+           
+            if (selectedValue == 1) {
+                $("#ShowActualDate").show();
+                $("#ShowReason").show();
+                $("#ShowActualTimeInOut").show();             
+                $("#ShowTimeFromTo").hide();
+
+
+                $("#ShowActualDate").val('');
+                $("#ActualDateEnd").val('');
+                $("#MissedPunch").val('');            
+                $("#MissedNoOfHours").val('');
+
+                $("#ActualTimeFrom").val('');
+                $("#ActualTimeTo").val('');
+                $("#NoOfHours").val('');
+                $("#Reason").val('');
+
+
+            } else if (selectedValue == 2) {
+
+                $("#ShowActualDate").show();
+                $("#ShowReason").show();
+                $("#ShowActualTimeInOut").hide();
+                $("#ShowTimeFromTo").show();
+
+                $("#ShowActualDate").val('');
+                $("#ActualDateEnd").val('');
+                $("#MissedPunch").val('');
+                $("#MissedNoOfHours").val('');
+
+                $("#ActualTimeFrom").val('');
+                $("#ActualTimeTo").val('');
+                $("#NoOfHours").val('');
+                $("#Reason").val('');
+
+            } else if (selectedValue == 3) {
+                $("#ShowActualDate").show();
+                $("#ShowReason").show();
+                $("#ShowActualTimeInOut").show();
+                $("#ShowTimeFromTo").hide();
+
+                $("#ShowActualDate").val('');
+                $("#ActualDateEnd").val('');
+                $("#MissedPunch").val('');
+                $("#MissedNoOfHours").val('');
+
+                $("#ActualTimeFrom").val('');
+                $("#ActualTimeTo").val('');
+                $("#NoOfHours").val('');
+                $("#Reason").val('');
+
+            } 
+            
+            
+
+        });
+    });
+
+
+
+        function SaveRecord() {
+
+            $('#modal-confirm').modal('hide');
+
+            var intIDMissingPunch = $("#intIDMissingpunch").val();
+            var empID = $("#intMstEmpPersonal").val();
+
+            var datFiled = $("#DateFiled").val();
+            var AdjustmentType = $("#AdjustmentType").val();
+
+
+            var datActualDate = $("#DatActualDate").val();
+            var MissedTimeIn = $("#MissedTimeIn").val();
+            var MissedTimeOut = $("#MissedTimeOut").val();
+            var MissedNoOfHours = $("#MissedNoOfHours").val();
+
+            var ActualDateEnd = $("#DatActualDateEnd").val();
+            var ActualTimeFrom = $("#ActualTimeFrom").val();
+            var ActualTimeTo = $("#ActualTimeTo").val();
+            var NoOfHours = $("#ActualNoOfHours").val();
+            var EmpName = $("#EmpName").val();
+            var HolidayDate = $("#HolidayDate").val();
+            var HolidayType = $("#HolidayType").val();
+            var NameOfHoliday = $("#NameOfHoliday").val();
+            var Reason = $("#Reason").val();
+            
+
+
+            var timeStart = new Date("01/01/2007 " + MissedTimeIn);
+            var timeEnd = new Date("01/01/2007 " + MissedTimeOut);
+
+            var difference = timeEnd - timeStart;
+
+           var Hours = difference / 60 / 60 / 1000;
+
+            
+
+            if (AdjustmentType === '') {
+                OpenModalConfirmation(1);
+            } else if (Reason === '') {
+                OpenModalConfirmation(2);
+            }
+      
+
+
+            if (AdjustmentType == 1) {
+                var myStoredData = {
+                    'intIDMissingpunch': 0,
+                    'intMstEmpPersonal': empID,
+                    'DateFiled': datFiled,
+                    'DatActualDate': datActualDate,
+                    'AdjustmentType': AdjustmentType,
+                    'MissedTimeIn' : MissedTimeIn,
+                    'MissedTimeOut': MissedTimeOut,
+                    'MissedNoOfHours': Hours,
+                    'ActualTimeFrom': '',
+                    'ActualTimeTo': '',
+                    'ActualNoOfHours': '',
+                    'Reason': Reason
+                };
+            } else if (AdjustmentType == 2)  {
+                var myStoredData = {
+                    'intIDMissingpunch': 0,
+                    'intMstEmpPersonal': empID,
+                    'DateFiled': datFiled,
+                    'DatActualDate': datActualDate,
+                    'AdjustmentType': AdjustmentType,
+                    'MissedTimeIn': '',
+                    'MissedTimeOut': '',
+                    'MissedNoOfHours': '',
+                    'ActualTimeFrom': ActualTimeFrom,
+                    'ActualTimeTo': ActualTimeTo,
+                    'ActualNoOfHours': NoOfHours,
+                    'Reason': Reason
+                };
+            } else if (AdjustmentType == 3) {
+
+                var myStoredData = {
+                    'intIDMissingpunch': 0,
+                    'intMstEmpPersonal': empID,
+                    'DateFiled': datFiled,
+                    'DatActualDate': datActualDate,
+                    'AdjustmentType': AdjustmentType,
+                    'MissedTimeIn': MissedTimeIn,
+                    'MissedTimeOut': MissedTimeOut,
+                    'MissedNoOfHours': MissedNoOfHours,
+                    'ActualTimeFrom': '',
+                    'ActualTimeTo': '',
+                    'ActualNoOfHours': '',
+                    'Reason': Reason
+                };
+            } 
+        
+            $.ajax({
+                url: '@Url.Action("InsertMissedPunch", "MissingPunch")',
+                beforeSend: function () {
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                type: 'POST',
+                data: JSON.stringify(myStoredData),
+                datatype: 'json',
+                contentType: 'application/json',
+                success: function (result) {
+
+                    $('#msg').addClass('active');
+                    $('#msg').removeClass('hide');
+
+
+                    //if (result != null && result.success) {
+
+                    //    $('#msg').removeClass('bg-danger');
+                    //    $('#msg').addClass('bg-success');
+                    //    setTimeout('RedirectMe()', 2000);
+
+                    //}
+                    //else {
+                    //    $('#msg').removeClass('bg-success');
+                    //    $('#msg').addClass('bg-danger');
+                    //}
+
+
+                    if (result.success == "True") {
+                        $('#msg').removeClass('bg-danger');
+                        $('#msg').addClass('bg-success');
+                        setTimeout('RedirectMe()', 2000);
+                    }
+                    else {
+                        $('#msg').removeClass('bg-success');
+                        $('#msg').addClass('bg-danger');
+                    }
+
+
+
+
+                    $('.ajax-loader').css("visibility", "hidden");
+                    $('#msg').html(result.msg);
+                    //$('#msg').html(result.responseText);
+                }
+            });
+
+        }
+
+        function OpenModalConfirmation(type) {
+            if (type == 1) {
+                $('#myModalLabel4').html("Error");
+                $('#myModalBody').html("Please select for adjustment type!");
+            }
+            if (type == 2) {
+                $('#myModalLabel4').html("Error");
+                $('#myModalBody').html("Please input your reason!");
+            }
+            if (type == 3) {
+                $('#myModalLabel4').html("Notice");
+                $('#myModalBody').html("Successfully Saved!");
+            }
+            if (type == 4) {
+                $('#myModalLabel4').html("Notice");
+                $('#myModalBody').html("Failed to Saved!");
+            }
+            if (type == 5) {
+                $('#myModalLabel4').html("Error");
+                $('#myModalBody').html("Duration must not equal to zero!");
+
+                return false;
+            }
+                
+            $('#type-id').val(type);
+            $('#myModal').modal();
+        }
+
+        function RedirectMe() {
+            window.location.href = "@Url.Content("~/MissingPunch/ListOfMissingPunch")";
+    }
+
+
+
+
+</script>
+
+<style>
+.ajax-loader {
+  visibility: hidden;
+  background-color: rgba(255,255,255,0.7);
+  position: absolute;
+  z-index: +100 !important;
+  width: 100%;
+  height:100%;
+}
+
+.ajax-loader img {
+  position: relative;
+  top:20%;
+  left:30%;
+}
+
+</style>
+
+<div class="ajax-loader">
+  <img src="~/Images/loaderIcon.gif" class="img-responsive" />
+</div>
+
+<div class="alert text-center" id="msg"></div>
+ <div class="panel panel-primary">
+
+
+     @using (Html.BeginForm("Index", "MissingPunch", FormMethod.Post, new { @class = "form-horizontal", @role = "form" }))
+     {
+        
+     <div class="panel-body">
+
+          @Html.HiddenFor(mdl => mdl.intIDMissingpunch)
+          @Html.HiddenFor(mdl => mdl.intMstEmpPersonal)
+
+         <div class="form-group">
+                <label class="col-sm-2 control-label">Date Filed</label>
+                <div class="col-sm-2">
+                    @Html.TextBoxFor(mdl => mdl.DateFiled, "{0:MM/dd/yyyy}", new { @class = "form-control", @readonly = "true", @data_date_format = "mm/dd/yyyy" })
+                </div>
+          </div>
+
+         <div class="form-group">
+                <label class="col-sm-2 control-label">Adjustment Type</label>
+                <div class="col-sm-4">
+                    @Html.DropDownList("AdjustmentType",null," " ,new { @class = "form-control", @style="width: 100%;" })
+                </div>
+          </div>
+            
+         @* For Missing Punch *@
+         <div class="form-group" style = "display: none;" id ="ShowActualDate">
+                <label class="col-sm-2 control-label">Actual Date</label>
+                <div class="col-sm-3">
+                    @Html.TextBoxFor(mdl => mdl.DatActualDate, "{0:MM/dd/yyyy}", new { @class = "form-control", @data_date_format = "mm/dd/yyyy" })
+                </div>
+          </div>
+
+         <div class="form-group" style = "display: none;" id ="ShowActualTimeInOut">
+               <label class="col-sm-2 control-label">Time In</label>
+                <div class="col-sm-3">
+                        <div class="input-group bootstrap-timepicker timepicker">
+                            @Html.TextBoxFor(mdl => mdl.MissedTimeIn,  new { @class = "form-control" })
+                        </div>
+                </div>
+                
+                <label class="col-sm-1 control-label">Time Out</label>
+                <div class="col-sm-3">
+                        <div class="input-group bootstrap-timepicker timepicker">
+                            @Html.TextBoxFor(mdl => mdl.MissedTimeOut,  new { @class = "form-control" })
+                        </div>
+                </div>
+
+                <label class="col-sm-1 control-label">Duration</label>
+                <div class="col-sm-2">
+                    @Html.HiddenFor(mdl => mdl.MissedNoOfHours, new { @class = "form-control", @readonly = "true" })
+                    <input type="text" id="MissedNoOfHour" class="form-control" value="0 h 0 m" readonly="true" />
+                </div>
+
+         </div>
+
+         @* For Missing Punch *@   
+         
+
+         @*<div class="form-group" style = "display: none;" id ="ShowActualDateEnd">
+                <label class="col-sm-2 control-label">Date End</label>
+                <div class="col-sm-3">
+                    @Html.TextBoxFor(mdl => mdl.DatActualDateEnd, " ", new { @class = "form-control", @data_date_format = "mm/dd/yyyy" })
+                </div>
+          </div>*@
+
+           
+         @* Other Adjustments *@
+         <div class="form-group" style = "display: none;" id ="ShowTimeFromTo">
+                <label class="col-sm-2 control-label">From</label>
+                <div class="col-sm-3">
+                        <div class="input-group bootstrap-timepicker timepicker">
+                            @Html.TextBoxFor(mdl => mdl.ActualTimeFrom,  new { @class = "form-control" })
+                        </div>
+                </div>
+                
+                <label class="col-sm-1 control-label">To</label>
+                <div class="col-sm-3">
+                        <div class="input-group bootstrap-timepicker timepicker">
+                            @Html.TextBoxFor(mdl => mdl.ActualTimeTo,  new { @class = "form-control" })
+                        </div>
+                </div>
+
+                <label class="col-sm-1 control-label">Duration</label>
+                <div class="col-sm-2">
+                    @Html.HiddenFor(mdl => mdl.ActualNoOfHours, new { @class = "form-control", @readonly = "true" })
+                    <input type="text" id="duration" class="form-control" value="0 h 0 m" readonly="true" />
+                </div>
+          </div>
+         @* End Other Adjustments *@
+
+
+        @* <div class="form-group" style = "display: none;" id ="ShowBranchDept">
+                <label class="col-sm-2 control-label">Employee Name</label>
+                <div class="col-sm-3">                  
+                    @Html.DropDownList("EmpName",null," " ,new { @class = "form-control", @style="width: 100%;" })
+                </div>
+          </div>*@
+
+
+          @* Holiday Proclamation *@
+     
+         @*<div class="form-group" style = "display: none;" id ="ShowHolidayDate">
+                <label class="col-sm-2 control-label">Holiday Date</label>
+                <div class="col-sm-3">
+                    @Html.TextBoxFor(mdl => mdl.HolidayDate, " ", new { @class = "form-control", @data_date_format = "mm/dd/yyyy" })
+                </div>
+          </div>
+
+         <div class="form-group" style="display:none;" id="ShowHolidayType">
+                <label class="col-sm-2 control-label">Holiday Type</label>
+                <div class="col-sm-3">
+                     @Html.DropDownList("HolidayType", new List<SelectListItem>  
+                                 { new SelectListItem { Text = "Regular", Value = "1"},  
+                                   new SelectListItem { Text = "Special", Value = "2"},  
+                                   }, "", new { @class = "form-control form-control-lg", @id = "HolidayType", @placeholder = "" })               
+                </div>               
+          </div>
+
+          <div class="form-group" style = "display: none;" id ="ShowHolidayName">
+                <label class="col-sm-2 control-label">Name of Holiday</label>
+                <div class="col-sm-3">
+                    @Html.TextBoxFor(mdl => mdl.NameOfHoliday, new { @class = "form-control", @required = "", })
+                </div>
+          </div>*@
+
+
+         @* End Holiday Proclamation *@
+
+
+
+         <div class="form-group" style = "display: none;" id ="ShowReason">
+                <label class="col-sm-2 control-label">Description</label>
+                <div class="col-sm-10">
+                    @Html.TextAreaFor(mdl => mdl.Reason, new { @class = "form-control", @required = "", })
+                </div>
+          </div>
+          
+     </div>
+        }  
+         <div class="panel-footer">
+             @*<div class="container" style="margin-bottom: 20px;">*@
+             @*<a class="btn btn-success btn-lg" onclick="setValConfirmation();">Submit</a>*@
+             <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal-confirm" href="#mdl-confirm">Submit</button>
+           @* <a class="btn btn-success btn-lg" onclick="setConfirmation();" data-toggle="modal" data-target="#modal-confirm" href="#mdl-confirm">Submit</a>*@
+          </div>   
+      
+ </div>
+
+@*CONFIRMATION*@
+<div class="modal fade" id="modal-confirm" role="dialog" aria-labelledby="myModalLabel-elig" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel-pwd">Confirmation</h4>
+      </div>
+      <div class="modal-body">
+          You are about to apply for Adjustments!.
+         @* <br />
+          <br />
+          <h4>@Session["emp_name"]</h4>
+          <span class="gtype"></span> Date Filed: <label id="dat_filed"></label><br />
+          Actual Date: <label id="datDateSelect"></label><br />
+          Adjustment Type: <label id="AdjustType"></label><br />
+          Time In: <label id="TimeIn"></label><br />  
+          Time Out: <label id="TimeOut"></label><br /> 
+          <p id="EmpLabel"></p>Employee Name: <label id="EmpName"></label><br /> 
+          <br />
+          <br />*@
+          Do you want to continue?
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-success btn-lg" onclick="SaveRecord();">Continue</button>
+        <button type="button" class="btn btn-danger  btn-lg" onclick=""  data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel4"></h4>
+              </div>
+              <div class="modal-body" id="myModalBody">
+              </div>
+              <div class="modal-footer">
+                @*<button type="button" class="btn btn-success btn-lg" onclick="SubmitGroupInsurance();">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+                <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>*@
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+

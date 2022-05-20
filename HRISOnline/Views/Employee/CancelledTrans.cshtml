@@ -1,0 +1,35 @@
+﻿@model IEnumerable<HRISOnline.Objects.NotificationTrans>
+
+@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <table class="table table-bordered table-heading" id="nt-table">
+                <thead>
+                    <tr>
+                        <th class="col-sm-2 text-center">Type</th>
+                        <th class="col-sm-1 text-center">Date Filed</th>
+                        <th>Transaction Description</th>
+                    </tr>                    
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    { 
+                        <tr>
+                            <td>@item.dType</td>
+                            <td class="text-center">@item.dDate.ToShortDateString()</td>
+                            <td>@item.dDesc</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div> 
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () { $("#nt-table").dataTable(); });
+    </script>
+}

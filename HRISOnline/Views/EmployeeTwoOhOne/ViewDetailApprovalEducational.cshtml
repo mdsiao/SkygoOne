@@ -1,0 +1,92 @@
+﻿@model HRISOnline.Objects.EmpViewDetailsForApproval
+@{
+    ViewBag.Title = "ViewDetailApprovalEducational";
+}
+
+<p style="float:right;">
+         @Html.ActionLink(" Back", "EmployeeTwoOhOneforApproval", null, new { @class="btn btn-danger" })
+</p>
+
+<div class="panel panel-primary">
+            <div class="panel-heading">
+                Educational Attainment (Current)
+            </div>
+             <div class="panel-body">
+                   <div class="container">
+                       <div class="row">
+                       <div class="col-xs-12">                                        
+                        <div class="table-responsive" >
+                       <table class="table table-striped" style="width:auto;">
+                           <thead>
+                               <tr>                             
+                               <th>Educational Attained</th>
+                               <th>Name of School</th>
+                               <th>Degree</th>
+                               <th>Date From</th>
+                               <th>Date To</th>
+                               <th>Honors</th>
+                               </tr>
+                           </thead>
+                           <tbody>
+                               @foreach (var item in Model.Current_EducAttained)
+                               {
+                                   <tr>
+                                       <td>@Html.DisplayFor(a => item.current_EducationalAttained)</td>
+                                       <td>@Html.DisplayFor(a => item.current_NameOfSchool)</td>
+                                       <td>@Html.DisplayFor(a => item.current_Degree)</td>
+                                       <td>@Html.DisplayFor(a => item.current_DateFrom)</td>
+                                       <td>@Html.DisplayFor(a => item.current_DateTo)</td>
+                                       <td>@Html.DisplayFor(a => item.current_Honors)</td>
+                                   </tr>
+                               }
+                           </tbody>
+                       </table>
+                        </div>
+                           </div>
+                           </div>
+                   </div>
+             </div>
+        </div>
+
+<br /> <br />
+<div class="panel panel-primary">
+            <div class="panel-heading">
+                Educational Attainment (New)
+            </div>
+             <div class="panel-body">
+                   <div class="container">
+                       <div class="row">
+                       <div class="col-xs-12">                                        
+                        <div class="table-responsive" >
+                       <table class="table table-striped" style="width:auto;">
+                           <thead>
+                               <tr>                             
+                               <th>Educational Attained</th>
+                               <th>Name of School</th>
+                               <th>Degree</th>
+                               <th>Date From</th>
+                               <th>Date To</th>
+                               <th>Honors</th>
+                               </tr>
+                           </thead>
+                           <tbody>
+                               @foreach (var item in Model.Educ_attained)
+                               {
+                                   <tr>
+                                       <td>@Html.DisplayFor(a => item.EducationalAttained)</td>
+                                       <td>@Html.DisplayFor(a => item.NameOfSchool)</td>
+                                       <td>@Html.DisplayFor(a => item.Degree)</td>
+                                       <td>@Html.DisplayFor(a => item.DateFrom)</td>
+                                       <td>@Html.DisplayFor(a => item.DateTo)</td>
+                                       <td>@Html.DisplayFor(a => item.Honors)</td>
+                                   </tr>
+                               }
+                           </tbody>
+                       </table>
+                        </div>
+                           </div>
+                           </div>
+                   </div>
+             </div>
+        </div>
+

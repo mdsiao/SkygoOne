@@ -1,0 +1,329 @@
+Change Log
+***************************************** I N S T A L L E D ***************************************** 10/26/2016
+dbFiles
+	-> add table
+		=> tblTrnAcknowledgement
+		
+dbHRIS2
+	-> add sp
+		=> Toolbox_UpdateToAcknowledge
+		
+dbHRIS2
+	-> modify sp
+		=> Toolbox_GetDocuments
+
+***************************************** I N S T A L L E D ***************************************** 08/24/2016
+added column
+	-> tblOlnGatePass
+		>> isOBHoliday	bit unchecked default(0)
+		>> intTrnHoliday int checked
+		
+modify sp
+	-> [Online_AddEditGatePass]
+	-> [Online_GetGatePassList]
+	-> [Online_GetGatePassForApproval]
+	
+added sp
+	-> Online_GetHoliday 
+	
+	
+add query
+add column in @tblLogs
+	-> intOlnGatePass int default(0)
+
+upper part
+--NEW UPDATE 2016-08-25
+	--ADD HOLIDAY LEAVE ON DAY STATUS
+	DECLARE @tblOBHoliday AS TABLE(dDate date, HolidayName nvarchar(150))
+	INSERT INTO @tblOBHoliday(dDate, HolidayName)
+	SELECT xlog.LogDate, holiday.HolidayName + '(' + CONVERT(nvarchar(15), holiday.HolidayDate, 101) + ')'
+	FROM @tblLogs xlog INNER JOIN		
+		tblOlnGatePass gp ON xlog.intOlnGatePass = gp.intOlnGatePass LEFT JOIN
+		tblTrnHoliday holiday ON gp.intTrnHoliday = holiday.intTrnHoliday
+
+bottom part
+--OB HOLIDAY
+	--2016-08-25
+	UPDATE  empStat
+	SET EmpDayStat = EmpDayStat + '[' + holiday.HolidayName + ']'
+	FROM @tblEmployeefinal empStat INNER JOIN @tblOBHoliday holiday ON empStat.DayDate = CONVERT(datetime, holiday.dDate)
+
+***************************************** I N S T A L L E D ***************************************** 07/26/2016
+added sp
+	-> Online_HRRegionalList_OB
+	-> [Report_OnlineOB]
+	-> [Report_OnlineHRLeave]
+
+***************************************** I N S T A L L E D *****************************************
+modify sp
+	-> [Online_GetLoanDetail]
+
+***************************************** I N S T A L L E D ***************************************** 05/24/2016
+added sp
+	-> Online_GetCoopLoanApplicationsFullyPaid
+	
+modify sp
+	-> Online_GetLoanDetail
+
+***************************************** I N S T A L L E D *****************************************
+added sp
+	-> Online_GetTrnAwardsAndBonus
+	
+added report
+	-> AwardAndBonus_Payslip.rpt
+
+***************************************** I N S T A L L E D *****************************************
+modify sp
+	-> [Toolbox_GetAnnouncementCount]
+	-> [Online_AddEditOvertimeApplication]
+	-> [Online_GetOvertimeList]
+	-> [Online_GetOvertimeForApproval]
+	-> [Online_GetOvertimeFinanceManager]
+	
+added sp
+	-> Online_ApprovalInfo
+
+add column
+	-> tblOlnOvertimeApplication
+		* NoOfHoursDisplay	decimal(18, 2)
+
+***************************************** I N S T A L L E D *****************************************
+added sp
+	-> Report_OnlineApprovedApplications
+	
+modify sp
+	-> Report_OnlineCancelled
+	-> Report_OnlineDisapproved
+	
+added report
+	-> rptApprovedTrans.rpt
+	-> rptApprovedTransLeave.rpt
+	-> rptDisapproveLeave.rpt
+	-> rptDisapproveOT.rpt
+	-> rptCancelLeave.rpt
+	-> rptCancelOT.rpt
+
+***************************************** I N S T A L L E D *****************************************
+added sp
+	-> Report_OnlineSubordinateDTR
+***************************************** I N S T A L L E D *****************************************
+modify sp
+	-> [Online_AddEditLeaveApplication] - modify the SP on local server
+	
+***************************************** I N S T A L L E D *****************************************
+modify sp
+	-> Online_GetOvertimeList
+	-> [Online_GetLeaveApplications]
+	-> [Online_GetGatePassList]
+	-> [Online_GetLeaveForApproval]
+	-> [Online_GetOvertimeForApproval]
+	-> [Online_GetCountOfForApprovals]
+	
+***************************************** I N S T A L L E D *****************************************
+modify sp
+	-> [Online_GetOvertimeFinanceManager]
+	-> Online_ApproveOvertime
+	
+***************************************** I N S T A L L E D *****************************************
+modify SP
+	-> Online_GetCancelled
+	-> [Online_GetTrnPayroll]
+	
+***************************************** I N S T A L L E D *****************************************
+modify SP
+	-> [Online_GetLeaveForApproval]*
+	-> [Online_ApproveLeave]*
+	-> Online_GetCountOfForApprovals*
+	-> [Online_GetOvertimeForApproval]*
+	-> Online_ApproveOvertime*
+	
+***************************************** I N S T A L L E D *****************************************
+modify SP
+	-> Online_ViewDTR*
+	
+add function
+	-> FunctionWorkHoursToWords*
+	
+modify report
+	-> rptDTR.rpt
+
+***************************************** I N S T A L L E D *****************************************
+modify sp
+	-> [Online_GetEmployee]*
+	-> Online_GetLeaveForApproval*
+	-> Online_GetOvertimeForApproval*
+	-> Online_GetGatePassForApproval*
+	-> Online_GetCountOfForApprovals*
+	-> Online_ApproveLeave*
+	-> Online_ApproveOvertime*
+	-> [Online_DisapproveTrans]*
+	-> [Online_AddEditGatePass]*
+	-> [Online_CancelOvertime]*
+	-> [Online_CancelGatePass]*
+	-> [Online_CancelLeave]*
+	-> Online_CancelLeaveByBatch*
+	-> [Online_ViewDTR]*
+	-> [Online_ViewDTRLogs]*-updated on live
+	-> Online_GetLeaveApplications*
+	-> Online_GetAvailableLeave*
+	
+added sp
+	-> [Online_GetApproverName]*
+	-> [Report_OnlineDisapproved]*
+	-> [Report_OnlineDisapprovedLeave]*
+	-> Report_OnlineCancelledLeave*
+	-> Report_OnlineCancelled*
+	
+add column
+	-> tblOlnLeaveApplicationHead*
+		* DisapproveReason nvarchar(250)
+		
+	-> tblOlnOvertimeApplication*
+		* DisapproveReason nvarchar(250)
+		* CancelledDateTime	datetime
+	
+	-> tblOlnGatePass*
+		* CancelledDateTime	datetime
+		
+add report
+	-> rptDisapproveLeave.rpt
+	-> rptDisapproveOT.rpt
+	-> rptCancelOT.rpt
+	-> rptCancelLeave.rpt
+
+***************************************** I N S T A L L E D *****************************************
+add column on tblMstPosition
+	-> isAllowedOvertime	bit null
+	
+modify SP
+	-> [Online_ApproveOvertime]
+
+
+***************************************** I N S T A L L E D *****************************************
+modify SP
+	-> [Online_AddEditGatePass]
+	-> Online_AddEditOvertimeApplication
+	-> [Online_GetCancelled]
+
+***************************************** I N S T A L L E D *****************************************
+modify SP
+	-> [Online_AddEditLeaveApplication]
+	-> [Online_GetOvertimeFinanceManager]
+	-> [Online_GetLeaveApplications]
+	-> Online_GetGatePassList
+
+
+***************************************** I N S T A L L E D *****************************************
+====================== 06/16/2015 ======================
+add column on tblOlnLeaveApplicationHead
+	=> DateFrom			datetime
+	=> DateFromAMorPM	int
+	=> DateTo			datetime
+	=> DateToAMorPM		int
+	=> NoOfDays			decimal(18,2)
+	
+modify SP 
+	=> [Online_AddEditLeaveApplication]
+
+add table
+	=> tblOlnAMorPMDescription
+	
+	
+====================== 06/17/2015 ======================
+modify SP
+	=> [Online_ChangePassword]
+	=> Toolbox_GetData
+	
+	
+================ 06/22/2015 & 06/23/2015 ================
+modify SP
+	=> [Online_GetLeaveApplications]
+	=> [Online_GetLeaveForApproval]
+	=> [Online_GetOvertimeList]
+	=> [Online_GetGatePassList]
+	
+====================== 06/25/2015 ======================		
+added SP
+	=> Online_GetEmployeeNotification
+	
+modify SP
+	=> Online_GetGatePassList
+	
+	
+====================== 06/29/2015 ======================			
+modify SP
+	=> [Online_GetAvailableLeave]
+	=> [Online_GetLeaveBalance]
+
+====================== 06/30/2015 ======================			
+modify SP	
+	=> [Toolbox_GetDocuments]
+
+====================== 07/07/2015 ======================				
+modify SP
+	=> Online_ViewDTR
+
+====================== 07/13/2015 ======================					
+added SP
+	=> Online_GetEmployee
+
+====================== 07/16/2015 ======================
+modify SP
+	=> [Online_HRRegionalList]
+
+added SP
+	=> Online_CancelLeaveByBatch
+	
+added column
+	=> tblOlnLeaveApplicationHead
+		- CancelledBy		nvarchar(50)	Checked
+		- CancelledDateTime	datetime		Checked
+
+====================== 07/20/2015 ======================
+added column
+	=> tblOlnDTRAdjustment
+		- HRApproval			nvarchar(20)	Checked
+		- HRApprovalDateTime	datetime		Checked
+		
+modify SP
+	=> [Online_GetDTRAdjustmentList]
+	=> [Online_GetCountOfForApprovals]
+
+====================== 07/20/2015 ======================	
+modify SP
+	=> [Online_GetDTRAdjustmentForApproval]
+	=> [Online_DisapproveTrans]
+	=> [Online_ApproveDTRAdjustment]
+	=> [Online_GetCoopLoanApplications]
+
+====================== 07/24/2015 ======================		
+modify SP
+	=> [Online_GetLoanDetail]
+	=> [Online_AddEditDTRAdjustment]
+	=> [Online_GetDTRAdjustmentList]
+	=> [Online_GetLeaveForApproval]
+	=> [Online_CancelDTRAdjustment]
+	=> [Online_CancelGatePass]
+	
+====================== 07/31/2015 ======================
+modify SP
+	=> Toolbox_GetDocuments
+
+====================== 08/12/2015 ======================	
+modify SP
+	=> [Online_GetLeaveForApproval]
+	=> [Online_GetOvertimeForApproval]
+	=> Online_GetCountOfForApprovals
+	=> [Online_GetGatePassForApproval]
+	
+====================== 08/14/2015 ======================		
+modify SP
+	=> [Online_CancelGatePass]
+	=> [Online_GetCancelled]
+	
+added SP
+	=> [Report_OnlineUndertime]
+
+====================== 08/18/2015 ======================	
+added SP
+	=> [Online_GetOvertimeForApprovalByDate]

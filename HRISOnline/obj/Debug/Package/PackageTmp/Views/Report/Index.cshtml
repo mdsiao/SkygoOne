@@ -1,0 +1,323 @@
+﻿@{
+    ViewBag.Title = ViewBag.MyTitle;
+}
+
+<style>
+    .selected {
+        background-color: #4A90BC;
+    }
+    #tbl, #dtFrom_param, #dtTo_param {
+        cursor: pointer;
+    }
+</style>
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <form class="form-horizontal" role="form">
+            <div class="form-group">
+                <div class="col-sm-4">
+                    <table class="table table-bordered table-heading" id="tbl">
+                        <thead>
+                            <tr>                                
+                                <th>Report Type</th>                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Convert.ToBoolean(Session["emp_canApproveTransactions"]) == true) 
+                            { 
+                                <tr id="1" onclick="Change(this)">
+                                    <td>Subordinate's DTR Report</td>                                
+                                </tr>
+                                <tr id="2" onclick="Change(this)">                                
+                                    <td>Approved Applications Report</td>
+                                </tr>
+                                <tr id="3" onclick="Change(this)">                                
+                                    <td>Dispproved Applications Report</td>
+                                </tr>
+                                <tr id="4" onclick="Change(this)">                                
+                                    <td>Cancelled Applications Report</td>
+                                </tr>
+                            }
+                            
+                            @if ((Convert.ToBoolean(Session["emp_isHRRegional"]) == true) || (Convert.ToBoolean(Session["emp_isHRHomeOffice"]) == true)) 
+                            { 
+                                <tr id="5" onclick="Change(this)">
+                                <td>Leave Report</td>
+                                </tr>
+                                <tr id="6" onclick="Change(this)">
+                                    <td>Official Business Report</td>
+                                </tr>
+                            }    
+
+                            @if(Convert.ToBoolean(Session["HasOTReport"]) == true)
+                            {
+                                <tr id="7" onclick="Change(this)">                                
+                                        <td>Overtime Meals Report</td>
+                                 </tr>
+                            }
+                                
+                                <tr id="8" onclick="Change(this)">                                
+                                        <td>Approve Adjustment Report</td>
+                                </tr>
+                                <tr id="9" onclick="Change(this)">                                
+                                        <td>Disapprove Adjustment Report</td>
+                                </tr>
+                                                    
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-8" id="id_params">
+                     <div class="form-group" id="frm_Rad_params">
+                         <label class="col-sm-3"></label>
+                        <label class="radio-inline">
+                            <input id="rad_Leave" type="radio"  value="Leave" name="optionsRadiosInline" />
+                            Leave
+                        </label>
+                        <label class="radio-inline">
+                            <input id="rad_OT" type="radio"  value="OT" name="optionsRadiosInline" />
+                            Overtime
+                        </label>
+                         <label class="radio-inline">
+                            <input id="rad_UT" type="radio"  value="UT" name="optionsRadiosInline" />
+                            Undertime
+                        </label>
+                        <label class="radio-inline">
+                            <input id="rad_OB" type="radio"  value="OB" name="optionsRadiosInline" />
+                            Official Business
+                        </label>
+                    </div>
+
+                    <div class="form-group" id="frm_serviceRequest">
+                         <label class="col-sm-3"></label>
+                        <label class="radio-inline">
+                            <input id="rad_Overtime" type="radio"  value="1" name="optionsRadiosInline" />
+                            Overtime
+                        </label>
+                        <label class="radio-inline">
+                            <input id="rad_VolDuty" type="radio"  value="2" name="optionsRadiosInline" />
+                            Voluntary Duty
+                        </label>
+                         <label class="radio-inline">
+                            <input id="rad_FlexHolDuty" type="radio"  value="3" name="optionsRadiosInline" />
+                            Flexi Holiday Duty
+                        </label>
+                      
+                    </div>
+
+                    <div class="form-group" id="frm_ApprveAdjustmentRequest">
+                         <label class="col-sm-3"></label>
+                        <label class="radio-inline">
+                            <input id="rad_MissAdjust" type="radio"  value="1" name="optionsRadiosInline" />
+                            Missing Punch Adjustment
+                        </label>
+                        <label class="radio-inline">
+                            <input id="rad_OTAdjust" type="radio"  value="2" name="optionsRadiosInline" />
+                            OT Adjustment
+                        </label>
+                         <label class="radio-inline">
+                            <input id="rad_OBAdjust" type="radio"  value="3" name="optionsRadiosInline" />
+                            OB Adjustment
+                        </label>                      
+                    </div>
+
+                    <div class="form-group" id="frm_dtFrom_params">
+                        <label class="col-sm-3 control-label">Date From</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="dtFrom_param" readonly class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group" id="frm_dtTo_params">
+                        <label class="col-sm-3 control-label">Date To</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="dtTo_param" readonly class="form-control" />
+                        </div>
+                    </div>
+
+
+                    
+                    
+                    
+                                       
+                </div>
+            </div>
+            
+        </form>
+    </div>
+    
+    <div class="panel-footer">        
+        <button type="button" class="btn btn-warning btn-lg" onclick="OpenReport();">View Report</button>
+    </div>    
+    <input type="text" id="id_selected" class="hide" />
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            HideAllControls();
+
+            $('#dtFrom_param, #dtTo_param').datepicker();
+        });
+
+        function Change(node) {
+
+            var j = document.getElementsByClassName("selected");
+            for (var i = 0; i < j.length; i++) {
+                j[i].className = "";
+            }
+            node.className = "selected";
+            
+            ShowControls($(node).attr('id'));
+            $('#id_selected').val($(node).attr('id'));
+        }
+
+        function HideAllControls()
+        {
+            $('#frm_dtFrom_params').hide();
+            $('#frm_dtTo_params').hide();
+            $('#frm_Rad_params').hide();
+            $('#frm_serviceRequest').hide();
+            $('#frm_ApprveAdjustmentRequest').hide();
+            
+        }
+
+        function ShowControls(id)
+        {
+            HideAllControls();            
+
+            switch (id)
+            {
+                case "1":
+                case "5":
+                case "6":
+                    //$('#id_params').show();
+                    $('#frm_dtFrom_params').show();
+                    $('#frm_dtTo_params').show();
+                    break;
+
+                case "2": 
+                case "3": 
+                case "4":
+                    //$('#id_params').show();
+                    $('#frm_Rad_params').show();
+                    $('#rad_Leave').prop('checked', true);
+                    $('#frm_dtFrom_params').show();
+                    $('#frm_dtTo_params').show();
+                    break;
+                case "7":
+                    $('#frm_serviceRequest').show();
+                    $('#frm_dtFrom_params').show();
+                    $('#frm_dtTo_params').show();
+                    break;
+                case "8":                   
+                    $('#frm_ApprveAdjustmentRequest').show();
+                    $('#frm_dtFrom_params').show();
+                    $('#frm_dtTo_params').show();
+                    break;
+                case "9":
+                    $('#frm_ApprveAdjustmentRequest').show();
+                    $('#frm_dtFrom_params').show();
+                    $('#frm_dtTo_params').show();
+                    break;
+            }
+        }
+
+        function OpenReport() {
+            var tbl_id = $('#id_selected').val();
+            var strQueryParam = "";
+            var strTitle = "";
+            var hasError = false;
+
+            switch (tbl_id)
+            {
+                case "1"://Subordinate's DTR
+                case "5"://Leave Report
+                case "6"://OB Report
+                    if ($('#dtFrom_param').val() == "" || $('#dtTo_param').val() == "") {
+                        alert("Please select a date.");
+                        hasError = true;
+                    }
+                    else {
+                        if (tbl_id == "1"){
+                            strQueryParam = "@Url.Content("~/Report/SubordinateDTRReport?dtFrom=")" + $('#dtFrom_param').val().toString("yyyy-mm-dd") + "&dtTo=" + $('#dtTo_param').val().toString("yyyy-mm-dd") + "";
+                            strTitle = "Subordinate's DTR Report";
+                        }
+                        else if (tbl_id == "5") {
+                            strQueryParam = "@Url.Content("~/Report/HRLeave?dtFrom=")" + $('#dtFrom_param').val().toString("yyyy-mm-dd") + "&dtTo=" + $('#dtTo_param').val().toString("yyyy-mm-dd") + "";
+                            strTitle = "HRs Leave Report";
+                        }
+                        else if (tbl_id == "6") {
+                            strQueryParam = "@Url.Content("~/Report/HROB?dtFrom=")" + $('#dtFrom_param').val().toString("yyyy-mm-dd") + "&dtTo=" + $('#dtTo_param').val().toString("yyyy-mm-dd") + "";
+                            strTitle = "HRs Official Business Report";
+                        }
+                    }                    
+                    break;
+
+                case "2"://Approved applications
+                case "3"://Disapproved applications
+                case "4"://Cancelled applications
+                    var rad_selected = $('input[name="optionsRadiosInline"]:checked').val();                    
+                    
+                    if ($('#dtFrom_param').val() == "" || $('#dtTo_param').val() == "") {
+                        alert("Please select a date.");
+                        hasError = true;
+                    }
+                    else {
+                        if (tbl_id == "2"){
+                            strQueryParam = "@Url.Content("~/Report/ApprovedAppsReport?dtFrom=")" + $('#dtFrom_param').val().toString("yyyy-mm-dd") + "&dtTo=" + $('#dtTo_param').val().toString("yyyy-mm-dd") + "&strModule=" + rad_selected + "";
+                            strTitle = "Approved Applications Report";
+                        }
+                        
+                        else if (tbl_id == "3") {
+                            strQueryParam = "@Url.Content("~/Report/DisapprovedAppsReport?dtFrom=")" + $('#dtFrom_param').val().toString("yyyy-mm-dd") + "&dtTo=" + $('#dtTo_param').val().toString("yyyy-mm-dd") + "&strModule=" + rad_selected + "";
+                            strTitle = "Disapproved Applications Report";
+                        }
+                        else if (tbl_id == "4") {
+                            strQueryParam = "@Url.Content("~/Report/CancelledAppsReport?dtFrom=")" + $('#dtFrom_param').val().toString("yyyy-mm-dd") + "&dtTo=" + $('#dtTo_param').val().toString("yyyy-mm-dd") + "&strModule=" + rad_selected + "";
+                            strTitle = "Cancelled Applications Report";
+                        }
+                    }
+                    break;                
+               @* case "7":
+                    var rad_selected = $('input[name="optionsRadiosInline"]:checked').val();
+
+                    if ($('#dtFrom_param').val() == "" || $('#dtTo_param').val() == "") {
+                        alert("Please select a date.");
+                        hasError = true;
+                    } else {
+                        strQueryParam = "@Url.Content("~/Report/ViewOTMealsReport?dtFrom=")" + $('#dtFrom_param').val().toString("yyyy-mm-dd") + "&dtTo=" + $('#dtTo_param').val().toString("yyyy-mm-dd") + "&strModule=" + rad_selected + "";
+                        strTitle = "Overtime Meals Report";
+                    }
+                    break;
+                case "8":
+                    var rad_selected = $('input[name="optionsRadiosInline"]:checked').val();
+
+                    if ($('#dtFrom_param').val() == "" || $('#dtTo_param').val() == "") {
+                        alert("Please select a date.");
+                        hasError = true;
+                    } else {
+                        strQueryParam = "@Url.Content("~/Report/ViewApproveAdjustmentReport?dtFrom=")" + $('#dtFrom_param').val().toString("yyyy-mm-dd") + "&dtTo=" + $('#dtTo_param').val().toString("yyyy-mm-dd") + "&strModule=" + rad_selected + "";
+                        strTitle = "Approve Adjustment Report";
+                    }
+                    break;
+                case "9":
+                    var rad_selected = $('input[name="optionsRadiosInline"]:checked').val();
+
+                    if ($('#dtFrom_param').val() == "" || $('#dtTo_param').val() == "") {
+                        alert("Please select a date.");
+                        hasError = true;
+                    } else {
+                        strQueryParam = "@Url.Content("~/Report/ViewDisApproveAdjustmentReport?dtFrom=")" + $('#dtFrom_param').val().toString("yyyy-mm-dd") + "&dtTo=" + $('#dtTo_param').val().toString("yyyy-mm-dd") + "&strModule=" + rad_selected + "";
+                        strTitle = "Disapprove Adjustment Report";
+                    }
+                    break;*@
+                    
+            }
+
+            if (hasError == false)
+            {
+                var win = window.open(strQueryParam, "_blank");
+                win.document.title = strTitle;
+            }            
+        }
+    </script>
+}

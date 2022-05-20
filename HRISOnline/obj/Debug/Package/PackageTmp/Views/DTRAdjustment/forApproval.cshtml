@@ -1,0 +1,297 @@
+﻿@model HRISOnline.Objects.DTRAdjustmentApprovalListMain
+
+@{
+    ViewBag.Title = ViewBag.MyTitle;
+}
+
+@*@section breadcrumb{
+    <div class="row">
+        <div id="breadcrumb" class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">DTR Adjustment</a></li>
+                <li><a href="#">@ViewBag.MyTitle</a></li>
+            </ol>
+        </div>
+    </div>
+}*@
+
+@*<div class="col-sm-12">*@
+    <div class="alert text-center" id="msg"></div>
+        <div class="panel panel-primary">
+            @*<div class="panel-heading">
+                <h3>@ViewBag.MyTitle</h3>
+            </div>*@
+            
+            <div class="panel-body">
+                <table class="table table-bordered table-heading" id="adj-table">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width:30px;">                         
+                                <input type="checkbox" id="chk-all" />
+                            </th>
+                            @*<th class="text-center" style="width:30px;">ID</th>*@
+                            <th class="col-sm-2 text-center">Adjustment Date</th>
+                            <th class="col-sm-2 text-center">Adjustment Time</th>
+                            <th>Employee</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.DTRAdjAppList)
+                        { 
+                            <tr>
+                                <td class="text-center">                                
+                                <input type="checkbox" class="chk" id="@item.intOlnDTRAdjustment" />                                
+                                </td>
+                                @*<td class="text-center">@item.intOlnDTRAdjustment</td>*@
+                                <td class="text-center">@item.AdjustmentDate.ToShortDateString()</td>
+                                <td class="text-center"><a href="@Url.Content("~/DTRAdjustment/Details?id=")@item.intOlnDTRAdjustment&isForApproval=true">@item.AdjustmentTime</a></td>
+                                <td>@item.EmpName</td>                                
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel-footer">
+                @if (Convert.ToBoolean(Session["emp_isHRHomeOffice"]) == true){
+                    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal-Payroll">Set Payroll Date</button>
+                }
+                else
+                {
+                    @*<button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#myModal">Approve</button>
+                    <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#myModal">Disapprove</button>*@
+                    <button type="button" class="btn btn-primary btn-lg" onclick="OpenModal(1);">Approve</button>
+                    <button type="button" class="btn btn-danger btn-lg" onclick="OpenModal(2);">Disapprove</button>                    
+                }                
+            </div>
+        </div>
+@*</div>*@
+
+<input type="text" id="type-id" class="hide" />
+
+<!-- Modal -->
+<div class="modal fade" id="myModal-Payroll" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel-Payroll">Set Payroll Date</h4>
+      </div>
+      <div class="modal-body">
+          <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-4 control-label">Payroll Month</label>
+                <div class="col-sm-4">
+                    @Html.DropDownListFor(mdl => mdl.PayrollMonth, (SelectList)@ViewBag.paymonth, new { @class = "form-control" })
+                </div>
+            </div>
+
+              <div class="form-group">
+                <label class="col-sm-4 control-label">Payroll Period</label>
+                <div class="col-sm-4">
+                    @Html.DropDownListFor(mdl => mdl.PayrollPeriod, (SelectList)@ViewBag.payperiod, new { @class = "form-control" })
+                </div>
+            </div>
+
+              <div class="form-group">
+                <label class="col-sm-4 control-label">Year</label>
+                <div class="col-sm-4">
+                    @Html.DropDownListFor(mdl => mdl.PayrollYear, (SelectList)@ViewBag.payyear, new { @class = "form-control" })
+                </div>
+            </div>
+          </form>        
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-success btn-lg" onclick="ApproveDTRAdjustment();"  data-dismiss="modal">Approve</button>
+        @*<button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>*@
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel"></h4>
+      </div>
+      <div class="modal-body" id="myModalBody">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-lg" onclick="ApproveDisapproveItem();">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#msg').removeClass('active');
+            $('#msg').addClass('hide');
+
+            $('#adj-table').dataTable({
+                "columnDefs": [{
+                    "targets": [],
+                    "visible": false,
+                    "searchable": false
+                }],
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "filter": false
+            });
+
+            $('#chk-all').on('click', function (ev) {
+                $('.chk').prop('checked', $('#chk-all').prop('checked'));
+            });
+        });
+
+        function RedirectMe() {
+            window.location.href = "@Url.Content("~/DTRAdjustment/forApproval")";
+        }
+
+        function OpenModal(type) {
+            if (type == 1) {
+                $('#myModalLabel').html("Approve");
+                $('#myModalBody').html("Do you want to APPROVE the selected item(s)?");
+            }
+            else {
+                $('#myModalLabel').html("Disapprove");
+                $('#myModalBody').html("Do you want to DISAPPROVE the selected item(s)?");
+            }
+
+            $('#type-id').val(type);
+            $('#myModal').modal();
+        }
+
+        function ApproveDisapproveItem() {
+            var type = $('#type-id').val();
+
+            if (type == 1) {
+                ApproveDTRAdjustment();
+            }
+            else {
+                DisapproveDTRAdjustment();
+            }
+
+            $('#myModal').modal('hide');
+        }
+
+        function ApproveDTRAdjustment() {
+            var id = { "DTRAdjAppList": [], "PayrollMonth": "", "PayrollPeriod": "", "PayrollYear": "" };
+            var sub = { "intOlnDTRAdjustment": "" };
+
+            id.PayrollMonth = $('#PayrollMonth').val();
+            id.PayrollPeriod = $('#PayrollPeriod').val();
+            id.PayrollYear = $('#PayrollYear').val();
+
+            $('#adj-table > tbody > tr input[type="checkbox"]:checked').each(function () {
+                var $row = $(this).attr('id');
+
+                sub.intOlnDTRAdjustment = $row;
+                id.DTRAdjAppList.push(sub);
+
+                sub = { "intOlnDTRAdjustment": "" };
+            });
+
+            if (id.DTRAdjAppList.length == 0) {
+                $('#msg').removeClass('hide');
+                $('#msg').addClass('active');
+
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html("Please select atleast one(1) item.");
+            }
+            else {
+
+                $.ajax({
+                    url: '@Url.Action("ApproveDTRAdjustment")',
+                    data: JSON.stringify(id),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (result) {
+
+                        $('#msg').addClass('active');
+                        $('#msg').removeClass('hide');
+
+                        if (result.success == 'True') {
+                            $('#msg').removeClass('bg-danger');
+                            $('#msg').addClass('bg-success');
+                            setTimeout('RedirectMe()', 2000);
+                        }
+                        else {
+                            $('#msg').removeClass('bg-success');
+                            $('#msg').addClass('bg-danger');
+                        }
+
+                        $('#msg').html(result.msg);
+
+                    }
+                });
+
+            }
+
+        }
+
+        function DisapproveDTRAdjustment() {
+            var id = { "dis": [] };
+            var sub = { "intOlnTransNo": "" };
+
+            $('#adj-table > tbody > tr input[type="checkbox"]:checked').each(function () {
+                var $row = $(this).attr('id');//$(this).parents('tr');
+
+                sub.intOlnTransNo = $row;//$row.find('td:eq(1)').html();
+                id.dis.push(sub);
+
+                sub = { "intOlnTransNo": "" };
+            });
+
+            if (id.dis.length == 0) {
+                $('#msg').removeClass('hide');
+                $('#msg').addClass('active');
+
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html("Please select atleast one(1) item.");
+            }
+            else {
+
+                $.ajax({
+                    url: '@Url.Action("Disapprove")',
+                    data: JSON.stringify(id),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (result) {
+
+                        $('#msg').addClass('active');
+                        $('#msg').removeClass('hide');
+
+                        if (result.success == 'True') {
+                            $('#msg').removeClass('bg-danger');
+                            $('#msg').addClass('bg-success');
+                            setTimeout('RedirectMe()', 2000);
+                        }
+                        else {
+                            $('#msg').removeClass('bg-success');
+                            $('#msg').addClass('bg-danger');
+                        }
+
+                        $('#msg').html(result.msg);
+
+                    }
+                });
+
+            }
+
+        }
+    </script>
+    
+}

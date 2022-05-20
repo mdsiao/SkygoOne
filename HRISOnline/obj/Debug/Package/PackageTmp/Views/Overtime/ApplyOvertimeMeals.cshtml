@@ -1,0 +1,172 @@
+﻿@model HRISOnline.Objects.OvertimeMeals
+@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#DateApplied").datepicker();
+    });
+
+
+    function SubmitMealAllowance() {
+
+        var DateFiled = $("#DateFiled").val();
+        var DateApplied = $("#DateApplied").val();
+        var RequestServiceID = $("#OTRequest").val();
+        var RequestServiceType = $('#OTRequest :selected').text();
+        var Reason = $("#Reason").val();
+
+
+        if ((RequestServiceID === '') || (RequestServiceID === null)) {
+            $('#modal-confirm').modal('hide');
+            $('#msg').removeClass('bg-success');
+            $('#msg').addClass('bg-danger');
+            $('#msg').html('Please select for requested service!').show().slideDown(3000).fadeOut(8000);
+            return false;
+        }
+        if ((Reason === '') || (Reason === null)) {
+            $('#modal-confirm').modal('hide');
+            $('#msg').removeClass('bg-success');
+            $('#msg').addClass('bg-danger');
+            $('#msg').html('Please type in the reason!').show().slideDown(3000).fadeOut(8000);
+            return false;
+        }
+
+
+        $('#modal-confirm').modal('hide');
+
+
+        var myStoredData = {
+            'DateFiled': DateFiled,
+            'DateApplied': DateApplied,
+            'RequestServiceID': RequestServiceID,
+            'RequestServiceType': RequestServiceType,
+            'Reason': Reason
+         
+        };
+
+
+        @* $.ajax({
+            url: '@Url.Action("InsertOvertimeMeals","Overtime")',
+            type: 'GET',
+            data: {
+                DateFiled: DateFiled,
+                DateApplied: DateApplied,
+                RequestServiceID: RequestServiceID,
+                RequestServiceType: RequestServiceType,
+                Reason: Reason               
+            },
+            datatype: 'json',
+            contentType: 'application/json;',
+            success: function (result) {*@
+        $.ajax({
+            url: '@Url.Action("InsertOvertimeMeals","Overtime")',
+            type: 'POST',
+            data: JSON.stringify(myStoredData),
+            datatype: 'json',
+            contentType: 'application/json',
+            success: function (result) {
+
+                //if (result != null && result.success) {
+                if (result.success == "True") {
+                    $('#msg').removeClass('bg-danger');
+                    $('#msg').addClass('bg-success');
+                    $('#msg').html(result.msg).show().slideDown(3000).fadeOut(8000);
+                    setTimeout('RedirectMe()', 6000);
+                }
+
+                else {
+                    $('#msg').removeClass('bg-success');
+                    $('#msg').addClass('bg-danger');
+                    $('#msg').html(result.msg).show().slideDown(3000).fadeOut(8000);
+                }
+               
+            }
+        });
+    }
+
+    function RedirectMe() {
+        window.location.href = "@Url.Content("~/Overtime/ListOfOvertimeMeals")";
+    }
+
+</script>
+
+
+
+<div class="alert text-center" id="msg"></div>
+
+<div class="panel panel-primary">
+  
+
+            @*@using (Html.BeginForm("Index", "MissingPunch", FormMethod.Post, new { @class = "form-horizontal", @role = "form" }))          
+            *@
+            
+            <div class="panel-body">
+
+            <div class="form-group">
+                    <label class="col-sm-2 control-label">Date Filed</label>
+                    <div class="col-sm-3" >
+                            @Html.TextBoxFor(model => model.DateFiled, "{0:MM/dd/yyyy}", new { @class = "form-control", @readonly = "true" })
+                    </div>
+
+                    <label class="col-sm-2 control-label">Date Applied Meals</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.DateApplied, "{0:MM/dd/yyyy}", new { @class = "form-control"})
+                    </div>
+                    
+             </div>
+                <br /><br />
+             <div class="form-group">
+                 <label class="col-sm-2 control-label">Requested Service</label>
+                <div class="col-sm-3">
+                        @Html.DropDownList("OTRequest",null," " ,new { @class = "form-control", @style="width: 100%;" })
+                </div>
+             </div>
+                <br /><br />
+              <div class="form-group">
+                 <label class="col-sm-2 control-label">Reason</label>
+                <div class="col-sm-5">
+                         @Html.TextArea("Reason", null, new { @class = "form-control" })
+                </div>
+             </div>
+
+               
+
+            </div>
+    
+                   @*<div class="panel-footer">
+                        <div class="table-responsive" style=" border-radius:5px; margin-top:20px; margin-bottom:20px;">
+                            <button type="button" class="btn btn-primary btn-lg btn-block" onclick="SubmitMealAllowance();" >Submit</button>
+                        </div>
+                    </div>*@
+                  
+                <div class="panel-footer">            
+                <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal-confirm" href="#mdl-confirm">Submit</button>           
+                </div>  
+    </div>
+
+
+@*CONFIRMATION*@
+<div class="modal fade" id="modal-confirm" role="dialog" aria-labelledby="myModalLabel-elig" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel-pwd">Confirmation</h4>
+      </div>
+      <div class="modal-body">
+          You are about to apply for Overtime Meals!.
+          Do you want to continue?
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-success btn-lg" onclick="SubmitMealAllowance();">Continue</button>
+        <button type="button" class="btn btn-danger  btn-lg" onclick=""  data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

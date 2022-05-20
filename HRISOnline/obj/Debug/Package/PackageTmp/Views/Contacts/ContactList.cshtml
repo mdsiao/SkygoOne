@@ -1,0 +1,82 @@
+﻿@model HRISOnline.Objects.Contacts
+@{
+    ViewBag.Title = ViewBag.MyTitle;
+}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<link rel="stylesheet" href="@Url.Content("http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css")">
+<script type="text/javascript" src="@Url.Content("http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js")"></script>
+
+<script>
+     $(document).ready(function () {
+     $('#myTable').dataTable();
+       });
+
+</script>
+
+<nav>
+     <ul class="pager" style="float:right; font-family:'Californian FB'; font-size:medium; font-weight:bold;"><li class="previous"> @Html.ActionLink(" Back", "Index", null, new { @class="fa fa-arrow-left"})</li></ul>
+</nav>
+
+<div>
+   <table id="myTable" class="table table-bordered">
+        <thead>
+           <tr style="font-size:small">
+                                    @*<th>EmployeeId</th>*@
+                                    <th>Full Name</th>                          
+                                    <th>Branch</th>
+                                    <th>Department</th>
+                                    <th>Position</th>
+                                    <th>Telephone No.</th>
+                                    <th>Service Phone</th>
+                                    <th>Email</th>
+                                    <th>Skype Name</th>
+                                    @if(Convert.ToBoolean(Session["IsAdmin"]) == true)
+                                    {
+                                        <th>Setting</th>
+                                    }
+                                      
+                       
+           </tr>
+        </thead>
+          <tbody>
+                                @{
+                                    for (int i = 0; i < Model.StoreAllData.Tables[0].Rows.Count; i++)
+                                    {
+
+                                        var EmployeeId = Model.StoreAllData.Tables[0].Rows[i]["EmployeeId"].ToString();
+                                        var FullName = Model.StoreAllData.Tables[0].Rows[i]["FullName"].ToString();
+                                        var Branch = Model.StoreAllData.Tables[0].Rows[i]["BranchName"].ToString();
+                                        var Department = Model.StoreAllData.Tables[0].Rows[i]["DepartmentName"].ToString();
+                                        var Position = Model.StoreAllData.Tables[0].Rows[i]["PositionName"].ToString();
+                                        var LocalNo = Model.StoreAllData.Tables[0].Rows[i]["LocalNo"].ToString();
+                                        var ServicePhone = Model.StoreAllData.Tables[0].Rows[i]["ServicePhone"].ToString();
+                                        var Email = Model.StoreAllData.Tables[0].Rows[i]["Email"].ToString();
+                                        var SkypeEmail = Model.StoreAllData.Tables[0].Rows[i]["SkypeAccount"].ToString();
+     
+                                          <tr style="font-size:smaller;">  
+                                              
+                                               @* <td>@EmployeeId</td> *@ 
+                                                <td>@FullName</td>  
+                                                <td>@Branch</td>
+                                                <td>@Department</td>  
+                                                <td>@Position</td>
+                                                <td>@LocalNo</td>
+                                                <td>@ServicePhone</td>
+                                                <td>@Email</td>
+                                                <td>@SkypeEmail</td>
+
+                                              @if(Convert.ToBoolean(Session["IsAdmin"]) == true)
+                                              {
+                                                <td>
+                                                @Html.ActionLink("Edit", "EditDetails", new { Id = Model.StoreAllData.Tables[0].Rows[i]["EmployeeId"].ToString() }, new { @class="btn btn-primary btn-large"}) 
+                                                </td>
+                                              }
+                                           </tr> 
+                                    } 
+                                 }
+          </tbody>
+
+     </table>
+</div>
+

@@ -1,0 +1,116 @@
+﻿@model HRISOnline.Objects.EmpViewDetails
+@{
+    ViewBag.Title = "ViewDetailWorkExp";
+}
+
+<p style="float:right;">
+         @Html.ActionLink(" Back", "myEmployee201Profile", null, new { @class="btn btn-danger" })
+</p> 
+<br /> <br />
+<div class="panel panel-primary">
+            <div class="panel-heading">
+                Work Experience 
+            </div>
+          <div class="panel-body">
+             <div class="container">
+                 <div class="row">
+                    <div class="col-xs-12">
+                     <div class="table-responsive">
+                  <table class="table table-striped" style="width:auto;">
+                           <thead>
+                               <tr>
+                               <th class="col-md-2">Date Employed</th>
+                               <th class="col-md-2">Position</th>
+                               <th class="col-md-2">Employer</th>
+                               <th class="col-md-2">Employer Contact No.</th>
+                               <th class="col-md-2">Reason for Leaving</th>
+                               </tr>
+                           </thead>
+                            @foreach (var item in Model.Work_Exp)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(a => item.strDateEmployeed)</td>
+                                    <td>@Html.DisplayFor(a => item.strPosition)</td>
+                                    <td>@Html.DisplayFor(a => item.strEmployerName)</td>                                        
+                                    <td>@Html.DisplayFor(a => item.strEmployerContactNum)</td>
+                                    <td>@Html.DisplayFor(a => item.strReason)</td>
+                                </tr>
+                            }
+
+                  </table>
+                </div>
+                </div>
+                     </div>
+             </div>
+          </div>
+        </div>
+
+
+            <div class="panel panel-primary">
+               <div class="panel-heading">
+                    Approve and Disapprove Information 
+                </div>
+               <div class="panel-body"> 
+                   <table class="table table-bordered">
+                       <thead>
+                           <tr>
+                               <th>First Approval</th>  
+                               <th>Second Approval</th>                        
+                           </tr>
+                           
+                           
+                       </thead>
+                        
+                       <tbody>
+                           <tr>
+                            @foreach (var item in Model.WorkReason)
+                            {
+                                if (item.isApprovedFirst == 1)
+                                {
+                                       <td style="color:green;">Approved</td>
+                                }
+                                else if(item.isApprovedFirst == 0)
+                                {
+                                    <td style="color:red;">Disapproved</td>
+                                }  
+                                else
+                                {
+                                    <td></td>
+                                }
+                                
+                                if (item.isApprovedSecond == 1)
+                                {
+                                    <td style="color:green;">Approved</td>
+                                }
+                                if (item.isApprovedSecond == 0)
+                                {
+                                    <td style="color:red;">Disapproved</td>
+                                }
+                                
+                                
+                             }
+                            
+                           </tr>
+                       </tbody>
+                   </table>
+
+                   <table class="table table-bordered">
+                       <thead>
+                           <tr>
+                               <th style="width:457px;">Reason</th>  
+                                                   
+                           </tr>                                               
+                       </thead>
+                        <tr>
+                            @foreach (var item in Model.WorkReason)
+                            {                        
+                            <td>@Html.DisplayFor(a => item.DisApproveReason)</td>
+                            }
+                        </tr>
+                       <tbody>
+                         
+                       </tbody>
+                   </table>
+
+               </div>
+           </div>

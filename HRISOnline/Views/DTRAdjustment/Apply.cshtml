@@ -1,0 +1,286 @@
+﻿@model HRISOnline.Objects.DTRAdjustment
+
+@{
+    ViewBag.Title = ViewBag.MyTitle;
+}
+
+@*@section breadcrumb{
+    <div class="row">
+        <div id="breadcrumb" class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">DTR Adjustment</a></li>
+                <li><a href="#">@ViewBag.MyTitle</a></li>
+            </ol>
+        </div>
+    </div>
+}*@
+
+@*<div class="col-sm-12">*@
+    <div class="alert text-center" id="msg"></div>
+
+    <div class="panel panel-primary">
+        @*<div class="panel-heading">
+            <h3>@ViewBag.MyTitle</h3>
+        </div>*@
+
+        @using (Html.BeginForm("Apply", "DTRAdjustment", FormMethod.Post, new { @class = "form-horizontal", @role = "form" }))
+        { 
+        <div class="panel-body">
+            @Html.HiddenFor(mdl => mdl.intOlnDTRAdjustment)
+            @Html.HiddenFor(mdl => mdl.intMstEmpPersonal)
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Date Filed</label>
+                <div class="col-sm-2">
+                    @Html.TextBoxFor(mdl => mdl.DateFiled, "{0:MM/dd/yyyy}", new { @class = "form-control", @readonly = "", @data_date_format = "mm/dd/yyyy" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Adjustment Date</label>
+                <div class="col-sm-2">
+                    @Html.TextBoxFor(mdl => mdl.AdjustmentDate, "{0:MM/dd/yyyy}", new { @class = "form-control", @onkeypress = "javascript: return false;", @data_date_format = "mm/dd/yyyy" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Time IN</label>
+                <div class="col-sm-2">
+                    <div class="bootstrap-timepicker">
+                        @Html.TextBoxFor(mdl => mdl.TimeIn, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Time OUT</label>
+                <div class="col-sm-2">
+                    <div class="bootstrap-timepicker">
+                        @Html.TextBoxFor(mdl => mdl.TimeOut, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <label class="col-sm-2 control-label">No. of hours</label>
+                <div class="col-sm-2">
+                    @Html.TextBoxFor(mdl => mdl.NoOfHours, new { @class = "form-control", @readonly = "" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Reason</label>
+                <div class="col-sm-10">
+                    @Html.TextAreaFor(mdl => mdl.Reason, new { @class = "form-control", @required = "" })
+                </div>
+            </div>
+        </div>
+        }
+
+        <div class="panel-footer">
+            @if (ViewBag.isForApproval == false)
+            {
+                if (ViewBag.MyTitle != "DTR Adjustment Details")
+                { 
+                <button type="button" class="btn btn-success btn-lg" onclick="SaveRecord();">Submit</button>
+                }
+                if ((ViewBag.MyTitle == "Update DTR Adjustment") || (ViewBag.MyTitle == "DTR Adjustment Details"))
+                { 
+                    <a class="btn btn-danger btn-lg" href="@Url.Content("~/DTRAdjustment")">Back to list</a>
+                }
+            }
+            else
+            {
+                <a class="btn btn-danger btn-lg" href="@Url.Content("~/DTRAdjustment/forApproval")">Back to list</a>
+            }
+            
+        </div>
+    </div>
+@*</div>*@
+
+@section scripts
+{
+    <script src="@Url.Content("~/Scripts/myScripts.js")"></script>    
+
+    <script type="text/javascript">
+        var _startShift = '';        
+
+        $(document).ready(function () {
+            var nowTemp = new Date();
+            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+            var adjdate;
+
+            $('#msg').removeClass('active');
+            $('#msg').addClass('hide');
+
+            if ('@ViewBag.MyTitle' == "DTR Adjustment Details") {
+                $('input[type="text"],textarea').attr('readonly', 'readonly');
+            }
+            else {
+                $('#TimeOut, #TimeIn').timepicker({
+                    minuteStep: 1,
+                    showInputs: false,
+                    disableFocus: true
+                });
+
+                adjdate = $("#AdjustmentDate").datepicker({
+                }).on('changeDate', function (ev) {
+
+                    adjdate.hide();                    
+                }).data('datepicker');
+
+                if ('@ViewBag.MyTitle' == "Apply for DTR Adjustment") {
+                    GetShifts();
+                }
+            }
+
+            $("#TimeOut, #TimeIn").on('change', function (ev) {
+
+                var url = '@Url.Action("SetDates")';
+                var datax = { "adjDate": "", "TimeIn": "", "TimeOut": "" };
+
+                datax.adjDate = $('#AdjustmentDate').val();
+                datax.TimeOut = $("#TimeOut").val();
+                datax.TimeIn = $("#TimeIn").val();
+
+                $.get(
+                    url,
+                    datax,
+                    function (data) {
+
+                        if (data.datanum == "1") {                                                        
+                            $('#TimeOut').val(data.shift);
+                        }
+                        else if (data.datanum == "2") {
+                            $('#TimeIn').val(data.shift);
+                        }
+
+                        $('#NoOfHours').val(data.NoOfHrs);
+                    });
+            });
+
+            //disable week ends here
+            disableWeekends(adjdate.picker);
+
+            var _fill = adjdate.fill;
+            adjdate.fill = function () {
+                {
+                    _fill.call(this);
+                    disableWeekends(adjdate.picker);
+                }
+            };
+            //end disable week ends here
+
+            @*if ('@ViewBag.MyTitle' == "Apply for DTR Adjustment") {
+                GetStartOfShift();
+            }*@
+        });
+
+        function GetShifts() {
+            var url = '@Url.Action("GetShifts")';
+            var datax = { "adjDate": "" };
+
+            datax.adjDate= $('#AdjustmentDate').val();
+
+            $.get(
+                url,
+                datax,
+                function (data) {
+                    $('#TimeOut').val(data.endOfTime);
+                    $('#TimeIn').val(data.startOfTime);
+                });
+        }
+
+        function GetNoOfHours() {
+            var url = '@Url.Action("GetNoOfHours")';
+            var datax = { "timestart": "", "timeend": "" };
+
+            datax.timestart = $('#TimeIn').val();
+            datax.timeend = $('#TimeOut').val();
+
+            $.get(
+                url,
+                datax,
+                function (data) {
+                    if (data.success == 'true') {
+                        $('#NoOfHours').val(data.hours);
+
+                        $('#msg').removeClass('alert-danger active');
+                        $('#msg').addClass('hide');
+                    }
+                    else {
+                        $('#NoOfHours').val(data.hours);
+
+                        $('#msg').addClass('alert-danger active');
+                        $('#msg').removeClass('hide');
+                        $('#msg').html(data.errmsg);
+
+                        if (data.errtype = "1") {
+                            $('#msg').removeClass('alert-danger active');
+                            $('#msg').addClass('hide');
+
+                            $('#TimeIn').val(_startShift);
+                            $('#TimeOut').val(_startShift);
+                        }
+                    }
+                });
+        }
+
+        function RedirectMe() {
+            window.location.href = "@Url.Content("~/DTRAdjustment")";
+        }
+
+        function SaveRecord()
+        {
+            if ($('#Reason').val() == "") {
+                $('#msg').addClass('active');
+                $('#msg').removeClass('hide');
+
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html("Please enter your Reason.");
+
+                return;
+            }
+
+            var adj = {
+                "intOlnDTRAdjustment": "", "intMstEmpPersonal": "", "AdjustmentDate": "", "TimeIn": "",
+                "TimeOut": "", "Reason": "", "NoOfHours": "", "DateFiled" : ""
+            };
+
+            adj.intOlnDTRAdjustment = $('#intOlnDTRAdjustment').val();
+            adj.intMstEmpPersonal = $('#intMstEmpPersonal').val();
+            adj.AdjustmentDate = $('#AdjustmentDate').val();
+            adj.TimeIn = $('#TimeIn').val();
+            adj.TimeOut = $('#TimeOut').val();
+            adj.Reason = $('#Reason').val();
+            adj.NoOfHours = $('#NoOfHours').val();
+            adj.DateFiled = $('#DateFiled').val();
+
+            //saving part
+            $.ajax({
+                url: '@Url.Action("SaveDTRAdjustment")',
+                data: JSON.stringify(adj),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+
+                    $('#msg').addClass('active');
+                    $('#msg').removeClass('hide');
+
+                    if (result.success == "True") {
+                        $('#msg').removeClass('bg-danger');
+                        $('#msg').addClass('bg-success');
+                        setTimeout('RedirectMe()', 2000);
+                    }
+                    else {
+                        $('#msg').removeClass('bg-success');
+                        $('#msg').addClass('bg-danger');
+                    }
+
+                    $('#msg').html(result.msg);
+                }
+            });
+        }
+    </script>
+    
+}

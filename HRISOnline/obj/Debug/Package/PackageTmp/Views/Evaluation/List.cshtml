@@ -1,0 +1,60 @@
+﻿@model IEnumerable<HRISOnline.Objects.EvalList>
+
+@{
+    ViewBag.Title = ViewBag.MyTitle;
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div id="breadcrumb" class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Evaluation</a></li>
+                <li><a href="#">@ViewBag.MyTitle</a></li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="col-sm-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3>@ViewBag.MyTitle</h3>
+        </div>
+
+        <div class="panel-body">
+            <table class="table table-bordered table-heading" id="list-table">
+                <thead>
+                    <tr>
+                        <th class="col-sm-2 text-center">Effectivity Date</th>
+                        <th class="col-sm-2 text-center">Period Covered</th>                        
+                        <th>Employee</th>
+                        <th class="col-sm-2 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var itm in Model)
+                    { 
+                        <tr>
+                            <td class="text-center">@itm.EffectivityDate.ToShortDateString()</td>
+                            <td class="text-center">@itm.PeriodCoveredFrom - @itm.PeriodCoveredTo</td>                            
+                            <td>@itm.EmpName</td>
+                            <td class="text-center">
+                                <a href="@Url.Content("~/Evaluation/Edit/" + @itm.intOlnEvaluation)" class="btn btn-success btn-xs">Edit</a> | 
+                                <button type="button" class="btn btn-danger btn-xs">Cancel</button>
+                            </td>
+                        </tr>
+                    }                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#list-table").dataTable();
+        });
+    </script>
+}

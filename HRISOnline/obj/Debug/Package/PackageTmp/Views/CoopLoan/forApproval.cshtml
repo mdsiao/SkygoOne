@@ -1,0 +1,150 @@
+﻿@model IEnumerable<HRISOnline.Objects.CoopLoanApproval>
+
+@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div id="breadcrumb" class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Coop Loan</a></li>
+                <li><a href="#">@ViewBag.MyTitle</a></li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="col-sm-12">
+
+    <div class="alert text-center" id="msg"></div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3>@ViewBag.MyTitle</h3>
+        </div>
+
+        <div class="panel-body">
+            <table class="table table-bordered table-heading" id="loan-table">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width:30px;">                         
+                            <input type="checkbox" id="chk-all" />
+                        </th>
+                        <th class="text-center" style="width:30px;">ID</th>
+                        <th class="col-sm-1 text-center">Date Filed</th>
+                        <th class="col-sm-2 text-center">Loan Type</th>                        
+                        <th>Employee</th>
+                        <th class="col-sm-1 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    { 
+                        <tr>
+                            <td class="text-center">                                
+                                <input type="checkbox" class="chk" />                                
+                            </td>
+                            <td>@item.intOlnCoopLoanApplication</td>
+                            <td>@item.DateFiled.ToShortDateString()</td>
+                            <td>@item.LoanType</td>
+                            <td>@item.EmpName</td>
+                            <td class="text-center">
+                                @*<a href="@Url.Content("~/CoopLoan/Details/") @item.intOlnCoopLoanApplication">View Details</a>*@
+                                <a href="@Url.Content("~/CoopLoan/Details?id=")@item.intOlnCoopLoanApplication&isForApproval=true">View Details</a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="panel-footer">
+            <button type="button" class="btn btn-primary btn-lg" onclick="ApproveLoan();">Approve</button>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#msg').removeClass('active');
+            $('#msg').addClass('hide');
+
+            $('#loan-table').dataTable({
+                "columnDefs": [{
+                    "targets": [],
+                    "visible": false,
+                    "searchable": false
+                }],
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "filter": false
+            });
+
+            $('#chk-all').on('click', function (ev) {
+                $('.chk').prop('checked', $('#chk-all').prop('checked'));
+            });
+        });
+
+        function RedirectMe() {
+            window.location.href = "@Url.Content("~/CoopLoan/forApproval")";
+        }
+
+        function ApproveLoan() {
+            var id = { "details": [] };
+            var sub = { "intOlnCoopLoanApplication": "" };
+
+            $('#loan-table > tbody > tr input[type="checkbox"]:checked').each(function () {
+                var $row = $(this).parents('tr');
+
+                sub.intOlnCoopLoanApplication = $row.find('td:eq(1)').html();
+                id.details.push(sub);
+
+                sub = { "intOlnCoopLoanApplication": "" };
+            });
+
+            if (id.details.length == 0) {
+                $('#msg').removeClass('hide');
+                $('#msg').addClass('active');
+
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html("Please select atleast one(1) item.");
+            }
+            else {
+
+                $.ajax({
+                    url: '@Url.Action("ApproveLoan")',
+                    data: JSON.stringify(id),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (result) {
+
+                        $('#msg').addClass('active');
+                        $('#msg').removeClass('hide');
+
+                        if (result.success == 'True') {
+                            $('#msg').removeClass('bg-danger');
+                            $('#msg').addClass('bg-success');
+                            setTimeout('RedirectMe()', 2000);
+                        }
+                        else {
+                            $('#msg').removeClass('bg-success');
+                            $('#msg').addClass('bg-danger');
+                        }
+
+                        $('#msg').html(result.msg);
+
+                    }
+                });
+
+            }
+
+        }
+    </script>
+}

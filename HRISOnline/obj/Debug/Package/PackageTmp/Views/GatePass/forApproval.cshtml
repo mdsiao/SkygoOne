@@ -1,0 +1,273 @@
+﻿@model IEnumerable<HRISOnline.Objects.GatePassApprovalList>
+
+@{
+    ViewBag.Title = ViewBag.MyTitle;
+}
+
+@*@section breadcrumb{
+    <div class="row">
+        <div id="breadcrumb" class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Gate Pass</a></li>
+                <li><a href="#">@ViewBag.MyTitle</a></li>
+            </ol>
+        </div>
+    </div>
+}*@
+
+@*<div class="col-sm-12">*@
+    <div class="alert text-center" id="msg"></div>
+        <div class="panel panel-primary">
+            @*<div class="panel-heading">
+                <h3>@ViewBag.MyTitle</h3>
+            </div>*@
+
+
+            <div class="panel-body">
+                <table class="table table-bordered table-heading" id="gp-table">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width:30px;">                         
+                                <input type="checkbox" id="chk-all" />
+                            </th>
+                            @*<th class="text-center" style="width:30px;">ID</th>*@
+                            <th class="col-sm-1 text-center">Date</th>
+                            <th class="col-sm-1 text-center">Duration</th>
+                            <th>Employee</th>
+                            <th>Reason/Remarks</th>
+                            <th class="col-sm-2 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        { 
+                            <tr>
+                                <td class="text-center">                                
+                                <input type="checkbox" class="chk" id="@item.intOlnGatePass" />                                
+                                </td>
+                                @*<td class="text-center">@item.intOlnGatePass</td>*@
+                                <td class="text-center">@item.GatePassDate.ToShortDateString()</td>
+                                <td class="text-center">@item.NoOfHours</td>
+                                <td>@item.EmpName</td>
+                                <td>
+                                    @item.Remarks
+                                    @if (item.isOBHoliday == true){ 
+                                    @:<strong style="color:red;">[@item.HolidayName.ToString()]</strong>
+                                }
+                                </td>
+                                <td class="text-center">
+                                    <a class="btn btn-warning btn-xs" href="@Url.Content("~/GatePass/Details?id=")@item.intOlnGatePass&xtype=@ViewBag.id&isForApproval=true">Details</a>                                                                    
+                                    <a class="btn btn-default btn-xs" href="@Url.Content("~/GatePass/ApprovalInfo?id=")@item.intOlnGatePass&xtype=@ViewBag.id&isForApproval=true">Approval Info</a>                                                                    
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel-footer">
+                @*<button type="button" class="btn btn-primary btn-lg" onclick="ApproveGatePass();">Approve</button>
+                <button type="button" class="btn btn-danger btn-lg" onclick="DisapproveOvertime();">Disapprove</button>*@
+                <button type="button" class="btn btn-success btn-lg" onclick="OpenModal(1);">Approve</button>
+                <button type="button" class="btn btn-danger btn-lg" onclick="OpenModal(2);">Disapprove</button>
+            </div>
+        </div>
+@*</div>*@
+
+<input type="text" id="type-id" class="hide" />
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">@*Cancel Overtime*@</h4>
+      </div>
+      <div class="modal-body">
+        @*Do you want to cancel this transaction?*@
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-lg" onclick="ApproveDisapproveItem();">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#msg').removeClass('active');
+            $('#msg').addClass('hide');
+
+            $('#gp-table').dataTable({
+                "columnDefs": [{
+                    "targets": [],
+                    "visible": false,
+                    "searchable": false
+                }],
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "filter": false
+            });
+
+            $('#chk-all').on('click', function (ev) {
+                $('.chk').prop('checked', $('#chk-all').prop('checked'));
+            });
+        });
+
+        function OpenModal(type) {
+            if (type == 1) {
+                $('.modal-title').html("Approve");
+                $('.modal-body').html("Do you want to APPROVE the selected item(s)?");
+            }
+            else {
+                $('.modal-title').html("Disapprove");
+                //$('.modal-body').html("Do you want to DISAPPROVE the selected item(s)?");
+                $('.modal-body').html("Do you want to DISAPPROVE the selected item(s)?<br><br>" +
+                                    "<strong>Reason:</strong> <textarea class='form-control' id='disapproveReason'></textarea>");
+            }
+
+            $('#type-id').val(type);
+            $('#myModal').modal();
+        }
+
+        function ApproveDisapproveItem() {
+            var type = $('#type-id').val();
+
+            if (type == 1) {
+                ApproveGatePass();
+            }
+            else {
+                DisapproveOvertime();
+            }
+
+            $('#myModal').modal('hide');
+        }
+
+        function RedirectMe() {
+            window.location.href = "@Url.Content("~/GatePass/forApproval/") @ViewBag.id";
+        }
+
+        function ApproveGatePass() {
+            var id = { "list": [] };
+            var sub = { "intOlnGatePass": "" };
+
+            $('#gp-table > tbody > tr input[type="checkbox"]:checked').each(function () {
+                var $row = $(this).attr('id');//$(this).parents('tr');
+
+                sub.intOlnGatePass = $row;//.find('td:eq(1)').html();
+                id.list.push(sub);
+
+                sub = { "intOlnGatePass": "" };
+            });
+
+            if (id.list.length == 0) {
+                $('#msg').removeClass('hide');
+                $('#msg').addClass('active');
+
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html("Please select atleast one(1) item.");
+            }
+            else {
+
+                $.ajax({
+                    url: '@Url.Action("ApproveGatePass")',
+                    data: JSON.stringify(id),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (result) {
+
+                        $('#msg').addClass('active');
+                        $('#msg').removeClass('hide');
+
+                        if (result.success == 'True') {
+                            $('#msg').removeClass('bg-danger');
+                            $('#msg').addClass('bg-success');
+                            setTimeout('RedirectMe()', 2000);
+                        }
+                        else {
+                            $('#msg').removeClass('bg-success');
+                            $('#msg').addClass('bg-danger');
+                        }
+
+                        $('#msg').html(result.msg);
+
+                    }
+                });
+
+            }
+
+        }
+
+        function DisapproveOvertime() {
+            var id = { "dis": [] };
+            var sub = { "intOlnTransNo": "", "Reason": "" };
+
+            $('#gp-table > tbody > tr input[type="checkbox"]:checked').each(function () {
+                var $row = $(this).attr('id');
+
+                sub.intOlnTransNo = $row;//.find('td:eq(1)').html();
+                sub.Reason = $('#disapproveReason').val();
+
+                id.dis.push(sub);
+
+                sub = { "intOlnTransNo": "" };
+            });
+
+            if (id.dis.length == 0) {
+                $('#msg').removeClass('hide');
+                $('#msg').addClass('active');
+
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html("Please select atleast one(1) item.");
+            }
+            else if ($('#disapproveReason').val() == '') {
+                $('#msg').removeClass('hide');
+                $('#msg').addClass('active');
+
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html("Please enter your reason for disapproving the transaction(s).");
+            }
+            else {
+
+                $.ajax({
+                    url: '@Url.Action("Disapprove")',
+                    data: JSON.stringify(id),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (result) {
+
+                        $('#msg').addClass('active');
+                        $('#msg').removeClass('hide');
+
+                        if (result.success == 'True') {
+                            $('#msg').removeClass('bg-danger');
+                            $('#msg').addClass('bg-success');
+                            setTimeout('RedirectMe()', 2000);
+                        }
+                        else {
+                            $('#msg').removeClass('bg-success');
+                            $('#msg').addClass('bg-danger');
+                        }
+
+                        $('#msg').html(result.msg);
+
+                    }
+                });
+
+            }
+
+        }
+    </script>
+}

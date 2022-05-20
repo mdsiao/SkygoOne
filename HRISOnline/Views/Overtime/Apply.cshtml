@@ -1,0 +1,445 @@
+﻿@model HRISOnline.Objects.Overtime
+
+@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+@*@section breadcrumb{
+    <div class="row">
+        <div id="breadcrumb" class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Overtime</a></li>
+                <li><a href="#">@ViewBag.MyTitle</a></li>
+            </ol>
+        </div>
+    </div>
+}*@
+
+@*<div class="col-sm-12">*@
+    
+    <div class="alert text-center" id="msg"></div>
+
+    <div class="panel panel-primary">
+        @*<div class="panel-heading">
+            <h3>@ViewBag.MyTitle</h3>
+        </div>        *@
+
+        @using (Html.BeginForm("Apply", "Overtime", FormMethod.Post, new { @class = "form-horizontal", @role = "form" }))
+        {
+        <div class="panel-body">
+            @Html.HiddenFor(Model => Model.intOlnOvertimeApplication)
+            @Html.HiddenFor(Model => Model.intMstEmpPersonal)
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Date Filed</label>
+                <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.DateFiled, "{0:MM/dd/yyyy}", new { @class = "form-control", @readonly = "true" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Overtime Date</label>
+                <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.OvertimeDate, "{0:MM/dd/yyyy}", new { @class = "form-control", @onkeypress = "javascript: return false;", @data_date_format = "mm/dd/yyyy" })
+                </div>                
+            </div>
+
+
+
+
+            
+            @* SAMPLE *@
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Time Start</label>
+                <div class="col-sm-3">
+                   <div class="input-group bootstrap-timepicker timepicker">                                                
+                      <i>@Html.TextBoxFor(Model => Model.TimeStarted,  new { @class = "form-control"})</i>
+                   </div>
+                </div>
+            </div>
+                
+            @* SAMPLE *@
+
+           @* <div class="form-group">*@
+                @*<label class="col-sm-2 control-label">Date Start</label>
+                <div class="col-sm-2">
+                    @Html.TextBoxFor(model => model.DateTimeFrom, "{0:MM/dd/yyyy}", new { @class = "form-control", @onkeypress = "javascript: return false;", @data_date_format = "mm/dd/yyyy" })
+                </div>*@
+
+             @*   <label class="col-sm-2 control-label">Time Start</label>
+                <div class="col-sm-2">
+                   <div class="bootstrap-timepicker">                        
+                        @Html.TextBoxFor(Model => Model.TimeStarted,new { @class = "form-control"})
+
+                    </div>
+                </div>
+            </div>*@
+
+            <div class="form-group">
+                @*<label class="col-sm-2 control-label">Date End</label>
+                <div class="col-sm-2">
+                    @Html.TextBoxFor(model => model.DateTimeTo, "{0:MM/dd/yyyy}", new { @class = "form-control", @onkeypress = "javascript: return false;", @data_date_format = "mm/dd/yyyy" })
+                </div>*@
+                <label class="col-sm-2 control-label">Time End</label>
+                <div class="col-sm-3">
+                    <div class="input-group bootstrap-timepicker timepicker">
+                        <i>@Html.TextBoxFor(Model => Model.TimeEnded, new { @class = "form-control" })</i>
+                    </div> 
+                </div>
+
+                <label class="col-sm-2 control-label">Duration</label>
+                <div class="col-sm-2">
+                    @Html.HiddenFor(Model => Model.NoOfHours, new { @class = "form-control", @required = "required", @readonly = "" })
+                    <input type="text" id="duration" class="form-control" value="0 h 0 m" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Purpose of work</label>
+                <div class="col-sm-10">
+                    @Html.TextAreaFor(Model => Model.PurposeOfWork, new { @class = "form-control" })
+                </div>
+            </div>
+
+            @if (Convert.ToBoolean(ViewBag.isDisapproved) == true)
+            { 
+                <div class="form-group">
+                    <label style="color:red;" class="col-sm-2 control-label">Disapprove By</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(Model => Model.DisapprovedByName, new { @class = "form-control" })
+                    </div>
+
+                    <label style="color:red;" class="col-sm-2 control-label">Disapprove Date</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(Model => Model.DisapprovedDateTime, new { @class = "form-control" })
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label style="color:red;" class="col-sm-2 control-label">Disapprove Reason</label>
+                    <div class="col-sm-10">
+                        @Html.TextAreaFor(Model => Model.DisapprovedReason, new { @class = "form-control" })
+                    </div>
+                </div>
+            }
+
+            @*<div class="form-group">
+                <label class="col-sm-2 control-label">Remarks</label>
+                <div class="col-sm-10">
+                    @Html.TextAreaFor(Model => Model.Remarks, new { @class = "form-control" })
+                </div>
+            </div>*@
+        </div>
+        }
+
+        <div class="panel-footer">
+            @if ((ViewBag.isForApproval == false) && (ViewBag.isFinance == false))
+            {
+                if (ViewBag.MyTitle != "Overtime Details")
+                { 
+                    <a class="btn btn-success btn-lg" onclick="setValConfirmation();" data-toggle="modal" data-target="#modal-confirm" href="#mdl-confirm">Submit</a>                                      
+                }            
+                if ((ViewBag.MyTitle == "Update Overtime") || (ViewBag.MyTitle == "Overtime Details"))
+                { 
+                    <a class="btn btn-danger btn-lg" href="@Url.Content("~/Overtime")">Back to list</a>
+                }    
+            }
+            else if ((ViewBag.isForApproval == true) && (ViewBag.isFinance == false))
+            {
+                <a class="btn btn-danger btn-lg" href="@Url.Content("~/Overtime/forApproval")">Back to list</a>
+            }
+            else
+            {
+                <a class="btn btn-danger btn-lg" href="@Url.Content("~/Overtime/FinanceApproval")">Back to list</a>
+            }
+            
+        </div>
+    </div>
+    
+    @if (Convert.ToBoolean(ViewBag.isForApproval) == false)
+    { 
+        <div style="font-size:12px; font-style:italic;">
+            <strong class="text-danger">Approval Level:</strong><br />
+            <span class="text-danger">First Level: <strong style="color:black;">@Session["emp_firstApprover"].ToString()</strong></span>
+            @if (Session["emp_approvallevel"].ToString() == "2")
+            { <br /><span class="text-danger">Second Level: <strong style="color:black;">@Session["emp_secondApprover"].ToString()</strong></span> }
+        </div> 
+    }    
+@*</div>*@
+
+@*CONFIRMATION*@
+<div class="modal fade" id="modal-confirm" role="dialog" aria-labelledby="myModalLabel-elig" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel-pwd">Confirmation</h4>
+      </div>
+      <div class="modal-body">
+          You are about to apply for overtime.
+          <br />
+          <br />
+          <h4>@Session["emp_name"]</h4>
+          Overtime Date: <label id="ot_date"></label><br />
+          Start Time: <label id="dt_start"></label><br />
+          End Time: <label id="dt_end"></label><br />
+          Duration: <label id="dur"></label>
+
+          <br />
+          <br />
+          Do you want to continue?
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-success btn-lg" onclick="SaveRecord();">Continue</button>
+        <button type="button" class="btn btn-danger  btn-lg" onclick=""  data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section scripts
+{
+    <script src="@Url.Content("~/Scripts/myScripts.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.maskedinput.js")"></script>
+
+
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js" ></script>*@
+
+    <script type="text/javascript">
+
+        
+         
+            $('#TimeStarted').timepicker();
+            $('#TimeEnded').timepicker();
+
+        var _endShift = '';
+        var _startShift = '';
+
+        $(document).ready(function () {
+            var nowTemp = new Date();
+            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+            var otdate;
+
+            $('#msg').removeClass('active');
+            $('#msg').addClass('hide');
+
+            //$('#TimeStarted, #TimeEnded').mask('99:99 aa', { placeholder: "hh:mm tt" });           
+            if ('@ViewBag.MyTitle' == "Overtime Details") {
+                $('input[type="text"],textarea').attr('readonly', 'readonly');
+
+                var durationSplit;
+                var durationH = 0;
+                var durationM = 0;
+
+                durationSplit = $('#NoOfHours').val().split('.');
+                durationH = durationSplit[0].toString();
+
+                if (typeof (durationSplit[1]) === "undefined")
+                { }
+                else {
+
+                    durationM = parseFloat(durationSplit[1].toString());
+
+                    switch (durationSplit[1]) {
+                        case "1":
+                        case "2":
+                        case "3":
+                        case "4":
+                        case "5":
+                        case "6":
+                            durationM = durationM * 10;
+                            break;
+                    }
+                }
+
+                $('#duration').val(durationH + " h " + ((durationM.toString() != "0") ? durationM.toString() + " m" : ""));
+            }
+            else {
+                
+                $('#TimeStarted, #TimeEnded').timepicker({
+                    minuteStep: 1,
+                    showInputs: false,
+                    disableFocus: true
+                });
+
+                $('#DateTimeFrom, #DateTimeTo').datepicker();
+
+                otdate = $("#OvertimeDate").datepicker({
+                }).on('changeDate', function (ev) {
+
+                    otdate.hide();
+                    GetEndOfShift();
+                    $('#NoOfHours').val("0");
+                }).data('datepicker');
+            }
+
+            $("#TimeStarted, #TimeEnded").on('change', function (ev) {
+                var startDate = $("#TimeStarted").val();
+                var endDate = $("#TimeEnded").val();
+                var theDate = $('#OvertimeDate').val();
+               
+                var url = '@Url.Action("SetDates")';
+                var datax = { "otDate": "", "startTime": "", "endTime": "" };
+                var durationSplit;
+                var durationH = 0;
+                var durationM = 0;
+
+                datax.otDate = $('#OvertimeDate').val();
+                datax.startTime = startDate;
+                datax.endTime = endDate;
+
+                $.get(
+                    url,
+                    datax,
+                    function (data) {
+                        
+                        if (data.datanum == "1") {
+                            $('#TimeStarted').val(data.shiftStart);
+                        }
+                        else if (data.datanum == "2") {
+                            $('#TimeEnded').val(data.shiftEnd);
+                        }
+
+                        $('#NoOfHours').val(data.OTHoursOrig);
+                        durationSplit = data.OTHours.toString().split('.');
+                        durationH = durationSplit[0].toString();
+                        
+                        if (typeof (durationSplit[1]) === "undefined")
+                        { }
+                        else {                            
+
+                            durationM = parseFloat(durationSplit[1].toString());
+
+                            switch (durationSplit[1])
+                            {
+                                case "1": 
+                                case "2": 
+                                case "3":
+                                case "4":
+                                case "5": 
+                                case "6":
+                                    durationM = durationM * 10;
+                                    break;                                
+                            }
+                        }
+
+                        $('#duration').val(durationH + " h " + ((durationM.toString() != "0") ? durationM.toString() + " m" : ""));
+                        
+                    });                
+            });           
+
+            //disableWeekends(otdate.picker);
+
+            //var _fill = otdate.fill;
+            //otdate.fill = function () {
+            //    {
+            //        _fill.call(this);
+            //        disableWeekends(otdate.picker);
+            //    }
+            //};          
+
+            if ('@ViewBag.MyTitle' == "Apply for Overtime") {
+                GetEndOfShift();
+            }
+        });
+
+        function setTimeStart() {
+
+        }
+
+        function setValConfirmation() {
+            $('#ot_date').html($('#OvertimeDate').val());
+            $('#dt_start').html($('#TimeStarted').val());
+            $('#dt_end').html($('#TimeEnded').val());
+            $('#dur').html($('#duration').val());
+        }
+
+        function GetEndOfShift() {
+            var url = '@Url.Action("GetEndOfShift")';
+            var datax = { "otDate": "" };
+
+            datax.otDate = $('#OvertimeDate').val();
+
+            $.get(
+                url,
+                datax,
+                function (data) {
+                    _endShift = data.endOfTime;
+
+                    $('#TimeEnded').val(_endShift);
+                    $('#TimeStarted').val(_endShift);
+                });
+        }
+
+        function GetStartOfShift() {
+            var url = '@Url.Action("GetStartOfShift")';
+            var datax = { "otDate": "" };
+
+            datax.otDate = $('#OvertimeDate').val();
+
+            $.get(
+                url,
+                datax,
+                function (data) {
+                    //_s = data.endOfTime;
+                    _startShift = data.startOfShift;
+
+                    //$('#TimeEnded').val(_endShift);
+                    $('#TimeStarted').val(_startShift);
+                });
+        }
+
+        function RedirectMe() {
+            window.location.href = "@Url.Content("~/Overtime")";
+        }
+
+        function SaveRecord() {
+            var overtime = {
+                "intOlnOvertimeApplication": "", "intMstEmpPersonal": "", "DateFiled": "", "OvertimeDate": "", "PurposeOfWork": "", "TimeStarted": "",
+                "TimeEnded": "", "NoOfHours": "", "Remarks": "", "NoOfHoursDisplay": ""
+            };
+
+            //set the data to the fields
+            overtime.intOlnOvertimeApplication = $('#intOlnOvertimeApplication').val();
+            overtime.intMstEmpPersonal = $('#intMstEmpPersonal').val();
+            overtime.DateFiled = $('#DateFiled').val();
+            overtime.OvertimeDate = $('#OvertimeDate').val();
+            overtime.PurposeOfWork = $('#PurposeOfWork').val();
+            overtime.TimeStarted = $('#TimeStarted').val();
+            overtime.TimeEnded = $('#TimeEnded').val();
+            overtime.NoOfHours = $('#NoOfHours').val();
+            overtime.Remarks = $('#Remarks').val();
+            overtime.NoOfHoursDisplay = $('#Remarks').val();
+
+            //saving part
+            $.ajax({
+                url: '@Url.Action("SaveOvertime")',
+                data: JSON.stringify(overtime),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+
+                    $('#msg').addClass('active');
+                    $('#msg').removeClass('hide');
+
+                    if (result.success == "True") {
+                        $('#msg').removeClass('bg-danger');
+                        $('#msg').addClass('bg-success');
+                        setTimeout('RedirectMe()', 2000);
+                    }
+                    else {
+                        $('#msg').removeClass('bg-success');
+                        $('#msg').addClass('bg-danger');
+                    }
+
+                    $('#msg').html(result.msg);
+                }
+            });
+
+            $('#modal-confirm').modal('hide');
+
+        }
+    </script>
+}

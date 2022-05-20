@@ -1,0 +1,533 @@
+﻿@model HRISOnline.Objects.LeaveMaster
+
+@{
+    ViewBag.Title = ViewBag.MyTitle;
+}
+
+@*@section breadcrumb{
+    <div class="row">
+        <div id="breadcrumb" class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Leave</a></li>
+                <li><a href="#">@ViewBag.MyTitle</a></li>
+            </ol>
+        </div>
+    </div>
+}*@
+
+@*<div class="col-sm-12">*@
+    <div class="alert text-center" id="msg"></div>
+
+    <div class="panel panel-primary">       
+        
+        <div class="panel-body">
+            @using (Html.BeginForm("Apply", "Leave", FormMethod.Post, new { @class = "form-horizontal", @role = "form" }))
+            {
+                @Html.HiddenFor(model => model.intOlnLeaveApplicationHead)
+                @Html.HiddenFor(model => model.intMstEmpPersonal)                
+                
+                <div class="form-group">                    
+                    <label class="col-sm-2 control-label">Date Filed</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.DateFiled, "{0:MM/dd/yyyy}", new { @class = "form-control", @readonly="true" })
+                    </div>
+
+                    <label class="col-sm-3 control-label">Year</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.YearPeriod, new { @class = "form-control", @readonly="true" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Leave Type</label>
+                    <div class="col-sm-2">
+                        @Html.DropDownListFor(model => model.intMstLeaveType, (SelectList)@ViewBag.leavetypes, new { @class = "form-control" })
+                    </div>
+                    
+                    <label class="col-sm-2 control-label">Available Leaves: <strong><span style="font-size:16px; color:red;" id="avLeave"></span></strong></label>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Date From</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.DateFrom, "{0:MM/dd/yyyy}", new { @class = "form-control", @onkeypress = "javascript: return false;" })
+                    </div>
+                    <div class="col-sm-2">
+                        @Html.DropDownListFor(model => model.DateFromAMorPM, (SelectList)@ViewBag.dtFromAMorPM, new { @class = "form-control" })
+                    </div>                    
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Date To</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.DateTo, "{0:MM/dd/yyyy}", new { @class = "form-control", @onkeypress = "javascript: return false;" })
+                    </div>
+                    <div class="col-sm-2">
+                        @Html.DropDownListFor(model => model.DateToAMorPM, (SelectList)@ViewBag.dtToAMorPM, new { @class = "form-control" })
+                    </div> 
+                    <label class="col-sm-1 control-label">Day(s)</label>
+                    <div class="col-sm-1">
+                        @Html.TextBoxFor(model => model.NoOfDays, new { @class = "form-control", @readonly="true" })
+                    </div>
+                </div>
+                <div class="form-group">
+                     <label class="col-sm-2 control-label">Reason</label>
+                    <div class="col-sm-10">
+                        @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control" })
+                    </div>
+                </div>
+                
+                 if (Convert.ToBoolean(ViewBag.isDisapproved) == true)
+                 { 
+                        <div class="form-group">
+                            <label style="color:red;" class="col-sm-2 control-label">Disapprove By</label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(Model => Model.DisapproveByName, new { @class = "form-control" })
+                            </div>
+
+                            <label style="color:red;" class="col-sm-2 control-label">Disapprove Date</label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(Model => Model.DisapprovedDateTime, new { @class = "form-control" })
+                            </div>
+                        </div>
+                
+                        <div class="form-group">
+                            <label style="color:red;" class="col-sm-2 control-label">Disapprove Reason</label>
+                            <div class="col-sm-10">
+                                @Html.TextAreaFor(Model => Model.DisapproveReason, new { @class = "form-control" })
+                            </div>
+                        </div>
+                 }
+            }
+        </div>
+
+        <div class="panel-footer">
+            @if (ViewBag.isForApproval == false)
+            {
+                if (ViewBag.MyTitle != "Leave Details")
+                { 
+                    @*<button type="button" class="btn btn-success btn-lg" >Submit</button>                    *@
+                    <a onclick="setValConfirmation();" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal-confirm" href="#mdl-confirm">Submit</a>
+                }
+                if ((ViewBag.MyTitle == "Update Leave") || (ViewBag.MyTitle == "Leave Details"))
+                { 
+                    <a class="btn btn-danger btn-lg" href="@Url.Content("~/Leave")">Back to list</a>
+                }
+            }
+            else
+            {
+                <a class="btn btn-danger btn-lg" href="@Url.Content("~/Leave/forApproval")">Back to list</a>
+            }
+            
+        </div>
+    </div>
+@*</div>*@
+   @if (Convert.ToBoolean(ViewBag.isForApproval) == false) 
+   { 
+       <div style="font-size:12px; font-style:italic;">
+            <strong class="text-danger">Approval Level:</strong><br />
+            <span class="text-danger">First Level: <strong style="color:black;">@Session["emp_firstApprover"].ToString()</strong></span>
+            @if (Session["emp_approvallevel"].ToString() == "2")
+            { <br /><span class="text-danger">Second Level: <strong style="color:black;">@Session["emp_secondApprover"].ToString()</strong></span> }
+       </div> 
+   }   
+
+@*CONFIRMATION*@
+<div class="modal fade" id="modal-confirm" role="dialog" aria-labelledby="myModalLabel-elig" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel-pwd">Confirmation</h4>
+      </div>
+      <div class="modal-body">
+          You are about to apply for leave.
+          <br />
+          <br />
+          <h4>@Session["emp_name"]</h4>
+          Date From: <label id="dtfrom"></label><br />
+          Date To: <label id="dtto"></label><br />
+          Duration: <label id="dur"></label>
+
+          <br />
+          <br />
+          Do you want to continue?
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-success btn-lg" onclick="SaveRecord();">Continue</button>
+        <button type="button" class="btn btn-danger  btn-lg" onclick=""  data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section scripts{
+    <script src="@Url.Content("~/Scripts/myScripts.js")"></script>
+    <script src="@Url.Content("~/Scripts/TableTools.js")"></script>
+    @*<script src="@Url.Content("~/Scripts/js/TableTools.min.js")"></script>*@
+
+    <script type="text/javascript">        
+        var code = $(".modal-dialog").html().replace('<!--', '').replace('-->', '');
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        var table;
+        var dtFrom;
+        var dtTo;
+        var _noOfDays = 0;
+
+        $(document).ready(function () {
+            //var table = $('#leave-application').DataTable();
+
+            $('#totalDays').html("0.0");
+
+            if ('@ViewBag.MyTitle' == "Leave Details") {      
+                
+                $('input[type="text"],textarea').attr('readonly', 'readonly');
+                $('select').attr('disabled', true);
+
+            }
+            else {
+
+                GetNoOfDays();
+
+                dtFrom = $("#DateFrom").datepicker({
+                }).on('changeDate', function (ev) {
+                    GetNoOfDays();
+                    ShowHideCombo();
+                    GetAvailableLeave();
+                    dtFrom.hide();                    
+                }).data('datepicker');
+
+                dtTo = $("#DateTo").datepicker({
+                }).on('changeDate', function (ev) {
+                    GetNoOfDays();
+                    ShowHideCombo();
+                    GetAvailableLeave();
+                    dtTo.hide();                    
+                }).data('datepicker');
+
+                $('#DateFromAMorPM').attr("disabled", true);
+
+                $('#DateFromAMorPM').change(function (e) {                    
+                    RecomputeDays("from");                    
+                });
+
+                $('#DateToAMorPM').change(function (e) {                    
+                    RecomputeDays("to");                    
+                });
+
+                @*disableWeekends(dtFrom.picker, Boolean('@Session["emp_hasWorkOnSat"]'));*@
+                @*disableWeekends(dtTo.picker, Boolean('@Session["emp_hasWorkOnSat"]'));*@
+                disableWeekends(dtFrom.picker, '@Session["emp_hasWorkOnSat"]');
+                disableWeekends(dtTo.picker, '@Session["emp_hasWorkOnSat"]');
+
+                var _fill = dtFrom.fill;
+                dtFrom.fill = function () {
+                    {
+                        _fill.call(this);
+                        disableWeekends(dtFrom.picker, '@Session["emp_hasWorkOnSat"]');
+                    }
+                };
+
+                var _fill2 = dtTo.fill;
+                dtTo.fill = function () {
+                    {
+                        _fill.call(this);
+                        disableWeekends(dtTo.picker, '@Session["emp_hasWorkOnSat"]');
+                    }
+                };
+            }           
+
+            ShowHideCombo();
+
+            if ('@ViewBag.MyTitle' != "Leave Details") {
+                GetAvailableLeave();
+            }            
+
+            $('#intMstLeaveType').on('change', function (ev) {                
+                GetAvailableLeave();                
+            });
+
+            $('#msg').removeClass('active');
+            $('#msg').addClass('hide');
+
+            
+        });
+
+        function setValConfirmation()
+        {
+            $('#dtfrom').html($('#DateFrom').val());
+            $('#dtto').html($('#DateTo').val());
+            $('#dur').html($('#NoOfDays').val() + ' day(s)');
+        }
+
+        function clickme(val)
+        {
+            var xVal = $(val).is(':checked');
+            if (xVal == true) {
+                $("#cbo").removeClass("hide");
+                $("#cbo").addClass("active");
+                $("#NoOfDays").val("0.5");
+            }
+            else {
+                $("#cbo").addClass("hide");
+                $("#cbo").removeClass("active");
+                $("#NoOfDays").val("1");
+            }
+        }
+
+        function ShowHideCombo() {
+            var dtFrom = $('#DateFrom').val();
+            var dtTo = $('#DateTo').val();
+
+            if (dtFrom != dtTo) {
+                $('#DateFromAMorPM').show();
+            }
+            else {
+                $('#DateFromAMorPM').hide();
+            }
+        }
+
+        function RecomputeDays(whatType) {
+            var _days = 0;
+            var dtFrom = $('#DateFrom').val();
+            var dtTo = $('#DateTo').val();
+            var strFrom = $('#DateFromAMorPM').val();
+            var strTo = $('#DateToAMorPM').val();
+            
+            $('#msg').addClass('hide');
+            $('#msg').removeClass('active');
+
+            if (dtFrom == dtTo) {
+                _days = _noOfDays;
+
+                if (strTo != "1") {
+                    _days -= 0.5;
+                }
+            }
+            else {
+                _days = parseFloat($('#NoOfDays').val());
+
+                if (whatType == "from") {
+                    if (strFrom != "1") {
+                        _days -= 0.5;
+                    }
+                    else {
+                        _days += 0.5;
+                    }
+                }
+                else {
+                    if (strTo != "1") {
+                        _days -= 0.5;                        
+                    }
+                    else {
+                        _days += 0.5;                        
+                    }
+                }                
+            }
+
+            $('#NoOfDays').val(_days);
+
+            if ((_days >= 4) && ('@Session["emp_approvallevel"].ToString()' == "2")) {
+                $('#msg').addClass('active');
+                $('#msg').removeClass('hide');
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html("Your leave is " + _days + " days. You need to have two(2) approvals.");
+            }
+        }               
+
+        function RedirectMe() {
+            window.location.href = "@Url.Content("~/Leave")";
+        }
+        
+        function GetNoOfDays() {
+            var url = '@Url.Action("GetNoOfDays")';
+            var datax = { "dtFrom": "", "dtTo": "" };
+            
+            $('#msg').addClass('hide');
+            $('#msg').removeClass('active');
+            $('#msg').removeClass('bg-danger');
+
+            datax.dtFrom = $('#DateFrom').val();
+            datax.dtTo = $('#DateTo').val();            
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                data: datax,
+                async: false,
+                success: function (data) {
+                    $('#NoOfDays').val(data.days);
+                    _noOfDays = data.days;
+
+                    if (_noOfDays <= 0) {//this means that the Date From is greater than Date To
+                        $('#msg').addClass('active');
+                        $('#msg').removeClass('hide');
+                        $('#msg').removeClass('bg-success');
+                        $('#msg').addClass('bg-danger');
+                        $('#msg').html("<strong>DATE FROM</strong> should not be greater than <strong>DATE TO</strong>. Please re-enter the dates.");
+                    }
+                    else {
+                        if (data.days > 1) {
+                            $('#DateFromAMorPM').attr("disabled", false);
+                            $('#DateToAMorPM').attr("disabled", false);
+                            getAMorPMType("from");
+                            getAMorPMType("to");
+                        }
+                        else {
+                            $('#DateFromAMorPM').attr("disabled", true);
+                            $('#DateToAMorPM').attr("disabled", false);
+
+                            getAMorPMType("");
+                            getAMorPMType("");
+                            $('#DateFromAMorPM').val(1);
+                        }
+
+                        if ((parseFloat(data.days) >= 4) && ('@Session["emp_approvallevel"].ToString()' == "2")) {
+                            $('#msg').addClass('active');
+                            $('#msg').removeClass('hide');
+                            $('#msg').removeClass('bg-success');
+                            $('#msg').addClass('bg-danger');
+                            $('#msg').html("Your leave is " + data.days + " days. You need to have two(2) approvals.");
+                        }
+                    }
+                    
+                }
+            });
+
+            //$('#DateFrom').val(datax.dtTo);
+        }
+
+        function getAMorPMType(dType) {
+            var values = { "dType": "", "noOfDays": "" };
+
+            values.dType = dType;
+            values.noOfDays = $('#NoOfDays').val();
+            if (dType == "from") {
+                $('#DateFromAMorPM').empty();
+            } else {
+                $('#DateToAMorPM').empty();
+            }
+            
+            var items = "";
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetAMorPMType")",
+                data: values,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+
+                success: function (data) {
+                    var arr = JSON.parse(data.obj);
+                    
+                    $.each(arr, function (i) {                                                
+                        items += "<option value='" + arr[i]["ValueMember"] + "'>" + arr[i]["DisplayMember"] + "</option>";
+                    });
+
+                    if (dType == "from") {
+                        $('#DateFromAMorPM').html(items);
+                    } else {
+                        $('#DateToAMorPM').html(items);
+                    }
+                }
+            });
+        }
+
+        function GetAvailableLeave()
+        {
+            var url = '@Url.Action("GetAvailableLeave")';
+            var datax = { "leaveType": "", "lvDate": "" };            
+
+            //$('#msg').addClass('hide');
+            //$('#msg').removeClass('active');            
+
+            datax.leaveType = $('#intMstLeaveType').val();
+            //datax.lvDate = $('#DateFiled').val();
+            datax.lvDate = $('#DateFrom').val();
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                data: datax,
+                async: false,
+                success: function (data) {
+                    $('#avLeave').html(data.avLeave);
+                }
+            });
+
+            var availableLeaves = parseFloat($('#avLeave').html());
+            //var counter = CountLeaveDays();
+            var counter = $('#NoOfDays').val();
+            var showError = false;
+            var msg = '';
+
+            //$('#totalDays').html(counter);
+
+            if (counter > availableLeaves) {
+                showError = true;
+                msg = "PLEASE NOTE: You have exceeded the maximum allowable leaves. Some leaves will not be paid.</br>";
+            }
+            if ((counter >= 4) && ('@Session["emp_approvallevel"].ToString()' == "2")) {
+                showError = true;
+                msg += "Your leave is " + counter.toString() + " days. You need to have two(2) approvals.";
+            }
+
+            if (showError == true) {
+                $('#msg').addClass('active');
+                $('#msg').removeClass('hide');
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html(msg);
+            }        
+        }
+
+        function SaveRecord()
+        {
+            var leaveheader = {
+                "intOlnLeaveApplicationHead": "", "intMstEmpPersonal": "", "YearPeriod": "",
+                "DateFiled": "", "intMstLeaveType": "", "Remarks": "", "DateFrom": "", "DateTo": "",
+                "NoOfDays": "", "DateFromAMorPM": "", "DateToAMorPM": "", "LeaveDetails": []
+            };          
+
+            leaveheader.intOlnLeaveApplicationHead = $("#intOlnLeaveApplicationHead").val();
+            leaveheader.intMstEmpPersonal = $("#intMstEmpPersonal").val();
+            leaveheader.YearPeriod = $("#YearPeriod").val();
+            leaveheader.DateFiled = $("#DateFiled").val();
+            leaveheader.intMstLeaveType = $("#intMstLeaveType").val();                        
+            leaveheader.Remarks = $("#Remarks").val();
+            leaveheader.DateFrom = $("#DateFrom").val();
+            leaveheader.DateTo = $("#DateTo").val();
+            leaveheader.NoOfDays = $("#NoOfDays").val();
+            leaveheader.DateFromAMorPM = $("#DateFromAMorPM").val();
+            leaveheader.DateToAMorPM = $("#DateToAMorPM").val();
+
+
+           
+                //saving part
+                $.ajax({
+                    url: '@Url.Action("SaveLeave")',
+                    data: JSON.stringify(leaveheader),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (result) {
+
+                        $('#msg').addClass('active');
+                        $('#msg').removeClass('hide');
+
+                        if (result.success == "True") {
+                            $('#msg').removeClass('bg-danger');
+                            $('#msg').addClass('bg-success');
+                            setTimeout('RedirectMe()', 2000);
+                        }
+                        else {
+                            $('#msg').removeClass('bg-success');
+                            $('#msg').addClass('bg-danger');
+                        }
+
+                        $('#msg').html(result.msg);
+                    }
+                });
+            //}
+            $('#modal-confirm').modal('hide');
+        }
+    </script>    
+}

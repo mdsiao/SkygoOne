@@ -1,0 +1,212 @@
+﻿@model HRISOnline.Objects.LeaveListData
+
+@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+<style type="text/css">
+    #leave-table {
+        font-size:12px;
+    }
+</style>
+
+@*<div class="col-lg-9">*@
+
+    <div class="alert text-center" id="msg"></div>
+
+    <div class="panel panel-primary">
+        @*<div class="panel-heading">
+            <h3>@ViewBag.MyTitle</h3>
+        </div>*@
+
+        <div class="panel-body">
+            <table class="table table-bordered table-heading" id="leave-table">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1">Leave Type</th>
+                        <th class="col-sm-1 text-center">Date Filed</th>
+                        <th class="col-sm-2 text-center">Date Covered</th>
+                        <th class="col-sm-1 text-center">No. of day(s)</th>
+                        <th class="col-sm-2">Reason</th>                        
+                        <th class="col-sm-1 text-center">Status</th>
+                        <th class="col-sm-1 text-center">Next Approver</th>                        
+                        <th class="col-sm-2 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.LeaveList)
+                    { 
+                        <tr>
+                            <td>@item.LeaveType</td>
+                            <td class="text-center">@item.DateFiled.ToShortDateString()</td>
+                            <td class="text-center">@item.LeaveDates</td>
+                            <td class="text-center">@item.NoOfDays</td>
+                            <td>@item.Remarks</td>    
+
+                            @if (item.Status == "APPROVED")
+                            { 
+                                <td class="text-center" style="color:green; font-size:11px; font-weight:bold;">@item.Status</td>
+                            }
+                            else
+                            { 
+                                <td class="text-center" style="color:red; font-size:11px; font-weight:bold;">@item.Status</td>
+                            }
+                            @if (item.isDisapproved == false)
+                            { 
+                                <td>@item.NextApprover</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }   
+                            <td class="text-center">
+                                @if ((item.isCancelled == false) && (item.isDisapproved == false))
+                                {
+                                    if ((item.isProcessed == false) && (item.ReferenceId == 0))
+                                    {                                         
+                                        <a class="btn btn-warning btn-xs" href="@Url.Content("~/Leave/Details/" + item.intOlnLeaveApplicationHead)">Details</a>
+                                        <button type="button" onclick="SetID(@item.intOlnLeaveApplicationHead);" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal">Cancel</button>
+                                        <a class="btn btn-default btn-xs" href="@Url.Content("~/Leave/ApprovalInfo?id=" + item.intOlnLeaveApplicationHead)">Approval Info</a>
+                                    }
+                                    else if (item.isProcessed == true)
+                                    {
+                                        <a class="btn btn-warning btn-xs" href="@Url.Content("~/Leave/Details/" + item.intOlnLeaveApplicationHead)">Details</a>                                        
+                                        <a class="btn btn-default btn-xs" href="@Url.Content("~/Leave/ApprovalInfo?id=" + item.intOlnLeaveApplicationHead)">Approval Info</a>
+                                    }
+                                }                                
+                                else if (item.isDisapproved == true)
+                                { 
+                                    <a class="btn btn-warning btn-xs" href="@Url.Content("~/Leave/Details/" + item.intOlnLeaveApplicationHead)">Details</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+@*</div>*@
+
+@*<div class="col-lg-3">*@
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3>Leave Balance</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-bordered table-heading">
+                <thead>
+                    <tr>
+                        <th class="text-center">Sick Leave</th>
+                        <th class="text-center">Vacation Leave</th>
+                        @*@if ((Model.Gender == "MALE") && (Model.CivilStatus == "MARRIED")) { 
+                            <th class="text-center">PL</th>
+                        }
+                        else if ((Model.Gender == "MALE") && (Model.CivilStatus == "MARRIED")){
+                            <th class="text-center">ML</th>
+                        }*@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.LeaveBalance)
+                    { 
+                        <tr>
+                            <td class="text-center">@item.SL</td>
+                            <td class="text-center">@item.VL</td>
+                            @*@if ((Model.Gender == "MALE") && (Model.CivilStatus == "MARRIED")) { 
+                                <td class="text-center">@item.PL</td>
+                            }
+                            else if ((Model.Gender == "FEMALE") && (Model.CivilStatus == "MARRIED")){
+                                <td class="text-center">@item.ML</td>
+                            }*@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+@*</div>*@
+
+<input type="text" id="cancel-id" class="hide" />
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Cancel Leave</h4>
+      </div>
+      <div class="modal-body">
+        Do you want to cancel this transaction?
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-success btn-lg" onclick="CancelOvertime();">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#leave-table").dataTable({
+                "columnDefs": [{
+                    "targets": [5, 6, 3, 7],
+                    "visible": true,
+                    "searchable": false,
+                    "orderable": false
+                }],
+                aaSorting: [[1, 'desc']]
+            });
+
+            $('#msg').removeClass('active');
+            $('#msg').addClass('hide');
+        });
+
+        function RedirectMe() {
+            window.location.href = "@Url.Content("~/Leave")";
+        }
+
+        function SetID(id) {
+            $('#cancel-id').val(id);
+        }
+
+        function CancelOvertime() {
+            var url = '@Url.Action("CancelLeave")';
+            var data = { "intOlnLeaveApplicationHead": 0 };
+
+            data.intOlnLeaveApplicationHead = $('#cancel-id').val();
+
+            $.ajax({
+                url: url,
+                data: JSON.stringify(data),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+
+                    $('#msg').addClass('active');
+                    $('#msg').removeClass('hide');
+
+                    if (result.success == "True") {
+                        $('#msg').removeClass('bg-danger');
+                        $('#msg').addClass('bg-success');
+                        setTimeout('RedirectMe()', 2000);
+                        $('#myModal').modal('hide');
+                    }
+                    else {
+                        $('#msg').removeClass('bg-success');
+                        $('#msg').addClass('bg-danger');
+                    }
+
+                    $('#msg').html(result.msg);
+
+                }
+            });
+
+        }
+    </script>
+}

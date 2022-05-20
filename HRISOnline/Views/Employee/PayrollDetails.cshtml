@@ -1,0 +1,387 @@
+﻿@model HRISOnline.Objects.PayrollData
+
+@{
+    ViewBag.Title = "Employee Payroll Details";    
+}
+
+<style>
+    body .panel-primary, input[type="text"] {
+        font-size:12px;
+    }
+    .page-header-index {color: red;}
+</style>
+
+@*@section breadcrumb{
+    <div class="row">
+        <div id="breadcrumb" class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Employee Information</a></li>
+                <li><a href="#">Payroll Details</a></li>
+            </ol>
+        </div>
+    </div>
+}*@
+
+@*<div class="col-sm-12">*@
+    <div class="panel panel-primary">
+        @*<div class="panel-heading">
+            <h3>@ViewBag.Title</h3>
+        </div>*@
+
+        <div class="panel-body">
+            <form class="form-horizontal">
+
+                <div class="row">
+                    @*Payroll Details*@
+                    <div class="col-xs-8 col-sm-8">
+                        @*Payroll Id and Employee Name*@
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Payroll Id</label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(md => md.PayrollEmp.intTrnPayroll, new { @class = "form-control text-center" })
+                            </div>
+                            <div class="col-sm-5">
+                                @Html.TextBoxFor(md => md.PayrollEmp.BatchNumber, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                            <label class="col-sm-2 control-label">Employee</label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(md => md.PayrollEmp.intMstEmpPersonal, new { @class = "form-control text-center" })
+                            </div>
+                            <div class="col-sm-5">
+                                @Html.TextBoxFor(md => md.PayrollEmp.EmployeeName, new { @class = "form-control" })
+                            </div>
+                        </div>*@
+
+                        <div class="row">
+                            @*Leave Monetization*@
+                            <div class="col-xs-6 col-sm-6">
+                                <h4 class="page-header-index">Leave Monetization</h4>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Days</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.NoOfLeaveMonetize, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                            </div>                            
+                            
+                            @*Income*@
+                            <div class="col-xs-6 col-sm-6">
+                                <h4 class="page-header-index">Income</h4>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Basic Amount</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.BasicAmount, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                            @*SL/VL*@
+                            <div class="col-xs-6 col-sm-6">
+                                <h4 class="page-header-index">SL/VL</h4>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Days</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.NoOfSLVL, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                            </div>
+                            @*Continuation of Income*@
+                            <div class="col-xs-6 col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Basic COLA</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.BasicCola, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Basic Allow.</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.BasicAllowance, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*Rates*@
+                            <div class="col-xs-6 col-sm-6">
+                                <h4 class="page-header-index">Rate</h4>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Days</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.DailyRate, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Monthly</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.MonthlyRate, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                            </div>
+                            @*Continuation of Income*@
+                            <div class="col-xs-6 col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">13th Month Amount</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.Month13thPay, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Overtime</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.OvertimePay, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Regular Holiday</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.RHolidayPay, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*Discretionary Allowance*@
+                            <div class="col-xs-6 col-sm-6">
+                                <h4 class="page-header-index">Discretionary Allowance</h4>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Amount</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.DiscAllowance, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                            </div>
+                            @*Continuation of Income*@
+                            <div class="col-xs-6 col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Special Holiday</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.SHolidayPay, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Leave Monetization</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.MonetizePay, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>                                
+                            </div>
+
+                            @*COLA*@
+                            <div class="col-xs-6 col-sm-6">
+                                <h4 class="page-header-index">COLA</h4>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Amount</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.Cola, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                            </div>
+                            @*Continuation of Income*@
+                            <div class="col-xs-6 col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">SL/VL</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.VLSLAmount, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Other Income</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.OtherIncome, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>                                
+                            </div>
+
+                            @*Working Days*@
+                            <div class="col-xs-6 col-sm-6">
+                                <h4 class="page-header-index">Working Days</h4>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">No. of Days</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.NoOfWorkDays, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Regular Hol.</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.NoOfRHoliday, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Special Hol.</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.NoOfSHoliday, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*LESS*@
+                            <div class="col-xs-6 col-sm-6">
+                                <h4 class="page-header-index">LESS</h4>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Tardy</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.TardyAmount, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Undertime</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.UTAmount, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Absences</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.AbsenceAmount, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Gross Pay</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.GrossPay, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*Days Absent*@
+                            <div class="col-xs-6 col-sm-6">
+                                <h4 class="page-header-index">Days Absent</h4>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">No. of Days</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.DaysAbsent, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*Mandatory Deductions*@
+                            <div class="col-xs-6 col-sm-6">
+                                <h4 class="page-header-index">Mandatory Deductions</h4>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">PHIC</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.PHICEmployee, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">HDMF</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.HDMFEmployee, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">SSS</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.SSSEmployee, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                            </div>
+                            @*Blank*@
+                            <div class="col-xs-6 col-sm-6"></div>
+
+                            @*Tax and Other Deductions*@
+                            <div class="col-xs-6 col-sm-6">
+                                <h4 class="page-header-index">Tax and Other Deductions</h4>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Tax</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.WithholdingTax, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Other Deduction</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.OtherDeduction, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                            </div>
+                            @*Blank*@
+                            <div class="col-xs-6 col-sm-6"></div>
+
+                            @*Net Pay*@
+                            <div class="col-xs-6 col-sm-6">
+                                <h4 class="page-header-index">Net Pay</h4>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Net Pay</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(md => md.PayrollEmp.NetPay, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    @*Other Income Details*@
+                    <div class="col-xs-4 col-sm-4">
+                        <h4 class="page-header-index">Other Income Details</h4>
+                        <table class="table table-bordered table-striped table-heading">
+                            <thead>
+                                <tr>
+                                    <td>Other Income</td>
+                                    <td>Amount</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var income in Model.PayrollOInc)
+                                { 
+                                    <tr>
+                                        <td>@income.IncomeName</td>
+                                        <td class="text-right">@income.Amount.ToString("N2")</td>
+                                    </tr>
+                                }
+                            </tbody>                            
+                        </table>
+                        <div class="form-group">                        
+                            <div class="col-sm-5 pull-right">
+                                @Html.TextBoxFor(md => md.PayrollEmp.TotalOtherIncomeDetail, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                            </div>
+                        </div>
+                    </div>                    
+
+                    @*Other Deduction Details*@
+                    <div class="col-xs-4 col-sm-4">
+                        <h4 class="page-header-index">Other Deduction Details</h4>
+                        <table class="table table-bordered table-striped table-heading">
+                            <thead>
+                                <tr>
+                                    <td>Other Deduction</td>
+                                    <td>Amount</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var income in Model.PayrollODeduc)
+                                { 
+                                    <tr>
+                                        <td>@income.DeductionName</td>
+                                        <td class="text-right">@income.Amount.ToString("N2")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div class="form-group">                        
+                            <div class="col-sm-5 pull-right">
+                                @Html.TextBoxFor(md => md.PayrollEmp.TotalOtherDeductionDetail, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                            </div>
+                        </div>
+                    </div>                
+                </div>
+
+            </form>
+        </div>
+    </div>
+@*</div>*@
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('input[type="text"]').keypress(function () {
+                return false;
+            });
+        });
+    </script>    
+}

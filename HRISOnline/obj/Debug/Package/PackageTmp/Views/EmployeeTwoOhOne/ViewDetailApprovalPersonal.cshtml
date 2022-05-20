@@ -1,0 +1,105 @@
+﻿@model HRISOnline.Objects.EmpViewDetailsForApproval
+@{
+    ViewBag.Title = "ViewDetailApprovalPersonal";
+}
+
+<p style="float:right;">
+         @Html.ActionLink(" Back", "EmployeeTwoOhOneforApproval", null, new { @class="btn btn-danger" })
+</p>
+<br /> <br />
+
+<div class="panel panel-primary">
+            <div class="panel-heading">
+                Personal Profile
+            </div>
+
+            <div class="panel-body"> 
+                <table>
+                   
+                    <tbody>
+                        <tr style="padding-bottom:1em;">
+                           
+                                <th></th>
+                                <th style="text-align:center; font-size:15px;">Current</th>
+                                <th style="text-align:center; font-size:15px;">New</th>                                                      
+                        </tr>
+                    
+                       @foreach (var item in Model.EmployeeProf)
+                       {
+                         <tr>
+                            <th class="col-md-4" >Employee ID </th>                          
+                             <td class="col-md-4">@Html.DisplayFor(a => item.Current_EmployeeID)</td>
+                             <td class="col-md-4">@Html.DisplayFor(a => item.EmployeeId)</td>
+                        </tr>
+                        <tr>
+                            <th class="col-md-4" style="">Employee Name</th>                           
+                            <td class="col-md-4"> @Html.DisplayFor(a => item.Current_EmployeeName)</td>
+                            <td class="col-md-4"> @Html.DisplayFor(a => item.EmployeeName)</td>
+                        </tr>
+                        <tr>
+                            <th class="col-md-4" style="">Email</th>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.Current_Email)</td>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.Email)</td>
+                            
+                        </tr>
+                        <tr>
+                            <th class="col-md-4" style="">Blood Type</th>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.Current_BloodType)</td>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.BloodType)</td>
+                            
+                        </tr> 
+                         <tr>
+                            <th class="col-md-4" style="">Home Phone No.</th>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.Current_HomeNum)</td>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.HomeNum)</td>
+                            
+                        </tr>  
+                        <tr>
+                            <th class="col-md-4" style="">Mobile Phone No.</th>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.Current_MobileNum)</td>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.MobileNum)</td>
+                            
+                        </tr>
+                        <tr>
+                            <th class="col-md-4" style="">Permanent Address</th>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.Current_PermanentAdd)</td>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.PermanentAdd)</td>
+                            
+                        </tr>
+                        <tr>
+                            <th class="col-md-4" style="">Present Address</th>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.Current_PresentAdd)</td>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.PresentAdd)</td>
+                            
+                        </tr>
+                        <tr>
+                            <th class="col-md-4" style="">Provincial Address</th>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.Current_ProvincialAdd)</td>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.ProvincialAdd)</td>
+                            
+                        </tr>  
+                        <tr>
+                            <th class="col-md-4" style="">Person to Notify incase of Emergency</th>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.Current_PersonToNotify)</td>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.PersonToNofify)</td>
+                            
+                        </tr>
+                        <tr>
+                            <th class="col-md-4" style="">Relation</th>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.Current_Relation)</td>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.Relation)</td>
+                            
+                        </tr>
+                        <tr>
+                            <th class="col-md-4" style="">Contact Number</th>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.Current_ContactNum)</td>
+                            <td class="col-md-4">@Html.DisplayFor(a => item.ContactNum)</td>
+                            
+                        </tr>
+                          
+                       }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>

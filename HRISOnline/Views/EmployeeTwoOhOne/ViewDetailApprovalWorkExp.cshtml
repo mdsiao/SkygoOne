@@ -1,0 +1,85 @@
+﻿@model HRISOnline.Objects.EmpViewDetailsForApproval
+@{
+    ViewBag.Title = "ViewDetailApprovalWorkExp";
+}
+
+<p style="float:right;">
+         @Html.ActionLink(" Back", "EmployeeTwoOhOneforApproval", null, new { @class="btn btn-danger" })
+</p>
+<br /><br />
+<div class="panel panel-primary">
+            <div class="panel-heading">
+                Work Experience (Current)
+            </div>
+          <div class="panel-body">
+             <div class="container">
+                 <div class="row">
+                       <div class="col-xs-12">                                        
+                        <div class="table-responsive" >
+                  <table class="table table-striped" style="width:1000px;">
+                           <thead>
+                                <tr>
+                                   <th class="col-md-2">Date Employed</th>
+                                   <th class="col-md-2">Position</th>
+                                   <th class="col-md-2">Employer</th>
+                                   <th class="col-md-2">Employer Contact No.</th>
+                                   <th class="col-md-2">Reason for Leaving</th>
+                                </tr>
+                           </thead>
+                            @foreach (var item in Model.Current_Work)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(a => item.current_strDateEmployeed)</td>
+                                    <td>@Html.DisplayFor(a => item.current_strPosition)</td>
+                                    <td>@Html.DisplayFor(a => item.current_strEmployerName)</td>
+                                    <td>@Html.DisplayFor(a => item.current_strEmployerContactNo)</td>
+                                    <td>@Html.DisplayFor(a => item.current_strReason)</td>
+                                </tr>
+                            }
+
+                  </table>
+                </div>
+                </div>
+            </div>
+             </div>
+          </div>
+        </div>
+<br /> <br />
+<div class="panel panel-primary">
+            <div class="panel-heading">
+                Work Experience (New)
+            </div>
+          <div class="panel-body">
+             <div class="container">
+                 <div class="row">
+                       <div class="col-xs-12">                                        
+                        <div class="table-responsive" >
+                  <table class="table table-striped" style="width:1000px;">
+                           <thead>
+                                <tr>
+                                   <th class="col-md-2">Date Employed</th>
+                                   <th class="col-md-2">Position</th>
+                                   <th class="col-md-2">Employer</th>
+                                   <th class="col-md-2">Employer Contact No.</th>
+                                   <th class="col-md-2">Reason for Leaving</th>
+                                </tr>
+                           </thead>
+                            @foreach (var item in Model.Work_Exp)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(a => item.strDateEmployeed)</td>
+                                    <td>@Html.DisplayFor(a => item.strPosition)</td>
+                                    <td>@Html.DisplayFor(a => item.strEmployerName)</td>
+                                    <td>@Html.DisplayFor(a => item.strEmployerContactNo)</td>
+                                    <td>@Html.DisplayFor(a => item.strReason)</td>
+                                </tr>
+                            }
+
+                  </table>
+                </div>
+                </div>
+            </div>
+             </div>
+          </div>
+        </div>
+

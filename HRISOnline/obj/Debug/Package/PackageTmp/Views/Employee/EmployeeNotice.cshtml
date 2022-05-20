@@ -1,0 +1,599 @@
+﻿@model IEnumerable<HRISOnline.Objects.EmpNoticeToolbox>
+
+@{
+    ViewBag.Title = ViewBag.MyTitle;
+    Layout = "~/Views/Shared/_LayoutDup.cshtml";
+}
+
+<style>
+    .badge {
+  padding: 1px 9px 2px;
+  font-size: 12.025px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: #ffffff;
+  background-color: #999999;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 9px;
+}
+    .badge:hover {
+  color: #ffffff;
+  text-decoration: none;
+  cursor: pointer;
+}
+    .badge-error {
+  background-color: #b94a48;
+}
+
+.badge-warning {
+  background-color: #f0ad4e;
+}
+
+.chat-body .header {
+    cursor: pointer;
+}
+.zoom {
+/*padding: 50px; */
+background-color: white;
+transition: transform .2s;
+width: 230px;
+height: 43px;
+/* margin: 0 auto; */
+}
+
+.zoom:hover {
+    -ms-transform: scale(1.5); /* IE 9 */
+    -webkit-transform: scale(1.5); /* Safari 3-8 */
+    transform: scale(1.5); 
+    border: 1px solid #888888;
+    box-shadow: 3px 5px #888888;
+}
+
+    .zoomButtons {
+    /*padding: 50px; */
+    transition: transform .2s;
+    width: 300px;
+    height: 43px;
+   /* margin: 0 auto; */
+}
+
+.zoomButtons:hover {
+    -ms-transform: scale(1.5); /* IE 9 */
+    -webkit-transform: scale(1.5); /* Safari 3-8 */
+    transform: scale(1.5); 
+}
+
+    #buttonDisabled {
+        pointer-events: none;
+        cursor: default;
+    }
+
+
+</style>
+
+<div class="col-lg-4" style="margin-top:20px;">
+    <div class="chat-panel panel panel-default">
+        <div class="panel-heading">
+            <strong>@ViewBag.MyTitle</strong>
+        </div>
+
+        <input hidden type="text" id="xFilename" />
+        <input hidden type="text" id="xID" />
+
+        <div class="panel-body"  id="cont">
+            <ul class="chat">
+
+                @foreach (var item in Model)
+                { 
+                    <li class="right clearfix">
+                        @if (item.isOpened == false)
+                        { 
+                            <div class="chat-img pull-right" id="badge-@item.intTrnEmpNotice">
+                                <span class="badge badge-error">New</span>
+                            </div>
+                        }
+
+                        <div class="chat-body clearfix">
+                        <div class="header">
+                            @if (item.isOpened == false || item.isAcknowledged == false)
+                            {
+                                <strong class="primary-font">
+                                    <a href="javascript:void(0);" onclick="urlChange('@item.FileName', @item.intTrnEmpNotice, '@item.isOpened.ToString()', '@item.isAcknowledged.ToString()', '@item.DateAcknowledged','@item.intReaction','@item.strReaction', '@item.IsAllowed')">@item.NoticeTypeName </a>
+                                </strong>                                
+                            }
+                            else
+                            { 
+                                <a style="color:#333;" href="javascript:void(0);" onclick="urlChange('@item.FileName', @item.intTrnEmpNotice, '@item.isOpened.ToString()', '@item.isAcknowledged.ToString()', '@item.DateAcknowledged','@item.intReaction','@item.strReaction', '@item.IsAllowed')">@item.NoticeTypeName </a>
+                            }                            
+                            <small class=" text-muted">
+                                <i class="fa fa-clock-o fa-fw"></i>
+                                @item.EmpNoticeDate.ToShortDateString()
+                            </small>
+                        </div>
+                        <p> @item.Description </p>
+
+                        @if (item.isOpened == true)                          
+                        { 
+                            <small class=" text-muted">
+                                @*Opened*@
+                                Read
+
+                                <i class="fa fa-clock-o fa-fw"></i>
+                                 @*@item.DateAcknowledged*@
+
+                                @item.DateOpened
+                            </small>
+                        }
+                        
+                        </div>
+                    </li>
+                }                
+                <li class="right clearfix">
+                    <div class="chat-body clearfix">
+                        <p style="height:auto;">
+                            <span class="fa-stack fa-lg">
+                                <span class="fa fa-exclamation-circle fa-fw fa-stack-2x"></span>
+                            </span>
+                            To view previous @ViewBag.MyTitle,<br />                             
+                            <a style="padding-left:3em;" href="@Url.Action("OpenToolboxCommunication", "Employee", new { intMstSysMasterfile = 2, ComNo = 3 })" target="_blank">Click here</a>
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-8" style="margin-top:20px;">    
+    <div class="row">
+        @*<i class="fa fa-hand-o-left fa-lg"></i>
+        <span style="font-size:12px; color: gray;">Click an item on the left to view @ViewBag.MyTitle.</span>*@
+        <span id="acknowledge-details" class="pull-right" style="color:#239B56; font-weight:bold;" ></span>
+
+        @* This is for recently uploaded file*@
+        <div id="ShowIcons" class="zoom" style="float:left; border-radius:8px;">
+                <a href="javascript:void(0);" onclick="ButtonReactionClicked('1')"><img src="~/Images/likefb.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons" ></a>          
+                <a href="javascript:void(0);" onclick="ButtonReactionClicked('2')"><img src="~/Images/heartheart.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+                <a href="javascript:void(0);" onclick="ButtonReactionClicked('3')"><img src="~/Images/sad2.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+                <a href="javascript:void(0);" onclick="ButtonReactionClicked('4')"><img src="~/Images/dislikebutton.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+        </div>
+
+        @* This is for outdated file with no reaction *@
+
+        <div id="ShowIconsDisabled"  style="float:left; border-radius:8px;">
+            <a href="#" id="buttonDisabled"><img src="~/Images/likefb.png" style="width:50px; height:40px; float:left;  margin-left:5px;" ></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/heartheart.png" style="width:50px; height:40px; float:left;  margin-left:5px;"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/sad2.png" style="width:50px; height:40px; float:left;  margin-left:5px;"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/dislikebutton.png" style="width:50px; height:40px; float:left;  margin-left:5px;"></a>
+        </div>
+
+
+       @* This is for selected like button active *@
+        <div id="ShowIconForLike" class="zoom"  style="float:left; border-radius:8px;">
+            <a href="#" id="buttonDisabled"><img src="~/Images/likefb.png" style="width:50px; height:40px; float:left;  margin-left:5px;"></a>
+            <a href="javascript:void(0);" onclick="ButtonReactionClicked('2')"><img src="~/Images/heartheart.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="javascript:void(0);" onclick="ButtonReactionClicked('3')"><img src="~/Images/sad2.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="javascript:void(0);" onclick="ButtonReactionClicked('4')"><img src="~/Images/dislikebutton.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+        </div>
+
+        @* This is for selected like button inactive *@
+        <div id="ShowIconForLikeInactive" style="float:left; border-radius:8px;">
+            <a href="#" id="buttonDisabled"><img src="~/Images/likefb.png" style="width:50px; height:40px; float:left;  margin-left:5px;"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/heartheart.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/sad2.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/dislikebutton.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+        </div>
+
+        @* This is for selected heart button active *@
+        <div id="ShowIconForHeart" class="zoom"  style="float:left; border-radius:8px;">
+            <a href="javascript:void(0);" onclick="ButtonReactionClicked('1')"><img src="~/Images/likefb.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/heartheart.png" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="javascript:void(0);" onclick="ButtonReactionClicked('3')"><img src="~/Images/sad2.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="javascript:void(0);" onclick="ButtonReactionClicked('4')"><img src="~/Images/dislikebutton.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+        </div>
+
+        @* This is for selected heart button inactive *@
+        <div id="ShowIconForHeartInactive" style="float:left; border-radius:8px;">
+            <a href="#" id="buttonDisabled"><img src="~/Images/likefb.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/heartheart.png" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/sad2.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/dislikebutton.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+        </div>
+
+        @* This is for selected sad button active *@
+        <div id="ShowIconForSad" class="zoom"  style="float:left; border-radius:8px;">
+            <a href="javascript:void(0);" onclick="ButtonReactionClicked('1')"><img src="~/Images/likefb.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="javascript:void(0);" onclick="ButtonReactionClicked('2')"><img src="~/Images/heartheart.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/sad2.png" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="javascript:void(0);" onclick="ButtonReactionClicked('4')"><img src="~/Images/dislikebutton.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+        </div>
+
+        @* This is for selected sad button inactive *@
+        <div id="ShowIconForSadInactive" style="float:left; border-radius:8px;">
+            <a href="#" id="buttonDisabled"><img src="~/Images/likefb.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/heartheart.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/sad2.png" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/dislikebutton.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+        </div>
+
+        @* This is for selected dislike button active *@
+        <div id="ShowIconForDislike" class="zoom"  style="float:left; border-radius:8px;">
+            <a href="javascript:void(0);" onclick="ButtonReactionClicked('1')"><img src="~/Images/likefb.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="javascript:void(0);" onclick="ButtonReactionClicked('2')"><img src="~/Images/heartheart.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="javascript:void(0);" onclick="ButtonReactionClicked('3')"><img src="~/Images/sad2.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/dislikebutton.png" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+        </div>
+
+        @* This is for selected dislike button inactive *@
+        <div id="ShowIconForDislikeInactive" style="float:left; border-radius:8px;">
+            <a href="#" id="buttonDisabled"><img src="~/Images/likefb.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/heartheart.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/sad2.gif" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+            <a href="#" id="buttonDisabled"><img src="~/Images/dislikebutton.png" style="width:50px; height:40px; float:left;  margin-left:5px;" class="zoomButtons"></a>
+        </div>
+
+        <div id="show-acknowledge" style="margin-bottom:10px; border:1px solid black;" class="pull-right">
+            
+            <button type="button" class="btn btn-warning btn-sm" id="btn-understand">I read and understand the content of this document.</button>                            
+        </div> 
+    </div>    
+    <div class="row">
+        <iframe id="iFrameName" style="width:100%; border: 0px;"></iframe>        
+    </div>    
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        var acknowledgedStore = [];
+
+        $(document).ready(function () {
+            acknowledgedStore = [];
+
+            $('#btn-understand').hide();
+            $('#acknowledge-details').hide();
+
+            $('#ShowIcons').hide();
+            $('#ShowIconsDisabled').hide();
+
+            $('#ShowIconForLike').hide();
+            $('#ShowIconForLikeInactive').hide();
+            $('#ShowIconForHeart').hide();
+            $('#ShowIconForHeartInactive').hide();
+            $('#ShowIconForSad').hide();
+            $('#ShowIconForSadInactive').hide();
+            $('#ShowIconForDislike').hide();
+            $('#ShowIconForDislikeInactive').hide();
+
+
+            $('#btn-understand').click(function () {
+                AcknowledgeDocument();
+            });
+        });
+
+        function urlChange(fileName, intTrnMemo, isOpened, isAcknowledged, dateAcknowledge, intReaction, strReaction, IsAllowed) {
+
+            $('#badge-' + intTrnMemo).hide();
+            $('#xFilename').val(fileName);
+            $('#xID').val(intTrnMemo);
+
+
+            $.ajax(
+            {
+                url: '@Url.Action("GetRecentReaction")',
+                type: 'GET',
+                data: { Filename: fileName },
+                cache: false,
+                success: function (result) {
+
+
+
+                    if ((result.intReaction == 0) && (result.IsAllowed == 0) && (result.strReaction == '')) {
+                        $('#ShowIcons').hide();
+                        $('#ShowIconsDisabled').show();
+
+                        $('#ShowIconForLike').hide();
+                        $('#ShowIconForLikeInactive').hide();
+                        $('#ShowIconForHeart').hide();
+                        $('#ShowIconForHeartInactive').hide();
+                        $('#ShowIconForSad').hide();
+                        $('#ShowIconForSadInactive').hide();
+                        $('#ShowIconForDislike').hide();
+                        $('#ShowIconForDislikeInactive').hide();
+
+                    }
+                    else if ((result.intReaction == 1) && (result.IsAllowed == 1) && (result.strReaction == 'Like')) {  //ACTIVE LIKE           
+                        $('#ShowIcons').hide();
+                        $('#ShowIconsDisabled').hide();
+
+                        $('#ShowIconForLike').show();
+                        $('#ShowIconForLikeInactive').hide();
+                        $('#ShowIconForHeart').hide();
+                        $('#ShowIconForHeartInactive').hide();
+                        $('#ShowIconForSad').hide();
+                        $('#ShowIconForSadInactive').hide();
+                        $('#ShowIconForDislike').hide();
+                        $('#ShowIconForDislikeInactive').hide();
+
+                    }
+                    else if ((result.intReaction == 1) && (result.IsAllowed == 0) && (result.strReaction == 'Like')) { //NON ACTIVE LIKE
+
+                        $('#ShowIcons').hide();
+                        $('#ShowIconsDisabled').hide();
+
+                        $('#ShowIconForLike').hide();
+                        $('#ShowIconForLikeInactive').show();
+                        $('#ShowIconForHeart').hide();
+                        $('#ShowIconForHeartInactive').hide();
+                        $('#ShowIconForSad').hide();
+                        $('#ShowIconForSadInactive').hide();
+                        $('#ShowIconForDislike').hide();
+                        $('#ShowIconForDislikeInactive').hide();
+                    }
+                    else if ((result.intReaction == 1) && (result.IsAllowed == 1) && (result.strReaction == 'Heart')) { //ACTIVE HEART
+                        $('#ShowIcons').hide();
+                        $('#ShowIconsDisabled').hide();
+
+                        $('#ShowIconForLike').hide();
+                        $('#ShowIconForLikeInactive').hide();
+                        $('#ShowIconForHeart').show();
+                        $('#ShowIconForHeartInactive').hide();
+                        $('#ShowIconForSad').hide();
+                        $('#ShowIconForSadInactive').hide();
+                        $('#ShowIconForDislike').hide();
+                        $('#ShowIconForDislikeInactive').hide();
+
+                    }
+                    else if ((result.intReaction == 1) && (result.IsAllowed == 0) && (result.strReaction == 'Heart')) { //NON ACTIVE HEART
+                        $('#ShowIcons').hide();
+                        $('#ShowIconsDisabled').hide();
+
+                        $('#ShowIconForLike').hide();
+                        $('#ShowIconForLikeInactive').hide();
+                        $('#ShowIconForHeart').hide();
+                        $('#ShowIconForHeartInactive').show();
+                        $('#ShowIconForSad').hide();
+                        $('#ShowIconForSadInactive').hide();
+                        $('#ShowIconForDislike').hide();
+                        $('#ShowIconForDislikeInactive').hide();
+                    }
+                    else if ((result.intReaction == 1) && (result.IsAllowed == 1) && (result.strReaction == 'Sad')) {  //ACTIVE SAD
+                        $('#ShowIcons').hide();
+                        $('#ShowIconsDisabled').hide();
+
+                        $('#ShowIconForLike').hide();
+                        $('#ShowIconForLikeInactive').hide();
+                        $('#ShowIconForHeart').hide();
+                        $('#ShowIconForHeartInactive').hide();
+                        $('#ShowIconForSad').show();
+                        $('#ShowIconForSadInactive').hide();
+                        $('#ShowIconForDislike').hide();
+                        $('#ShowIconForDislikeInactive').hide();
+
+                    }
+                    else if ((result.intReaction == 1) && (result.IsAllowed == 0) && (result.strReaction == 'Sad')) {  //NON ACTIVE SAD
+                        $('#ShowIcons').hide();
+                        $('#ShowIconsDisabled').hide();
+
+                        $('#ShowIconForLike').hide();
+                        $('#ShowIconForLikeInactive').hide();
+                        $('#ShowIconForHeart').hide();
+                        $('#ShowIconForHeartInactive').hide();
+                        $('#ShowIconForSad').hide();
+                        $('#ShowIconForSadInactive').show();
+                        $('#ShowIconForDislike').hide();
+                        $('#ShowIconForDislikeInactive').hide();
+
+                    }
+                    else if ((result.intReaction == 1) && (result.IsAllowed == 1) && (result.strReaction == 'Dislike')) {  //ACTIVE Dislike
+                        $('#ShowIcons').hide();
+                        $('#ShowIconsDisabled').hide();
+
+                        $('#ShowIconForLike').hide();
+                        $('#ShowIconForLikeInactive').hide();
+                        $('#ShowIconForHeart').hide();
+                        $('#ShowIconForHeartInactive').hide();
+                        $('#ShowIconForSad').hide();
+                        $('#ShowIconForSadInactive').hide();
+                        $('#ShowIconForDislike').show();
+                        $('#ShowIconForDislikeInactive').hide();
+
+                    }
+                    else if ((result.intReaction == 1) && (result.IsAllowed == 0) && (result.strReaction == 'Dislike')) {  //NON ACTIVE Dislike
+                        $('#ShowIcons').hide();
+                        $('#ShowIconsDisabled').hide();
+
+                        $('#ShowIconForLike').hide();
+                        $('#ShowIconForLikeInactive').hide();
+                        $('#ShowIconForHeart').hide();
+                        $('#ShowIconForHeartInactive').hide();
+                        $('#ShowIconForSad').hide();
+                        $('#ShowIconForSadInactive').hide();
+                        $('#ShowIconForDislike').hide();
+                        $('#ShowIconForDislikeInactive').show();
+
+                    } else if ((result.intReaction == 0) && (result.IsAllowed == 1) && (result.strReaction == '')) {
+                        $('#ShowIcons').show();
+                        $('#ShowIconsDisabled').hide();
+
+                        $('#ShowIconForLike').hide();
+                        $('#ShowIconForLikeInactive').hide();
+                        $('#ShowIconForHeart').hide();
+                        $('#ShowIconForHeartInactive').hide();
+                        $('#ShowIconForSad').hide();
+                        $('#ShowIconForSadInactive').hide();
+                        $('#ShowIconForDislike').hide();
+                        $('#ShowIconForDislikeInactive').hide();
+
+                    }
+
+
+
+                }
+            });
+
+
+
+            if (isAcknowledged.toLowerCase() == 'false') {
+                if (CheckExistFileName(fileName) == true) {
+                    $('#btn-understand').hide();
+                    ShowAcknowledgeDetails(dateAcknowledge);
+                }
+                else {
+                    $('#acknowledge-details').hide();
+                    $('#btn-understand').show();
+                }
+
+            }
+            else {
+                $('#btn-understand').hide();
+                ShowAcknowledgeDetails(dateAcknowledge);
+            }
+
+            var url = '@Url.Action("GetPDF")';
+            var site = url + "?id=" + fileName + "&isOpen=" + isOpened + "&whatType=Notice&folderName=Notice";
+            document.getElementById('iFrameName').src = site;
+        }
+        
+        function AcknowledgeDocument() {
+            var _url = '@Url.Action("AcknowledgeDocument")';
+            var _data = { "fileName": "", "whatType": "" };
+
+            _data.fileName = $('#xFilename').val();
+            _data.whatType = 'Notice';
+
+            $.ajax({
+                type: "POST",
+                url: _url,
+                data: JSON.stringify(_data),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.success.toLowerCase() == 'true')
+                        $('#btn-understand').hide();
+
+                    acknowledgedStore.push(_data.fileName);
+                    return false;
+                }//,
+                //error: function (textStatus, errorThrown) {
+                //    alert(errorThrown);
+                //}
+            });
+        }
+
+        function CheckExistFileName(varFileName) {
+
+            var retVal = false;
+            try {
+                var i;
+                for (i = 0; i < acknowledgedStore.length; i++) {
+                    if (varFileName == acknowledgedStore[i]) {
+                        $('#btn-understand').hide();
+                        retVal = true;
+                    }
+                }
+
+            } catch (e) {
+                retVal = false;
+            }
+            return retVal;
+        }
+
+        function ShowAcknowledgeDetails(dDate) {
+            $('#acknowledge-details').html('Date acknowledged:' + dDate);
+            $('#acknowledge-details').show();
+        }
+
+        function ButtonReactionClicked(ButtonType) {
+            var _url = '@Url.Action("DocumentReaction")';
+            var _data = { "ReactionType": "", "ID": "", "FName": "" };
+
+            if (ButtonType == 1) {
+                _data.ReactionType = ButtonType;
+            }
+            else if (ButtonType == 2) {
+                _data.ReactionType = ButtonType;
+            }
+            else if (ButtonType == 3) {
+                _data.ReactionType = ButtonType;
+            }
+            else if (ButtonType == 4) {
+                _data.ReactionType = ButtonType;
+            }
+
+
+            _data.FName = $('#xFilename').val();
+            _data.ID = $('#xID').val();
+
+            $.ajax({
+                type: "POST",
+                url: _url,
+                data: JSON.stringify(_data),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.success.toLowerCase() == 'successlike') {
+
+                        $('#ShowIcons').hide();
+                        $('#ShowIconsDisabled').hide();
+
+                        $('#ShowIconForLike').show();
+                        $('#ShowIconForLikeInactive').hide();
+                        $('#ShowIconForHeart').hide();
+                        $('#ShowIconForHeartInactive').hide();
+                        $('#ShowIconForSad').hide();
+                        $('#ShowIconForSadInactive').hide();
+                        $('#ShowIconForDislike').hide();
+                        $('#ShowIconForDislikeInactive').hide();
+                    } else if (data.success.toLowerCase() == 'successheart') {
+                        $('#ShowIcons').hide();
+                        $('#ShowIconsDisabled').hide();
+
+                        $('#ShowIconForLike').hide();
+                        $('#ShowIconForLikeInactive').hide();
+                        $('#ShowIconForHeart').show();
+                        $('#ShowIconForHeartInactive').hide();
+                        $('#ShowIconForSad').hide();
+                        $('#ShowIconForSadInactive').hide();
+                        $('#ShowIconForDislike').hide();
+                        $('#ShowIconForDislikeInactive').hide();
+                    } else if (data.success.toLowerCase() == 'successsad') {
+                        $('#ShowIcons').hide();
+                        $('#ShowIconsDisabled').hide();
+
+                        $('#ShowIconForLike').hide();
+                        $('#ShowIconForLikeInactive').hide();
+                        $('#ShowIconForHeart').hide();
+                        $('#ShowIconForHeartInactive').hide();
+                        $('#ShowIconForSad').show();
+                        $('#ShowIconForSadInactive').hide();
+                        $('#ShowIconForDislike').hide();
+                        $('#ShowIconForDislikeInactive').hide();
+                    } else if (data.success.toLowerCase() == 'successdislike') {
+                        $('#ShowIcons').hide();
+                        $('#ShowIconsDisabled').hide();
+
+                        $('#ShowIconForLike').hide();
+                        $('#ShowIconForLikeInactive').hide();
+                        $('#ShowIconForHeart').hide();
+                        $('#ShowIconForHeartInactive').hide();
+                        $('#ShowIconForSad').hide();
+                        $('#ShowIconForSadInactive').hide();
+                        $('#ShowIconForDislike').show();
+                        $('#ShowIconForDislikeInactive').hide();
+                    }
+
+
+
+
+                    return false;
+                }//,
+                //error: function (textStatus, errorThrown) {
+                //    alert(errorThrown);
+                //}
+            });
+        }
+    </script>    
+    
+}

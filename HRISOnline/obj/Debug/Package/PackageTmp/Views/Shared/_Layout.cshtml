@@ -1,0 +1,919 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta content="IE=edge" http-equiv="X-UA-Compatible">
+        <meta content="width=device-width, initial-scale=1" name="viewport">
+        <meta content="" name="description">
+        <meta content="" name="author">        
+        <title>@ViewBag.Title</title>
+        <link href="@Url.Content("~/Images/skygoIcon.png")" rel="shortcut icon" type="image/x-icon" />        
+       
+        <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap.min.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/jquery-ui.min.css")" />                
+        <link rel="stylesheet" href="@Url.Content("~/Content/jquery.fancybox.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/fullcalendar.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/select2.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap-timepicker.min.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap-datetimepicker.min.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/datepicker.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/dataTables.bootstrap.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap-dialog.min.css")" />        
+        
+        <link rel="stylesheet" href="@Url.Content("~/Content/metisMenu.min.css")" />        
+        <link rel="stylesheet" href="@Url.Content("~/Content/sb-admin-2.css")" />                
+        @*<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" type="text/css" />*@
+        <link rel="stylesheet" href="@Url.Content("~/Content/font-awesome.css")" />        
+        
+         @*@Styles.Render("~/Content/css")*@
+        @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        .badge {
+          padding: 1px 9px 2px;
+          font-size: 12.025px;
+          font-weight: bold;
+          white-space: nowrap;
+          color: #ffffff;
+          background-color: #999999;
+          -webkit-border-radius: 9px;
+          -moz-border-radius: 9px;
+          border-radius: 9px;
+        }
+        .badge:hover {
+          color: #ffffff;
+          text-decoration: none;
+          cursor: pointer;
+        }
+        .badge-error {
+          background-color: #b94a48;
+        }
+        .badge-warning {
+          background-color: #f0ad4e;
+        }
+        .chat-body .header {
+            cursor: pointer;
+        }
+
+        .notification {
+  background-color: #555;
+  color: white;
+  text-decoration: none;
+  padding: 15px 26px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+.notification:hover {
+  background: red;
+}
+
+            .notification .badge {
+                position: absolute;
+                top: -10px;
+                right: -10px;
+                padding: 5px 10px;
+                border-radius: 50%;
+                background-color: red;
+                color: white;
+            }
+    </style>
+    </head>
+    <body>
+
+        <div id="wrapper">
+            <nav class="navbar navbar-default navbar-static-top" style="margin-bottom: 0" role="navigation">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    </button>
+
+                    <a class="navbar-brand" style="color:#337ab7; cursor:default;" href="javascript:void(0);">@Session["emp_name"]</a>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">                    
+                    
+                    <li class="dropdown hide" id="for-approval">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <i style="color: red;" class="fa fa-exclamation-circle fa-fw"></i>                            
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts" id="for-approval-dropdown"></ul>                                             
+                    </li>                   
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <i class="fa fa-gear"></i>
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li>
+                                <a href="@Url.Content("~/User/ChangePassword")">                                
+                                    <i class="fa fa-wrench"></i>
+                                    Change Password
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Content("~/User/Logout")">
+                                    <i class="fa fa-power-off"></i>
+                                    Log Out
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="navbar-default sidebar" role="navigation">
+                    <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav in" id="side-menu">
+                            <li>
+                                <a href="#">                                    
+                                    Communication
+                                    <span id="bg-announcements" class="badge badge-error"></span>
+                                    <span class="fa arrow"></span>
+                                </a>
+                                <ul class="nav nav-second-level collapse" aria-expanded="false" style="height:0;">
+                                    <li>
+                                        <a href="@Url.Content("~/Employee/Notification")">
+                                            Announcements
+                                            <span id="bg-notification" class="badge badge-error pull-right"></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Content("~/Employee/EmployeeNotice")">
+                                            Employee Notice
+                                            <span id="bg-empnotice" class="badge badge-error pull-right"></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        @*<a href="@Url.Content("~/Employee/AuditReport")">*@
+                                        <a href="#">
+                                            Audit Report
+                                            <span id="bg-empaudit" class="badge badge-error pull-right"></span>
+                                            <span class="fa arrow"></span>
+                                        </a>
+                                        <ul class="nav nav-third-level collapse" aria-expanded="false" style="height:0;">
+                                                <li>
+                                                    <a href="@Url.Content("~/Employee/GetAuditReportWithMajorDeviationToolbox")">
+                                                            With Major Deviation
+                                                        <span id="bg-empauditMajor" class="badge badge-error pull-right"></span>
+                                                    </a>
+                                               </li>
+                                                <li>
+                                                        <a href="@Url.Content("~/Employee/GetAuditReportWithMinorDeviationToolbox")">
+                                                            With Minor Deviation
+                                                            <span id="bg-empauditMinor" class="badge badge-error pull-right"></span>                                                     
+                                                        </a>
+                                                </li>
+                                                <li>
+                                                     <a href="@Url.Content("~/Employee/GetAuditReportWithoutDeviationToolbox")">
+                                                            Without Deviation    
+                                                         <span id="bg-empauditWithout" class="badge badge-error pull-right"></span>                                                          
+                                                     </a>
+                                                </li>
+
+                                                <li>
+                                                     <a href="@Url.Content("~/Employee/AuditReport")">
+                                                            Previous Audit Report    
+                                                         <span id="bg-empauditPrev" class="badge badge-error pull-right"></span>                                                          
+                                                     </a>
+                                                </li>
+                                                
+                                                
+                                        </ul>
+
+                                    </li>
+                                    <li>                                        
+                                        <a href="@Url.Content("~/Employee/Memo")">
+                                            Department Order
+                                            <span id="bg-memo" class="badge badge-error pull-right"></span>
+                                        </a>
+                                    </li>                                    
+                                    <li>
+                                        <a href="@Url.Content("~/Employee/Policy")">
+                                            Memo Circular
+                                            <span id="bg-policy" class="badge badge-error pull-right"></span>
+                                        </a>
+                                    </li>   
+                                </ul>
+                            </li>                               
+                            <li>                                
+                                <a href="#">
+                                    ONE Profile
+                                    <span id="bg-oneprofile" class="badge badge-error"></span>
+                                    <span id="bg-oneprofile-p" class="badge badge-warning"></span>
+                                    <span class="fa arrow"></span>
+                                </a>
+                                <ul class="nav nav-second-level collapse" aria-expanded="false" style="height:0;">
+                                    <li>
+                                        <a href="@Url.Content("~/Employee")">Personal Profile</a>                                        
+                                    </li>
+                                    @if ((Session["emp_branchcode"].ToString() == "SPPART" && Session["emp_mstbranch"].ToString() == "HO-L") ||
+                                        (Session["emp_branchcode"].ToString() == "HO" && Session["emp_mstbranch"].ToString() == "HO") ||
+                                        (Session["emp_branchcode"].ToString() == "HO" && Session["emp_mstbranch"].ToString() == "HO-L") ||
+                                        (Session["emp_branchcode"].ToString() == "HO-NTW" && Session["emp_mstbranch"].ToString() == "HO") ||
+                                        (Session["emp_branchcode"].ToString() == "HO" && Session["emp_mstbranch"].ToString() == "LRO") ||
+                                        (Session["emp_branchcode"].ToString() == "LRO" && Session["emp_mstbranch"].ToString() == "HO") ||
+                                        (Session["emp_branchcode"].ToString() == "HO-NT" && Session["emp_mstbranch"].ToString() == "HO") ||
+                                         (Session["emp_branchcode"].ToString() == "MAN" && Session["emp_mstbranch"].ToString() == "MAN")
+                                        
+                                        
+                                        )
+                                    {
+                                        if ((Convert.ToBoolean(Session["emp_canApproveTransactions"]) == true) ||
+                                            (Convert.ToBoolean(Session["emp_isFinanceManager"]) == true) ||
+                                            (Convert.ToBoolean(Session["emp_isAllowedOvertime"]) == true))
+                                        { 
+                                            <li>
+                                                <a href="#">
+                                                    Overtime  
+                                                    <span id="bg-ot" class="badge badge-error"></span>
+                                                    <span id="bg-ot-p" class="badge badge-warning"></span>
+                                                    <span class="fa arrow"></span>
+                                                </a>
+                                                <ul class="nav nav-third-level collapse" aria-expanded="false" style="height:0;">                                                                                       
+                                                    @if ((Convert.ToBoolean(Session["emp_isAllowedOvertime"]) == true))
+                                                    {
+                                                    <li>
+                                                        <a class="ajax-link" href="@Url.Content("~/Overtime/Apply")">
+                                                            Apply for Overtime
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="ajax-link" href="@Url.Content("~/Overtime")">
+                                                            My Overtime
+                                                            <span id="bg-ot-p1" class="badge badge-warning pull-right"></span>
+                                                        </a>
+                                                    </li>
+                                                    }    
+
+                                                    @if ((Convert.ToBoolean(Session["emp_canApproveTransactions"]) == true) || (Convert.ToBoolean(Session["emp_isFinanceManager"]) == true))
+                                                    {
+                                                        if (Convert.ToBoolean(Session["emp_isFinanceManager"]) == true)
+                                                        { 
+                                                            <li>
+                                                                <a class="ajax-link" href="@Url.Content("~/Overtime/FinanceApproval")">
+                                                                    Finance Approval
+                                                                    <span id="bg-ot-1" class="badge badge-error pull-right"></span>
+                                                                </a>
+                                                            </li>
+                                                        }
+
+                                                        if (Convert.ToBoolean(Session["emp_canApproveTransactions"]) == true)
+                                                        {
+                                                            <li>
+                                                                <a class="ajax-link" href="@Url.Content("~/Overtime/forApproval")">
+                                                                    For Approval
+                                                                    <span id="bg-ot-2" class="badge badge-error pull-right"></span>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    }
+
+                                                                                                                                                
+                                                </ul>
+
+
+                                               @* OVERTIME MEALS FOR HO EMPLOYEES *@
+
+                                           @*<ul class="nav nav-third-level collapse" aria-expanded="false" style="height:0;">
+                                               @if (Convert.ToBoolean(Session["emp_isAllowedOvertime"]) == true)
+                                               {
+                                                <li>
+                                                    <a class="ajax-link" href="@Url.Content("~/Overtime/ApplyOvertimeMeals")">
+                                                        Apply for Overtime Meal
+                                                    </a>
+                                                </li>
+                                                 <li>
+                                                    <a class="ajax-link" href="@Url.Content("~/Overtime/ListOfOvertimeMeals")">
+                                                        Filed Overtime Meal
+                                                        <span id="bg-otm-p2" class="badge badge-warning"></span>
+                                                    </a>
+                                                 </li>
+                                               }
+
+                                                @if (Convert.ToBoolean(Session["emp_canApproveTransactions"]) == true)
+                                                {
+                                                <li>
+                                                    <a class="ajax-link" href="@Url.Content("~/Overtime/OvertimeMealsForApproval")">
+                                                        Overtime Meals Approval
+                                                        <span id="bg-otm-2" class="badge badge-error pull-right"></span>
+                                                    </a>
+                                                </li>
+                                                }
+
+                                           </ul>*@
+
+                                                @* END OF OVERTIME MEALS FOR HO EMPLOYEES *@
+
+                                            </li>    
+                                        }
+
+
+                                    } 
+                                   
+                                    @* else
+                                    {
+                                         
+                                        <li>
+                                                <a href="#">
+                                                    Overtimes
+                                                  <span id="bg-ot" class="badge badge-error"></span>
+                                                  <span id="bg-ot-p" class="badge badge-warning"></span>
+                                                    <span class="fa arrow"></span>
+                                                </a>
+                                             <ul class="nav nav-third-level collapse" aria-expanded="false" style="height:0;">
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/Overtime/ApplyOvertimeMeals")">
+                                                    Apply for Overtime Meals1
+                                                </a>
+                                            </li>
+                                             <li>
+                                                <a class="ajax-link" href="@Url.Content("~/Overtime/ListOfOvertimeMeals")">
+                                                    Filed Overtime Meals1
+                                                    <span id="bg-otm-p2" class="badge badge-warning"></span>
+                                                </a>
+                                             </li>
+                                            @if (Convert.ToBoolean(Session["emp_canApproveTransactions"]) == true)
+                                             {
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/Overtime/OvertimeMealsForApproval")">
+                                                    Overtime Meals Approval1
+                                                    <span id="bg-otm-2" class="badge badge-error pull-right"></span>
+                                                </a>
+                                            </li>
+                                              }
+                                            </ul>
+                                        </li>
+                                    
+                                    }  *@
+
+                                    <li>
+                                        <a href="#">
+                                            Leaves
+                                            <span id="bg-lv" class="badge badge-error"></span>
+                                            <span id="bg-lv-p" class="badge badge-warning"></span>
+                                            <span class="fa arrow"></span>
+                                        </a>
+                                        <ul class="nav nav-third-level collapse" aria-expanded="false" style="height:0;">
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/Leave/Apply")">
+                                                    Apply for Leave
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/Leave")">
+                                                    My Leaves
+                                                    <span id="bg-lv-p1" class="badge badge-warning"></span>
+                                                </a>
+                                            </li>
+                                            @if (Convert.ToBoolean(Session["emp_canApproveTransactions"]) == true)
+                                            { 
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/Leave/forApproval")">
+                                                    For Approval
+                                                    <span id="bg-lv-1" class="badge badge-error pull-right"></span>
+                                                </a>
+                                            </li>
+                                            }
+
+                                            @if ((Convert.ToBoolean(Session["emp_isHRRegional"]) == true) || (Convert.ToBoolean(Session["emp_isHRHomeOffice"]) == true))
+                                            { 
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/Leave/WholeRegion")">
+                                                    @if (Session["emp_branchcode"].ToString() == "HO" && Session["emp_mstbranch"].ToString() == "HO")
+                                                    {
+                                                        @:Home Office
+                                                    }
+                                                    else
+                                                    {
+                                                        @:Whole Region
+                                                    }                                                    
+                                                </a>
+                                            </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            Undertime
+                                            <span id="bg-pb" class="badge badge-error"></span>
+                                            <span id="bg-pb-p" class="badge badge-warning"></span>
+                                            <span class="fa arrow"></span>
+                                        </a>
+                                        <ul class="nav nav-third-level collapse" aria-expanded="false" style="height:0;">
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/GatePass/Apply/2")">
+                                                    Apply for Undertime
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/GatePass/Index/2")">
+                                                    My Undertime
+                                                    <span id="bg-pb-p1" class="badge badge-warning"></span>
+                                                </a>
+                                            </li>
+                                            @if (Convert.ToBoolean(Session["emp_canApproveTransactions"]) == true)
+                                            {
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/GatePass/forApproval/2")">
+                                                    For Approval
+                                                    <span id="bg-pb-1" class="badge badge-error pull-right"></span>
+                                                </a>
+                                            </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            Official Business
+                                            <span id="bg-ob" class="badge badge-error"></span>
+                                            <span id="bg-ob-p" class="badge badge-warning"></span>
+                                            <span class="fa arrow"></span>
+                                        </a>
+                                        <ul class="nav nav-third-level collapse" aria-expanded="false" style="height:0;">
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/GatePass/Apply/1")">
+                                                    Apply for Official Business
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/GatePass/Index/1")">
+                                                    My Official Business
+                                                    <span id="bg-ob-p1" class="badge badge-warning"></span>
+                                                </a>
+                                            </li>
+                                            @if (Convert.ToBoolean(Session["emp_canApproveTransactions"]) == true)
+                                            {
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/GatePass/forApproval/1")">
+                                                    For Approval
+                                                    <span id="bg-ob-1" class="badge badge-error pull-right"></span>
+                                                </a>
+                                            </li>
+                                            }
+
+                                            @if ((Convert.ToBoolean(Session["emp_isHRRegional"]) == true) || (Convert.ToBoolean(Session["emp_isHRHomeOffice"]) == true))
+                                            { 
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/GatePass/WholeRegion")">
+                                                    @if (Session["emp_branchcode"].ToString() == "HO" && Session["emp_mstbranch"].ToString() == "HO")
+                                                    {
+                                                        @:Home Office
+                                                    }
+                                                    else
+                                                    {
+                                                        @:Whole Region
+                                                    }                                                    
+                                                </a>
+                                            </li>
+                                            }
+                                        </ul>
+                                    </li>                                    
+                                    <li>
+                                        <a href="#">
+                                            Loans
+                                            <span class="fa arrow"></span>
+                                        </a>
+                                        <ul class="nav nav-third-level collapse" aria-expanded="false" style="height:0;">                                            
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/CoopLoan")">
+                                                    My Loans
+                                                </a>
+                                            </li>                                            
+                                        </ul>
+                                    </li>
+
+                                     @* SIAO ADDED *@
+
+                                    
+                                   
+                                        @if (Convert.ToBoolean(Session["HasEmpUpdate"]) == true)
+                                        {
+                                      <li>
+                                        @if (Convert.ToBoolean(Session["emp_canApproveEmployee201"]) == true)
+                                        {
+                                            
+                                        <a href="#">Employee Profile Edit
+                                            <span id="bg-em" class="badge badge-error"></span>
+                                            <span id="bg-em-p" class="badge badge-warning"></span>
+                                            <span class="fa arrow"></span>
+                                        </a>
+                                        <ul class="nav nav-third-level collapse" aria-expanded="false" style="height:0;">                                                                                  
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/EmployeeTwoOhOne")">
+                                                   Edit Profile
+                                                </a>    
+                                            </li>
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/EmployeeTwoOhOne/myEmployee201Profile")">
+                                                   Employee Profile Update
+                                                  <span id="bg-em-p1" class="badge badge-warning"></span>
+                                                </a>
+                                            </li> 
+                                           
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/EmployeeTwoOhOne/EmployeeTwoOhOneforApproval")">
+                                                    For Approvals
+                                                 <span id="bg-em-1" class="badge badge-error pull-right"></span>
+                                                </a>
+                                            </li>                                                                            
+                                        </ul>  
+                                        }
+                                        else
+                                        {
+                                           <a href="#">Employee Profile Edit
+                                            <span id="bg-em" class="badge badge-error"></span>
+                                            <span id="bg-em-p" class="badge badge-warning"></span>
+                                            <span class="fa arrow"></span>
+                                        </a>
+                                        <ul class="nav nav-third-level collapse" aria-expanded="false" style="height:0;">                                                                                  
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/EmployeeTwoOhOne")">
+                                                   Edit Profile
+                                                </a>    
+                                            </li>
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/EmployeeTwoOhOne/myEmployee201Profile")">
+                                                   Employee Profile Update
+                                                  <span id="bg-em-p1" class="badge badge-warning"></span>
+                                                </a>
+                                            </li>                                                                           
+                                        </ul>   
+                                        }                                                                                                                                                                                                                        
+                                    </li>
+                                        }                                                                                                          
+                                    @* END OF SIAO ADDED *@
+
+                                    @if ((Convert.ToBoolean(Session["emp_canApproveTransactions"]) == true) || (Convert.ToBoolean(Session["emp_isHRRegional"]) == true) || (Convert.ToBoolean(Session["emp_isHRHomeOffice"]) == true))
+                                    {
+                                    <li>
+                                        <a href="@Url.Content("~/Report")">Reports</a>                                                                        
+                                    </li>                                               
+                                    }     
+                                    <li>
+                                        <a href="@Url.Content("~/TaxReport")">Tax Refund/Payable Report</a>
+                                    </li> 
+
+                                  @* Adjustment Application *@
+                                    <li>
+                                        @if (Convert.ToBoolean(Session["HasMissingPunchApprover"]) == true)
+                                        {
+                                        <a href="#">
+                                            Adjustment
+                                            <span id="bg-mp" class="badge badge-error"></span>
+                                            <span id="bg-mp-p" class="badge badge-warning"></span>
+                                            <span class="fa arrow"></span>
+                                        </a>
+                                        <ul class="nav nav-third-level collapse" aria-expanded="false" style="height:0;">
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/MissingPunch/Index")">
+                                                    Apply for Adjustment
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/MissingPunch/ListOfMissingPunch")">
+                                                    My Adjustment
+                                                    <span id="bg-mp-p1" class="badge badge-warning"></span>
+                                                </a>
+                                            </li>
+                                           
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/MissingPunch/MissingPunchApproval")">
+                                                    For Approval
+                                                    <span id="bg-mp-1" class="badge badge-error pull-right"></span>
+                                                </a>
+                                            </li>                                                                                     
+                                        </ul>                                          
+                                        }
+                                        else
+                                        {
+                                            <a href="#">
+                                            Adjustment on DTR
+                                            <span id="bg-mp" class="badge badge-error"></span>
+                                            <span id="bg-mp-p" class="badge badge-warning"></span>
+                                            <span class="fa arrow"></span>
+                                        </a>
+                                        <ul class="nav nav-third-level collapse" aria-expanded="false" style="height:0;">
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/MissingPunch/Index")">
+                                                    Apply for Adjustment
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="ajax-link" href="@Url.Content("~/MissingPunch/ListOfMissingPunch")">
+                                                    My Adjustment
+                                                    <span id="bg-mp-p1" class="badge badge-warning"></span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                      
+                                        </ul>    
+                                        }
+                                    </li>  
+                                    
+                                    @* End Adjustment Application *@
+
+
+                                                              
+                                </ul>
+                            </li>                           
+                            @{
+                                var one_det = Session["one_userdet"] as List<HRISOnline.Objects.ObjUserDetails>;
+
+                                if (one_det != null)
+                                {
+                                    foreach (var item in one_det)
+                                    {
+                                        if (item.sysLink != "None")
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("OpenNewSystem", "Employee", new { intMstSysMasterfile = item.intMstSysMasterfile, ComNo = 0 })" target="_blank">@item.sysName</a>
+                                                
+                                            </li>
+                                        }
+                                    }
+                                }
+                            }
+
+                            @*Directories/Contact Details*@
+                            <li>
+                                <a href="@Url.Content("~/Contacts")">Directory
+                                </a>
+                            </li>
+                             @*Group Insurance*@
+
+                            @if (Convert.ToBoolean(Session["HasGroupInsurance"]) == true)
+                            {
+                             <li>
+                                <a href="#">Group Insurance @*href="@Url.Content("~/GroupInsurance")">Group Insurance*@
+                                 <span class="fa arrow"></span>
+                                </a>
+                                 <ul class="nav nav-second-level collapse" aria-expanded="false" style="height:0;">
+                                     <li>
+                                        <a href="@Url.Content("~/GroupInsurance")">Registration</a>
+                                    </li>
+
+                                     @*<li>
+                                        <a href="@Url.Content("~/GroupInsurance/GenerateInsurance")">Generate</a>
+                                    </li>
+                                     <li>
+                                        <a href="@Url.Content("~/InsuranceReport")">Reports</a>
+                                    </li>*@
+
+                                 </ul>
+                            </li>
+                            }
+                         @if (Convert.ToBoolean(Session["HasTaskMonitoring"]) == true)
+                         {
+                            <li>
+                                <a href="@Url.Content("~/TaskMonitoring")">Task Monitoring</a>
+                                
+                            </li>
+                         }
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div id="page-wrapper" style="min-height: 356px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2 class="page-header">@ViewBag.MyTitle</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        @RenderSection("featured", required: false)
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>        
+
+         <script src="@Url.Content("~/Scripts/jquery-1.7.1.js")"></script>
+        <script src="@Url.Content("~/Scripts/jquery-ui.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/jquery.justifiedgallery.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/tinymce.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/jquery.tinymce.min.js")"></script>        
+        <script src="@Url.Content("~/Scripts/bootstrap-timepicker.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bootstrap-datetimepicker.js")"></script>
+        <script src="@Url.Content("~/Scripts/bootstrap-datepicker.js")"></script>        
+        <script src="@Url.Content("~/Scripts/jquery.dataTables.min.js")"></script>        
+        <script src="@Url.Content("~/Scripts/dataTables.bootstrap.js")"></script>
+        <script src="@Url.Content("~/Scripts/bootstrap-dialog.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/json2.js")"></script>
+        <script src="@Url.Content("~/Scripts/accounting.js")"></script>
+        <script src="@Url.Content("~/Scripts/select2.min.js")"></script>
+        
+        <script src="@Url.Content("~/Scripts/metisMenu.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/raphael-min.js")"></script>                
+        <script src="@Url.Content("~/Scripts/sb-admin-2.js")"></script>
+
+        <script src="@Url.Content("~/Scripts/global-notifications.js")"></script>
+
+         @*@Scripts.Render("~/bundles/jquery")*@
+        @RenderSection("scripts", required: false)
+    </body>
+</html>
+
+<script type="text/javascript">
+
+
+
+    $(document).ready(function () {
+        GetNotifications('@Url.Content("~/Employee/GetAnnCount")', '@Session["Username"]', '@Url.Content("~/Employee/ApprovalNotification")');
+        //setInterval(function () { GetNotifications('@Url.Content("~/Employee/GetAnnCount")', '@Session["Username"]', '@Url.Content("~/Employee/ApprovalNotification")') }, 5000);
+        
+        //if ((('@Session["emp_canApproveTransactions"]' == 'True') && ('@Session["emp_isHRRegional"]' == 'False')) || ('@Session["emp_isFinanceManager"]' == 'True')) {
+            GetItemsForApproval();
+            //setInterval(function () { GetItemsForApproval() }, 5000);
+        //}
+
+
+
+        $("#idresulttable").on('click', '.viewdata', function () {
+
+            var idEmp = $(this).closest('tr').find('td').eq(0).text();
+            var intmodule = $(this).closest('tr').find('td').eq(3).text();
+                
+            if (intmodule == 1) {
+                window.location.href = '@Url.Action("ViewDetailLogs", "EmployeeTwoOhOne")' + '?idt=' + idEmp + '&intModule=' + intmodule;
+            }
+            else if (intmodule == 2) {
+                window.location.href = '@Url.Action("ViewDetailLogsLegal", "EmployeeTwoOhOne")' + '?idt=' + idEmp + '&intModule=' + intmodule;
+            }
+            else if (intmodule == 3) {
+                window.location.href = '@Url.Action("ViewDetailEducAttained", "EmployeeTwoOhOne")' + '?idt=' + idEmp + '&intModule=' + intmodule;
+            }
+            else if (intmodule == 4) {
+                window.location.href = '@Url.Action("ViewDetailWorkExp", "EmployeeTwoOhOne")' + '?idt=' + idEmp + '&intModule=' + intmodule;
+            }
+            else if (intmodule == 5) {
+               window.location.href = '@Url.Action("ViewDetailTrainingExp", "EmployeeTwoOhOne")' + '?idt=' + idEmp + '&intModule=' + intmodule;
+            }
+                
+   
+        });
+
+        $("#getIDresult").on('click', '.viewDetails', function () {
+            var intID = $(this).closest('tr').find('td').eq(0).text();
+            var strEmployeeID = $(this).closest('tr').find('td').eq(3).text();
+            var intIDModule = $(this).closest('tr').find('td').eq(5).text();
+            
+            if (intIDModule == 1) {
+                window.location.href = '@Url.Action("ViewDetailApprovalPersonal", "EmployeeTwoOhOne")' + '?intID=' + intID;
+            }
+            else if (intIDModule == 2) {
+                window.location.href = '@Url.Action("ViewDetailApprovalLegal", "EmployeeTwoOhOne")' + '?intID=' + intID;
+            }
+            else if (intIDModule == 3) {
+                window.location.href = '@Url.Action("ViewDetailApprovalEducational", "EmployeeTwoOhOne")' + '?intID=' + intID;
+            }
+            else if (intIDModule == 4) {
+                window.location.href = '@Url.Action("ViewDetailApprovalWorkExp", "EmployeeTwoOhOne")' + '?intID=' + intID;
+            }
+            else if ((intIDModule == 5)) {
+                window.location.href = '@Url.Action("ViewDetailApprovalTraining", "EmployeeTwoOhOne")' + '?intID=' + intID;
+            }
+
+         });
+                       
+    });
+
+
+    
+
+    function GetItemsForApproval() {
+        var url = '@Url.Content("~/Home/GetItemCount")';
+
+        $.get(
+            url,
+            function (data) {
+                if ('@Session["Username"]' != null || '@Session["Username"]' != '') {
+
+                    if (data.otCount != "0") {
+                        $('#bg-ot').html(data.otCount);
+                        $('#bg-ot-2').html(data.otCount);
+
+                        $("#for-approval ul").append('<li><a href="@Url.Content("~/Overtime/forApproval")"><div>' + data.otCount + ' Overtime for approval</div></a></li>');
+                    }
+                    else {
+                        $('#bg-ot').html('');
+                        $('#bg-ot-2').html('');
+                    }
+                    if (data.fmCount != "0") {
+                        $('#bg-ot').html(data.fmCount);
+                        $('#bg-ot-1').html(data.fmCount);
+
+                        $("#for-approval ul").append('<li><a href="@Url.Content("~/Overtime/FinanceApproval")"><div>' + data.fmCount + ' Overtime for approval</div></a></li>');
+                    }
+                    else {
+                        if (data.otCount == "0") {
+                            $('#bg-ot').html('');
+                        }
+                        $('#bg-ot-1').html('');
+                    }
+                    if (data.leaveCount != "0") {
+                        $('#bg-lv').html(data.leaveCount);
+                        $('#bg-lv-1').html(data.leaveCount);
+
+                        $("#for-approval ul").append('<li><a href="@Url.Content("~/Leave/forApproval")"><div>' + data.leaveCount + ' Leaves for approval</div></a></li>');
+
+                    }
+                    else {
+                        $('#bg-lv').html('');
+                        $('#bg-lv-1').html('');
+                    }
+                    if (data.obCount != "0") {
+                        $('#bg-ob').html(data.obCount);
+                        $('#bg-ob-1').html(data.obCount);
+
+                        $("#for-approval ul").append('<li><a href="@Url.Content("~/GatePass/forApproval/1")"><div>' + data.obCount + ' Official Business for approval</div></a></li>');
+                    }
+                    else {
+                        $('#bg-ob').html('');
+                        $('#bg-ob-1').html('');
+                    }
+                    if (data.pbCount != "0") {
+                        $('#bg-pb').html(data.pbCount);
+                        $('#bg-pb-1').html(data.pbCount);
+
+                        $("#for-approval ul").append('<li><a href="@Url.Content("~/GatePass/forApproval/2")"><div>' + data.pbCount + ' Undertime for approval</div></a></li>');
+                    }
+                    else {
+                        $('#bg-pb').html('');
+                        $('#bg-pb-1').html('');
+                    }
+                    if (data.adjCount != "0") {
+                        $('#bg-adj').html(data.adjCount);
+                        $('#bg-adj-1').html(data.adjCount);
+
+                        //$("#for-approval-dropdown ul").append($("<li>").text("Some Text."));
+                    }
+                    else {
+                        $('#bg-adj').html('');
+                        $('#bg-adj-1').html('');
+                    }
+                    if (data.cancelledCount != "0") {
+                        //$('#cancelled-items').removeClass('hide');
+                        //$('#cancelled-items').show();                        
+                        $("#for-approval ul").append('<li><a href="@Url.Content("~/Employee/CancelledTrans")"><div>Cancelled transactions</div></a></li>');
+                    }
+                    //else {
+                    //    $('#cancelled-items').hide();
+                    //}
+
+                    if ((data.otCount != 0) || (data.fmCount != 0) || (data.leaveCount != 0) || (data.obCount != 0) || (data.pbCount != 0) || (data.adjCount != 0) || (data.EmpCount != "0") || (data.MPCount != "0")) {
+                        $('#bg-oneprofile').html("!");
+                        $('#for-approval').removeClass('hide');
+                        $('#for-approval').show();
+                    }
+                    else {
+                        $('#bg-oneprofile').html("");
+
+                        if ($('#for-approval').is(":hidden")) {
+                            $('#for-approval').addClass('hide');
+                        }
+                    }
+                    //SIAO
+                    if (data.EmpCount != "0") {
+                        $('#bg-em').html(data.EmpCount);
+                        $('#bg-em-1').html(data.EmpCount);                       
+                    }
+                    else {
+                        $('#bg-em').html('');
+                        $('#bg-em-1').html('');
+                    }
+
+                    //Missing punches
+                    if (data.MPCount != "0") {
+                        $('#bg-mp').html(data.MPCount);
+                        $('#bg-mp-1').html(data.MPCount);
+                    }
+                    else {
+                        $('#bg-mp').html('');
+                        $('#bg-mp-1').html('');
+                    }
+
+                    //Overtime Meals Notication Count for Approver
+                    if (data.OTMealsCount != "0") {
+                       /// $('#bg-ot').html(data.OTMealsCount);
+                        $('#bg-otm-2').html(data.OTMealsCount);
+                    }
+                    else {
+                        //$('#bg-ot').html('');
+                        $('#bg-otm-2').html('');
+                    }
+                    // End overtime Meals Notication Count for Approver
+
+
+                    //END SIAO
+                }
+            }
+        );
+
+        }
+</script>

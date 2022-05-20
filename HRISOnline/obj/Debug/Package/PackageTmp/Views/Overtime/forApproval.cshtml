@@ -1,0 +1,302 @@
+﻿@model IEnumerable<HRISOnline.Objects.OvertimeApproval>
+
+@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+@*<div class="col-sm-12">*@
+
+    <div class="alert text-center" id="msg"></div>
+    <div class="panel panel-primary">
+       @* <div class="panel-heading">
+            <h3>@ViewBag.MyTitle</h3>
+        </div>*@
+
+        <div class="panel-body">
+            <table class="table table-bordered table-heading" id="ot-table">
+                <thead>
+                    <tr>                        
+                        <th class="text-center" style="width:30px;">                         
+                            <input type="checkbox" id="chk-all" />
+                        </th>
+                        @*<th class="text-center" style="width:30px;">ID</th>*@
+                        <th class="col-sm-1 text-center">Overtime Date</th>
+                        <th class="col-sm-2 text-center">Overtime Time</th>
+                        <th class="col-sm-1 text-center">Duration</th>
+                        <th>Employee</th>
+                        <th class="col-sm-2 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    { 
+                        <tr>
+                            <td class="text-center">                                
+                                <input type="checkbox" class="chk" id="@item.intOlnOvertimeApplication" />                                
+                            </td>
+                            @*<td class="text-center">@item.intOlnOvertimeApplication</td>*@
+                            <td class="text-center">@item.OvertimeDate.ToShortDateString()</td>
+                            <td class="text-center">@item.OvertimeTime</td>
+                            <td class="text-center">@item.NoOfHours</td>
+                            <td>@item.EmpName</td>
+                            <td class="text-center">
+                                <a class="btn btn-warning btn-xs" href="@Url.Content("~/Overtime/Details?id=")@item.intOlnOvertimeApplication&isForApproval=true">Details</a>                                                                
+                                <a class="btn btn-default btn-xs" href="@Url.Content("~/Overtime/ApprovalInfo?id=")@item.intOlnOvertimeApplication&isForApproval=true">Approval Info</a>                                                                    
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="panel-footer">
+            @*<button type="button" class="btn btn-primary btn-lg" onclick="ApproveOvertime();">Approve</button>*@
+            <button type="button" class="btn btn-success btn-lg" onclick="OpenModal(1);">Approve</button>
+            <button type="button" class="btn btn-danger btn-lg" onclick="OpenModal(2);">Disapprove</button>
+            <button type="button" class="btn btn-warning btn-lg" onclick="OpenModalReport();">View Report</button>
+            @*<button type="button" class="btn btn-danger btn-lg" onclick="DisapproveOvertime();">Disapprove</button>*@
+        </div>
+    </div>
+@*</div>*@
+
+<input type="text" id="type-id" class="hide" />
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">@*Cancel Overtime*@</h4>
+      </div>
+      <div class="modal-body" id="m-body">
+        @*Do you want to cancel this transaction?*@
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-success btn-lg" onclick="ApproveDisapproveItem();">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModalReport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabelReport">Select date to view</h4>
+      </div>
+      <div class="modal-body">
+          <form class="form-horizontal">
+              <div class="form-group">
+                  <label class="col-sm-4 control-label">Overtime Date</label>
+                  <div class="col-sm-4">
+                        <input type="text" id="OTPreviewDate" class="form-control" value ="@DateTime.Now.ToShortDateString()" />
+                  </div>
+              </div>                
+          </form>        
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-success btn-lg" onclick="GenerateReport();">&nbsp;&nbsp;Preview&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;Close&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#msg').removeClass('active');
+            $('#msg').addClass('hide');
+            $('#OTPreviewDate').datepicker();
+
+            $('#ot-table').dataTable({
+                "columnDefs": [{
+                    "targets": [],
+                    "visible": false,
+                    "searchable": false
+                }],
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "filter": false
+            });
+
+            $('#chk-all').on('click', function (ev) {
+                $('.chk').prop('checked', $('#chk-all').prop('checked'));
+            });            
+
+        });
+
+        function GenerateReport() {            
+            var url = "@Url.Content("~/Report/OvertimeList?a=")" + $('#OTPreviewDate').val().toString("yyyy-mm-dd") + "&b=" + '@Session["emp_position"]' + "&c=" + '@Session["emp_branchcode"]' + "&d=" + '@Session["emp_company"]';
+
+            var win = window.open(url, "_blank");
+            win.document.title = "Overtime List";
+        }
+
+        function OpenModalReport()
+        {
+            $('#myModalReport').modal();
+        }
+
+        function OpenModal(type)
+        {
+            if (type == 1) {
+                $('#myModalLabel').html("Approve");
+                $('#m-body').html("Do you want to APPROVE the selected item(s)?");
+            }
+            else {
+                $('#myModalLabel').html("Disapprove");
+                $('#m-body').html("Do you want to DISAPPROVE the selected item(s)?<br><br>" +
+                                    "<strong>Reason:</strong> <textarea class='form-control' id='disapproveReason'></textarea>");
+            }
+
+            $('#type-id').val(type);
+            $('#myModal').modal();
+        }
+
+        function ApproveDisapproveItem() {
+            var type = $('#type-id').val();
+
+            if (type == 1) {
+                ApproveOvertime();
+            }
+            else {
+                DisapproveOvertime();
+            }
+
+            $('#myModal').modal('hide');
+        }
+
+        function RedirectMe() {
+            window.location.href = "@Url.Content("~/Overtime/forApproval")";
+        }
+
+        function ApproveOvertime()
+        {
+            var id = { "details": [] };
+            var sub = { "intOlnOvertimeApplication": "" };
+
+            $('#ot-table > tbody > tr input[type="checkbox"]:checked').each(function () {
+                var $row = $(this).attr('id');//$(this).parents('tr');
+
+                sub.intOlnOvertimeApplication = $row;//.find('td:eq(1)').html();
+                id.details.push(sub);
+                
+                sub = { "intOlnOvertimeApplication": "" };
+            });
+
+            if (id.details.length == 0) {
+                $('#msg').removeClass('hide');
+                $('#msg').addClass('active');
+
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html("Please select atleast one(1) item.");
+            }
+            else {                
+
+                $.ajax({
+                    url: '@Url.Action("ApproveOvertime")',
+                    data: JSON.stringify(id),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (result) {
+
+                        $('#msg').addClass('active');
+                        $('#msg').removeClass('hide');
+
+                        if (result.success == 'True') {
+                            $('#msg').removeClass('bg-danger');
+                            $('#msg').addClass('bg-success');
+                            setTimeout('RedirectMe()', 2000);
+                        }
+                        else {
+                            $('#msg').removeClass('bg-success');
+                            $('#msg').addClass('bg-danger');
+                        }
+
+                        $('#msg').html(result.msg);
+
+                    }
+                });
+
+            }
+
+        }
+
+        function DisapproveOvertime() {
+            var id = { "dis": [] };
+            var sub = { "intOlnTransNo": "", "Reason": "" };            
+
+            $('#ot-table > tbody > tr input[type="checkbox"]:checked').each(function () {
+                var $row = $(this).attr('id');
+
+                sub.intOlnTransNo = $row;//.find('td:eq(1)').html();
+                sub.Reason = $('#disapproveReason').val();
+
+                id.dis.push(sub);
+
+                sub = { "intOlnTransNo": "", "Reason": "" };
+            });
+
+            if (id.dis.length == 0) {
+                $('#msg').removeClass('hide');
+                $('#msg').addClass('active');
+
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html("Please select atleast one(1) item.");
+            }
+            else if ($('#disapproveReason').val() == '')
+            {
+                $('#msg').removeClass('hide');
+                $('#msg').addClass('active');
+
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html("Please enter your reason for disapproving the transaction(s).");
+            }
+            else {
+
+                $.ajax({
+                    url: '@Url.Action("Disapprove")',
+                    data: JSON.stringify(id),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (result) {
+
+                        $('#msg').addClass('active');
+                        $('#msg').removeClass('hide');
+
+                        if (result.success == 'True') {
+                            $('#msg').removeClass('bg-danger');
+                            $('#msg').addClass('bg-success');
+                            setTimeout('RedirectMe()', 2000);
+                        }
+                        else {
+                            $('#msg').removeClass('bg-success');
+                            $('#msg').addClass('bg-danger');
+                        }
+
+                        $('#msg').html(result.msg);
+
+                    }
+                });
+
+            }
+
+        }
+    </script>
+}

@@ -1,0 +1,121 @@
+﻿@model HRISOnline.Objects.Contacts
+@{
+    ViewBag.Title = ViewBag.MyTitle;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Edit Contacts</title>
+
+        <script type="text/javascript">
+            $(this).oneTime(1000, function () {
+                $("#mydiv").hide();
+            });
+
+        </script>
+
+    </head>
+    <body>
+         @{
+        if (ViewData["resultUpdate"] != "" && ViewData["resultUpdate"] != null)
+        {
+            ViewData["resultUpdate"] = null;       
+            
+                <div class="alert alert-success">
+                    <strong>Successfully Updated!</strong> 
+                </div>
+        
+        }
+    
+    }
+        @using (Html.BeginForm(new { @class = "form-horizontal", @role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+    
+
+     <div class="container-fluid"> 
+          <div class="panel-body" style="background-color:#ECEEF1; border-radius:5px;" >
+                  <nav>
+                       <ul class="pager" style="float:right; font-family:'Californian FB'; font-size:medium;">
+                              <li class="previous"> @Html.ActionLink(" Back", "Index", null, new { @class = "fa fa-arrow-left" })</li>
+                       </ul>
+                   </nav>
+                <div class="form-horizontal">
+                               <div class="row" style="font-weight:bold; font-size:large; margin-top:20px; margin-left:20px;">
+                                     <span class="fa fa-user"></span>
+                                    Employee Details                                   
+                                </div>
+
+                                
+                                <div class="form-group">
+                                    <label for="inputlg" style="float:left; margin-left:70px;" class="col-sm-2 control-label">Employee Name</label>
+                                    <div class="col-sm-6" style="margin-left:50px; margin-bottom:5px; font-weight:bold; font-size:medium; ">
+                                        @Html.TextBoxFor(model => model.FullName, null, new { @readonly = true, @class = "form-control" })
+                                     </div> 
+                                </div>
+                               <div class="form-group">
+                                   <label for="inputlg" style="float:left; margin-left:70px;" class="col-sm-2 control-label">Branch</label>
+                                   <div class="col-sm-6" style="margin-left:50px;">
+                                       @* @Html.DisplayFor(model => model.Branch)*@
+                                        @Html.TextBoxFor(model => model.Branch, null, new { @readonly = true, @class = "form-control" })
+                                       
+                                   </div>
+                                </div>
+                                <div class="form-group">
+                                   <label for="inputlg" style="float:left; margin-left:70px;" class="col-sm-2 control-label">Department</label>
+                                   <div class="col-sm-6" style="margin-left:50px;">
+                                       @* @Html.DisplayFor(model => model.Branch)*@
+                                        @Html.TextBoxFor(model => model.Department, null, new { @readonly = true, @class = "form-control" })
+                                       
+                                   </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputlg" style="float:left; margin-left:70px;" class="col-sm-2 control-label">Position</label>
+                                    <div class="col-sm-6" style="margin-left:50px;">
+                                        @Html.TextBoxFor(model => model.Position, null, new { @readonly = true, @class = "form-control" })
+                                        
+                                    </div>
+                                </div>
+                        
+                                <div class="form-group" style="font-size:large; font-weight:bold; margin-top:10px; margin-bottom:10px; margin-left:20px; float:left; width:900px; ">
+                                <span class="fa fa-phone-square"></span>
+                                Contact Information 
+                                </div>
+                                
+                                           
+                                    <div class="form-group" style="float:left; margin-top:5px; width:900px;">
+                                      <label for="formGroupInputSmall" style="float:left; margin-left:13px;" class="col-sm-3 control-label">Telephone No</label>
+                                             <div class="col-sm-4" style="margin-left:50px;">
+                                                @Html.TextBoxFor(model => model.LocalNo, null, new { @class = "form-control" })                                        
+                                            </div>
+                                    </div>
+                                    
+                                                               
+                                <div class="form-group" style="float:left; margin-top:5px; width:900px;">
+                                    <label for="formGroupInputSmall" style="margin-left:15px;" class="col-sm-3 control-label">Service Phone No</label>
+                                    <div class="col-sm-4" style="margin-left:50px;">
+                                       @Html.TextBoxFor(model => model.ServicePhone, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                 
+                                <div class="form-group" style="float:left; margin-top:5px; width:900px;">
+                                        <label for="inputlg" style="margin-left:15px;" class="col-sm-3 control-label">Email Address</label>
+                                    <div class="col-sm-4" style="margin-left:50px;">
+                                      @Html.TextBoxFor(model => model.Email, null, new { @class = "form-control", @type = "email" })
+                                    </div>
+                                </div>
+                                <div class="form-group" style="float:left; margin-top:5px; width:900px;">
+                                        <label for="inputlg" style="float:left; margin-left:15px;" class="col-sm-3 control-label">Skype Account</label>
+                                    <div class="col-sm-4" style="margin-left:50px; margin-bottom:10px;">
+                                      @Html.TextBoxFor(model => model.SkypeEmail, new { @class = "form-control" })                                      
+                                            <input type="submit" class="btn btn-primary btn-lg btn-block" style="margin-bottom:30px; margin-top:30px; margin-right:80px;"  name="submit" value="Update"/>                                                                                                              
+                                    </div>                                    
+                                </div>
+                                    
+                        </div>
+
+                </div>
+         </div>
+        }
+        </body>
+</html>

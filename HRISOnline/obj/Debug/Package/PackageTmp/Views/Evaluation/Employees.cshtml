@@ -1,0 +1,49 @@
+﻿@model IEnumerable<HRISOnline.Objects.EvalEmployee>
+
+@{
+    ViewBag.Title = "Evaluation - " + ViewBag.MyTitle;
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div id="breadcrumb" class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Evaluation</a></li>
+                <li><a href="#">@ViewBag.MyTitle</a></li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="col-sm-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading"> 
+            <h3>@ViewBag.MyTitle</h3>
+        </div>
+
+        <div class="panel-body">
+            <table class="table table-bordered table-heading">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1 text-center">Employee ID</th>
+                        <th>Employee Name</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    { 
+                        <tr>
+                            <td class="text-center">@item.intMstEmpPersonal</td>
+                            <td>@item.EmpName</td>
+                            <td class="col-sm-1 text-center">
+                                <a href="@Url.Content("~/Evaluation/Evaluate/" + @item.intMstEmpPersonal)" class="btn btn-primary btn-xs">Evaluate</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>            
+        </div>
+    </div>
+</div>
+

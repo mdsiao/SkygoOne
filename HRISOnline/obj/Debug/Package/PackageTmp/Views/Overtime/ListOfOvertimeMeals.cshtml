@@ -1,0 +1,188 @@
+﻿@model IEnumerable<HRISOnline.Objects.OvertimeMealsList>
+@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+<html>
+    <head>
+        <title>List of Filed Missing Punch</title>
+
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+         <script type="text/javascript" src="@Url.Content("https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js")"></script>
+         <script type="text/javascript" src="@Url.Content("https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css")"></script>       
+         <script>
+             $(document).ready(function () {
+                 $('#myTable').dataTable();
+             });
+         </script>
+
+
+  @section scripts
+    {
+<script type="text/javascript">
+
+    function OpenModalConfirmation(type, ID) {
+        if (type == 1) {
+
+            $('.modal-title').html("Confirmation");
+            $('.modal-body').html("Are you sure you want to Cancel?");
+
+        }
+        $('#intIDCan').val(ID);
+        $('#myModal2').modal();
+
+    }
+
+
+    function CancelFiled() {
+
+        $(document).ready(function () {
+
+            var cancelID = $('#intIDCan').val();
+
+            var tempCancel = {
+                "intITHead": cancelID
+            };
+
+            $.ajax({
+                url: '@Url.Action("CancelPunch", "Overtime")',
+                         cache: false,
+                         type: 'POST',
+                         data: JSON.stringify(tempCancel),
+                         datatype: 'json',
+                         contentType: 'application/json',
+                         async: true,
+                         success: function (result) {
+                             if (result != null && result.success) {
+                                 $('#myModal2').modal('hide');
+                                 $('#msg').removeClass('bg-danger');
+                                 $('#msg').addClass('bg-success');
+
+                                 $('#msg').html(result.responseText).show().slideDown(5000);
+                                 setTimeout('RedirectMe()', 5000);
+                             }
+                             else {
+                                 $('#myModal2').modal('hide');
+                                 $('#msg').removeClass('bg-success');
+                                 $('#msg').addClass('bg-danger');
+
+
+                                 $('#msg').html(result.responseText).show().slideDown(5000);
+                                 setTimeout('RedirectMe()', 5000);
+                             }
+
+                         },
+                         error: function (result) {
+                             alert(result);
+                         }
+                     });
+                 });
+             }
+
+             function CloseButton() {
+
+                 $('#intIDCan').val('');
+
+                 $('#myModal2').modal('hide');
+                 RedirectMe();
+             }
+
+             function RedirectMe() {
+                 window.location.href = "@Url.Content("~/Overtime/ListOfOvertimeMeals")";
+      }
+
+
+
+</script>
+}
+</head>
+<body>
+    <div class="alert text-center" id="msg"></div>
+<div class="panel panel-primary">
+   <div class="panel-body">
+        <table id="myTable" class="table table-striped table-bordered">
+            <thead>
+                <tr style="font-size:12px; text-align:center;">
+                       <th style="display:none;">ID</th>
+                       <th style="text-align:center;" >Date Filed</th>
+                       <th style="text-align:center;">Date Overtime Applied</th>
+                       <th style="text-align:center; display:none;">Service ID</th>
+                       <th style="text-align:center;">Request Service</th>
+                       <th style="text-align:center;">Reason</th>
+                       <th style="text-align:center;">Status</th>
+                       <th style="text-align:center;">Next Approver</th>
+                       <th style="text-align:center;">Action</th> 
+                </tr>
+            </thead>
+            <tbody id="idresulttable">
+                 @foreach (var item in Model)
+                 {
+                      <tr style="font-size:12px; text-align:center;">
+                        <td style="display:none;">@Html.DisplayFor(a => item.ID)</td>
+                        <td>@Html.DisplayFor(a => item.DateFiled)</td>
+                        <td>@Html.DisplayFor(a => item.DateFiledApplied)</td>
+                        <td style="display:none;">@Html.DisplayFor(a => item.RequestServiceID)</td>
+                        <td>@Html.DisplayFor(a => item.strRequestService)</td>
+                        <td>@Html.DisplayFor(a => item.Reason)</td>
+
+                          @if (item.Status == "PENDING")
+                          {
+                              <td style="color:red;">@Html.DisplayFor(a => item.Status)</td>
+                              <td>@Html.DisplayFor(a => item.NextApprover)</td>
+                          }
+                          else if (item.Status == "DISAPPROVED")
+                          {
+                              <td style="color:red;">@Html.DisplayFor(a => item.Status)</td>
+                               <td></td>
+                          }
+                          else if (item.Status == "APPROVED")
+                          {
+                              <td style="color:green;">@Html.DisplayFor(a => item.Status)</td>
+                              <td></td>
+                          }
+         
+
+                           <td>
+                            @*<a class="btn btn-info viewdata" href="@Url.Content("~/Overtime/ViewOvertimeMealsDetails?intIDHead=" + item.ID)">Details</a>*@
+                            @if (item.Status == "PENDING")
+                            {
+                                <button type="button" class="btn btn-danger" name="btnCancel" id="btnCancel" onclick="OpenModalConfirmation(1,@Html.DisplayFor(a => item.ID));">Cancel</button>
+                            }
+
+                           </td> 
+                     
+
+                      </tr>
+                 }
+            </tbody>
+        </table>
+    </div>
+ </div>
+
+ <input type="text" id="intIDCan" class="hide" />
+ <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel2"></h4>
+      </div>
+      <div class="modal-body">
+      
+      </div>
+      <div class="modal-footer">
+         
+        <button type="button" class="btn btn-success btn-lg" onclick="CancelFiled();">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+         
+        <button type="button" class="btn btn-danger btn-lg"  onclick="CloseButton();">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+             
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
+
+

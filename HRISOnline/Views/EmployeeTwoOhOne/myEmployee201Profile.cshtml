@@ -1,0 +1,271 @@
+﻿@model HRISOnline.Objects.EmployeeUpdateLogs
+@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Employee 201</title>
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />      
+
+
+
+
+       <script type="text/javascript">
+
+
+            function UpdateCancel() {
+                $(document).ready(function () {
+                 
+                    var cancelID = $('#intIDCan').val();
+
+                 
+                    var tempCancel = {
+                        "intITHead": cancelID
+                    };
+
+                    $.ajax({
+                        url: '@Url.Action("CancelUpdate", "EmployeeTwoOhOne")',
+                        cache: false,
+                        type: 'POST',
+                        data: JSON.stringify(tempCancel),
+                        datatype: 'json',
+                        contentType: 'application/json',
+                        async: true,
+                        success: function (result) {
+                            if (result != null && result.success) {
+                                $('#myModal2').modal('hide');
+                                $('#msg').removeClass('bg-danger');
+                                $('#msg').addClass('bg-success');
+
+                                $('#msg').html(result.responseText).show().slideDown(5000);
+                                setTimeout('RedirectMe()', 5000);
+                            }
+                            else {
+                                $('#myModal2').modal('hide');
+                                $('#msg').removeClass('bg-success');
+                                $('#msg').addClass('bg-danger');
+
+
+                                $('#msg').html(result.responseText).show().slideDown(5000);
+                                setTimeout('RedirectMe()', 5000);
+                            }
+
+                        },
+                        error: function (result) {
+                            alert(result);
+                        }
+                    });
+
+
+                    //$.ajax({
+                    //    url: '/EmployeeTwoOhOne/CancelUpdate?intITHead=' + intID,
+                    //    cache: false,
+                    //    datatype: "json",
+                    //    contentType: "application/json; charset=utf-8",
+                    //    async: true,
+                    //    success: function (result) {
+                    //        if (result != null && result.success) {
+                    //            $('#msg').removeClass('bg-danger');
+                    //            $('#msg').addClass('bg-success');
+                                                             
+                    //            $('#msg').html(result.responseText).show().slideDown(5000);
+                    //            setTimeout('RedirectMe()', 5000);
+                    //        }
+                    //        else {
+                    //            $('#msg').removeClass('bg-success');
+                    //            $('#msg').addClass('bg-danger');
+                                
+                              
+                    //            $('#msg').html(result.responseText).show().slideDown(5000);
+                    //            setTimeout('RedirectMe()', 5000);
+                    //        }
+
+                    //    },
+                    //    error: function (result) {
+                    //        alert(result);
+                    //    }
+                    //});
+                        
+                });
+
+            }
+                
+            
+
+            function ViewDetails(ID,intIDmodule) {
+
+                $(document).ready(function () {
+
+                    var intHID = ID;
+                    var intIDModule = intIDmodule;
+
+                    
+
+                    if (intIDModule == 1) {
+     
+                        var tempDetail = {
+                            "ID": ID
+                        };
+
+                        $.ajax({
+                            //url: '/EmployeeTwoOhOne/ViewDetails?intITheader=' + intHID,
+                            // url: '/EmployeeTwoOhOne/ViewDetailLogs?intID=' + intHID,
+                        url: '@Url.Action("ViewDetailLogs", "EmployeeTwoOhOne")',
+                        cache: false,
+                        type: 'POST',
+                        data: JSON.stringify(tempDetail),
+                        datatype: 'json',
+                        contentType: 'application/json',
+                        async: true,  
+                        error: function (result) {
+                            alert(result);
+                        }
+                    });
+                    }
+
+
+                    
+
+                });
+                  
+            }
+
+            function RedirectMe() {
+                window.location.href = "@Url.Content("~/EmployeeTwoOhOne/myEmployee201Profile")";
+                }
+
+        </script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+ @*<link rel="stylesheet" href="@Url.Content("https://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css")">*@
+  <script type="text/javascript" src="@Url.Content("https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css")"></script>   
+            
+ <script>
+
+     $(document).ready(function () {
+         $('#myTable').dataTable();
+     });
+
+     function OpenModalLegalInfo(type,ID) {
+         if (type == 1) {
+             
+             $('.modal-title').html("Confirmation");
+             $('.modal-body').html("Are you sure you want to Cancel?");
+             
+         }
+         $('#intIDCan').val(ID);
+         $('#type-id2').val(type);
+         $('#myModal2').modal();
+
+     }
+
+     function CloseButton() {
+
+         $('#intIDCan').val('');
+
+         $('#myModal2').modal('hide');
+         RedirectMe();
+     }
+
+</script>
+
+       
+
+
+
+    </head>
+
+<body>
+
+ 
+
+
+
+<div class="alert text-center" id="msg"></div>
+    
+
+
+    <table id="myTable" class="table table-striped table-bordered">
+        <thead>
+            <tr style="font:small;">
+                   <th style="display:none;">ID</th>
+                   <th>Employee ID</th>
+                   <th>Employee Name</th>
+                   <th style="display:none;">intIDModuleName</th>
+                   <th>Module Name</th>
+                   <th>Date Updated</th>
+                   <th>Status</th>
+                   <th>Action</th> 
+                <th>Action</th> 
+            </tr>
+        </thead>
+        <tbody id="idresulttable">
+            @foreach (var item in Model.UpdateLogs)
+            {
+            <tr style="font:small;"> 
+                <td style="display:none;">@Html.DisplayFor(a => item.ID)</td>
+                <td>@Html.DisplayFor(a => item.EmployeeID)</td>
+                <td>@Html.DisplayFor(a => item.EmployeeName)</td>
+                <td style="display:none;">@Html.DisplayFor(a => item.intIDModuleName)</td>
+                <td>@Html.DisplayFor(a => item.ModuleName)</td>
+                <td>@Html.DisplayFor(a => item.DateUpdated)</td>
+                @if (item.strStatus == "Pending")
+                {
+                  <td>@Html.DisplayFor(a => item.strStatus)</td>
+                }
+                else if (item.strStatus == "Approved")
+                {
+                <td style="color:green;">@Html.DisplayFor(a => item.strStatus)</td>
+                }
+                else
+                {
+                <td style="color:red;">@Html.DisplayFor(a => item.strStatus)</td>
+                }
+                <td><button type="button" class="btn btn-info viewdata" id="btnViewDetail">Detail</button></td>
+                @if (item.strStatus == "Pending")
+                {
+                    @*<td><button type="button" class="btn btn-danger" name="btnCancel" id="btnCancel" onclick="UpdateCancel(@Html.DisplayFor(a => item.ID));">Cancel</button></td>*@
+                    <td><button type="button" class="btn btn-danger" name="btnCancel" id="btnCancel" onclick="OpenModalLegalInfo(1,@Html.DisplayFor(a => item.ID));">Cancel</button></td>
+                }
+                else
+                {
+                    <td></td>
+                }
+                              
+            </tr>
+            }
+        </tbody>
+    </table>
+
+
+ <input type="text" id="type-id2" class="hide"/>
+ <input type="text" id="intIDCan" class="hide"/>
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel2"></h4>
+      </div>
+      <div class="modal-body">
+      
+      </div>
+      <div class="modal-footer">
+         
+        <button type="button" class="btn btn-success btn-lg" onclick="UpdateCancel();">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+         
+        <button type="button" class="btn btn-danger btn-lg"  onclick="CloseButton();">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+             
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+

@@ -1,0 +1,387 @@
+﻿@model HRISOnline.Objects.CoopLoan
+
+@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div id="breadcrumb" class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Loans</a></li>                
+                <li><a href="#">@ViewBag.MyTitle</a></li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="col-sm-12">
+
+    <div class="alert text-center" id="msg"></div>
+    <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3>@ViewBag.MyTitle</h3>
+            </div>
+    @if (((((ViewBag.MyTitle == "Coop Loan Details") || (ViewBag.MyTitle == "Update Coop Loan")) 
+        || ((ViewBag.MyTitle == "Government Loan Details") || (ViewBag.MyTitle == "Update Government Loan"))) 
+        && (Model.LoanDetails.Count == 0)) 
+        || ((ViewBag.MyTitle == "Apply Coop Loan") || (ViewBag.MyTitle == "Apply Government Loan")))
+    {
+
+        using (Html.BeginForm("Apply", "CoopLoan", FormMethod.Post, new { @class = "form-horizontal", @role = "form" }))
+        { 
+            <div class="panel-body">
+
+                @Html.HiddenFor(model => model.intOlnCoopLoanApplication)
+                @Html.HiddenFor(model => model.intMstEmpPersonal)
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Type of Membership</label>
+                    <div class="col-sm-2">
+                        @Html.DropDownListFor(model => model.TypeOfMembership, (SelectList)@ViewBag.membershiptypes, new { @class = "form-control" })
+                    </div>                
+
+                    <label class="col-sm-2 control-label">Date Filed</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.DateFiled, "{0:MM/dd/yyyy}", new { @class = "form-control", @onkeypress = "javascript: return false;" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Loan Type</label>
+                    <div class="col-sm-2">
+                        @Html.DropDownListFor(model => model.intOlnLoanType, (SelectList)@ViewBag.loantypes, new { @class = "form-control" })
+                    </div>
+
+                    <label class="col-sm-2 control-label">Loan percentage</label>
+                    <div class="col-sm-1">
+                        <input type="text" id="interestpercentage" value="0.00" class="form-control text-right" onkeypress="javascript: return false;" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">No. of months</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.NoOfMonths, new { @class = "form-control text-right" })
+                    </div>
+
+                    <label class="col-sm-2 control-label">Amount Applied</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.AmountApplied, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Interest Amount</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.InterestAmount, "{0:###, ##0.00}", new { @class = "form-control text-right", @onkeypress = "javascript: return false;" })
+                    </div>
+                    <label class="col-sm-2 control-label">Total Amount</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.TotalAmount, "{0:###, ##0.00}", new { @class = "form-control text-right", @onkeypress = "javascript: return false;" })
+                    </div>
+                    <label class="col-sm-2 control-label">Amount to be paid</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.AmountToBePaid, "{0:###, ##0.00}", new { @class = "form-control text-right", @onkeypress = "javascript: return false;" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Purpose of loan</label>
+                    <div class="col-sm-10">
+                        @Html.TextAreaFor(model => model.PurposeOfLoan, new { @class = "form-control" })
+                    </div>
+                </div>
+                @if(ViewBag.isGovLoan == false)
+                {
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Co-maker 1</label>
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(model => model.CoMaker1, (SelectList)@ViewBag.cmkr1)
+                        </div>
+
+                        <label class="col-sm-2 control-label">Co-maker 2</label>
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(model => model.CoMaker2, (SelectList)@ViewBag.cmkr2)
+                        </div>
+                    </div>
+                }                
+            </div>
+        }
+
+    }
+    else
+    {
+        using (Html.BeginForm("Apply", "CoopLoan", FormMethod.Post, new { @class = "form-horizontal", @role = "form" }))
+        { 
+            <div class="panel-body">
+
+                @Html.HiddenFor(model => model.intOlnCoopLoanApplication)
+                @Html.HiddenFor(model => model.intMstEmpPersonal)
+
+                <div class="row">
+                    <div class="col-xs-8 col-sm-8">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                @ViewBag.MyTypeOfMembership
+                            </label>
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(model => model.TypeOfMembership, (SelectList)@ViewBag.membershiptypes, new { @class = "form-control" })
+                            </div>                                    
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Date Filed</label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.DateFiled, "{0:MM/dd/yyyy}", new { @class = "form-control", @onkeypress = "javascript: return false;" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Loan Type</label>
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(model => model.intOlnLoanType, (SelectList)@ViewBag.loantypes, new { @class = "form-control" })
+                            </div>                    
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Loan percentage</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="interestpercentage" value="0.00" class="form-control text-right" onkeypress="javascript: return false;" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">No. of months</label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.NoOfMonths, new { @class = "form-control text-right" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Amount Applied</label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.AmountApplied, "{0:###, ##0.00}", new { @class = "form-control text-right" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Interest Amount</label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.InterestAmount, "{0:###, ##0.00}", new { @class = "form-control text-right", @onkeypress = "javascript: return false;" })
+                            </div>                    
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Total Amount</label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.TotalAmount, "{0:###, ##0.00}", new { @class = "form-control text-right", @onkeypress = "javascript: return false;" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Amount to be paid</label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.AmountToBePaid, "{0:###, ##0.00}", new { @class = "form-control text-right", @onkeypress = "javascript: return false;" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Purpose of loan</label>
+                            <div class="col-sm-6">
+                                @Html.TextAreaFor(model => model.PurposeOfLoan, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        @if (ViewBag.isGovLoan == false)
+                        { 
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Co-maker 1</label>
+                                <div class="col-sm-6">
+                                    @Html.DropDownListFor(model => model.CoMaker1, (SelectList)@ViewBag.cmkr1)
+                                </div>                    
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Co-maker 2</label>
+                                <div class="col-sm-6">
+                                    @Html.DropDownListFor(model => model.CoMaker2, (SelectList)@ViewBag.cmkr2)
+                                </div>
+                            </div>
+                        }
+                        
+                    </div>
+                    
+
+                    <div class="col-xs-4 col-sm-4">
+                        <table class="table table-heading table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="col-sm-1 text-center">Payroll ID</th>
+                                    <th class="col-sm-1 text-center">Batch Number</th>
+                                    <th class="col-sm-1 text-center">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                @foreach (var item in Model.LoanDetails) 
+                                { 
+                                    <tr>
+                                        <td class="text-center">@item.intTrnPayroll</td>
+                                        <td class="text-center">@item.BatchNumber</td>
+                                        <td class="text-right">@item.Amount.ToString("N")</td>
+                                    </tr>
+                                }
+                                                                
+                            </tbody>
+                        </table>
+                        <div class="form-group">
+                            <label class="col-sm-12 pull-right control-label">Total Amount Paid:&nbsp;&nbsp;&nbsp;
+                                <span class="text-danger">@Model.AmountPaid.ToString("N")</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-12 pull-right control-label">Total Balance: &nbsp;&nbsp;&nbsp;
+                                <span class="text-danger">@Model.AmountBalance.ToString("N")</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                                
+            </div>
+        }
+    }
+    
+        <div class="panel-footer">
+            @if (ViewBag.isForApproval == false) 
+            {
+                if ((ViewBag.MyTitle != "Coop Loan Details") || (ViewBag.MyTitle != "Government Loan Details"))
+                { 
+                    <button type="button" class="btn btn-primary btn-lg" onclick="SaveRecord();">Submit</button>
+                }
+                if (((ViewBag.MyTitle == "Update Coop Loan") || (ViewBag.MyTitle == "Coop Loan Details"))
+                    || (ViewBag.MyTitle == "Update Government Loan") || (ViewBag.MyTitle == "Government Loan Details"))
+                { 
+                <a class="btn btn-primary btn-lg" href="@Url.Content("~/CoopLoan")">Back to list</a>
+                }
+            }
+            else
+            {
+                <a class="btn btn-primary btn-lg" href="@Url.Content("~/CoopLoan/forApproval")">Back to list</a>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    
+    <script type="text/javascript">        
+        $(document).ready(function () {
+
+            $('#msg').removeClass('active');
+            $('#msg').addClass('hide');
+            $('#CoMaker1, #CoMaker2').select2();
+            
+            GetInterestPercentage();
+            $("#intOlnLoanType").change(function () {
+                GetInterestPercentage();
+                ComputeTotalAmount();
+            });
+
+            $("#NoOfMonths, #AmountApplied").focusout(function () {
+                ComputeTotalAmount();
+            });
+
+            $("#AmountApplied").focusout(function (ev) {
+                $("#AmountApplied").val(accounting.formatMoney($("#AmountApplied").val()));
+            });
+
+            $("#NoOfMonths").focusout(function (ev) {
+                $("#NoOfMonths").val(accounting.formatMoney($("#NoOfMonths").val()));
+            });
+        });
+
+
+        function GetInterestPercentage()
+        {
+            var url = '@Url.Action("GetInterestPercentage")';
+            var values = { "intOlnLoanType": "" };
+
+            values.intOlnLoanType = $("#intOlnLoanType").val();
+
+            $.get(
+                url,
+                values,
+                function (data){
+
+                    $("#interestpercentage").val(accounting.formatMoney(data.interestPercentage));
+
+                });
+        }
+
+        function ComputeTotalAmount()
+        {
+            var url = '@Url.Action("ComputeTotalAmount")';
+            var values = { "NoOfMonths": $('#NoOfMonths').val().replace(/[ ,]+/g, ""), "AmountApplied": $('#AmountApplied').val().replace(/[ ,]+/g, ""), "intOlnLoanType": $('#intOlnLoanType').val() };
+
+            $.get(
+                url,
+                values,
+                function (data){
+
+                    $("#InterestAmount").val(accounting.formatMoney(data.interestAmount));
+                    $("#TotalAmount").val(accounting.formatMoney(data.totalAmount));
+                    $("#AmountToBePaid").val(accounting.formatMoney(data.amountToBePaid));
+
+                });
+
+        }
+
+        function RedirectMe() {
+            window.location.href = "@Url.Content("~/CoopLoan")";
+        }
+
+        function SaveRecord()
+        {
+            var coop = {
+                "intOlnCoopLoanApplication": "", "intMstEmpPersonal": "", "DateFiled": "", "TypeOfMembership": "", "PurposeOfLoan": "",
+                "intOlnLoanType": "", "AmountApplied": "", "InterestAmount": "", "TotalAmount": "", "AmountToBePaid": "", "CoMaker1": "",
+                "CoMaker2": "", "NoOfMonths": "", "isGovernment" : false
+            };
+
+            var aAmount = $('#AmountApplied').val().replace(/[ ,]+/g, "");
+            var intAmount = $('#InterestAmount').val().replace(/[ ,]+/g, "");
+            var tAmount = $('#TotalAmount').val().replace(/[ ,]+/g, "");
+            var atbPaid = $('#AmountToBePaid').val().replace(/[ ,]+/g, "");
+
+            coop.intOlnCoopLoanApplication = $('#intOlnCoopLoanApplication').val();
+            coop.intMstEmpPersonal = $('#intMstEmpPersonal').val();
+            coop.DateFiled = $('#DateFiled').val();
+            coop.TypeOfMembership = $('#TypeOfMembership').val();
+            coop.PurposeOfLoan = $('#PurposeOfLoan').val();
+            coop.intOlnLoanType = $('#intOlnLoanType').val();
+            coop.AmountApplied = parseFloat(aAmount);
+            coop.InterestAmount = parseFloat(intAmount);
+            coop.TotalAmount = parseFloat(tAmount);
+            coop.AmountToBePaid = parseFloat(atbPaid);
+            coop.CoMaker1 = $('#CoMaker1').val();
+            coop.CoMaker2 = $('#CoMaker2').val();
+            coop.NoOfMonths = $('#NoOfMonths').val();
+            coop.isGovernment = Boolean('@ViewBag.isGovLoan');
+
+            //saving part
+            $.ajax({
+                url: '@Url.Action("SaveCoopLoan")',
+                data: JSON.stringify(coop),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+
+                    $('#msg').addClass('active');
+                    $('#msg').removeClass('hide');
+
+                    if (result.success == "True") {
+                        $('#msg').removeClass('bg-danger');
+                        $('#msg').addClass('bg-success');
+                        setTimeout('RedirectMe()', 2000);
+                    }
+                    else {
+                        $('#msg').removeClass('bg-success');
+                        $('#msg').addClass('bg-danger');
+                    }
+
+                    $('#msg').html(result.msg);
+                }
+            });
+
+        }
+    </script>    
+    
+}

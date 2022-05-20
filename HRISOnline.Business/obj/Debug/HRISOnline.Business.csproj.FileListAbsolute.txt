@@ -1,0 +1,187 @@
+C:\Users\johnbasi\Desktop\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+C:\Users\johnbasi\Desktop\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+C:\Users\johnbasi\Desktop\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+C:\Users\johnbasi\Desktop\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+C:\Users\johnbasi\Desktop\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+C:\Users\johnbasi\Desktop\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+C:\Users\johnbasi\Desktop\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+C:\Users\johnbasi\Desktop\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+C:\Users\johnbasi\Desktop\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+C:\Users\johnbasi\Desktop\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+C:\Users\johnbasi\Desktop\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+D:\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+D:\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+D:\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+D:\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+D:\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+D:\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+D:\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+D:\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+D:\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+D:\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+D:\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+C:\Users\jcbasi\Desktop\Contacts\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+C:\Users\jcbasi\Desktop\Contacts\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+C:\Users\jcbasi\Desktop\Contacts\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+C:\Users\jcbasi\Desktop\Contacts\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+C:\Users\jcbasi\Desktop\Contacts\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+C:\Users\jcbasi\Desktop\Contacts\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+C:\Users\jcbasi\Desktop\Contacts\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+C:\Users\jcbasi\Desktop\Contacts\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+C:\Users\jcbasi\Desktop\Contacts\HRISOnline - live\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+C:\Users\jcbasi\Desktop\Contacts\HRISOnline - live\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+C:\Users\jcbasi\Desktop\Contacts\HRISOnline - live\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+D:\PROJECTS\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+D:\PROJECTS\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+D:\PROJECTS\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+D:\PROJECTS\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+D:\PROJECTS\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+D:\PROJECTS\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+D:\PROJECTS\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+D:\PROJECTS\HRISOnline - live\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+D:\PROJECTS\HRISOnline - live\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+D:\PROJECTS\HRISOnline - live\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+D:\PROJECTS\HRISOnline - live\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+D:\PROJECTS\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+D:\PROJECTS\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+D:\PROJECTS\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+D:\PROJECTS\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+D:\PROJECTS\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+D:\PROJECTS\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+D:\PROJECTS\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+D:\PROJECTS\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+D:\PROJECTS\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+D:\PROJECTS\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+D:\PROJECTS\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+D:\KIMFILES\PROGRAMS\OneAccessFiles\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+D:\KIMFILES\PROGRAMS\OneAccessFiles\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+D:\KIMFILES\PROGRAMS\OneAccessFiles\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+D:\KIMFILES\PROGRAMS\OneAccessFiles\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+D:\KIMFILES\PROGRAMS\OneAccessFiles\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+D:\KIMFILES\PROGRAMS\OneAccessFiles\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+D:\KIMFILES\PROGRAMS\OneAccessFiles\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+D:\KIMFILES\PROGRAMS\OneAccessFiles\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+D:\KIMFILES\PROGRAMS\OneAccessFiles\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+D:\KIMFILES\PROGRAMS\OneAccessFiles\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+D:\KIMFILES\PROGRAMS\OneAccessFiles\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+C:\Users\USER\Desktop\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+C:\Users\USER\Desktop\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+C:\Users\USER\Desktop\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+C:\Users\USER\Desktop\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+C:\Users\USER\Desktop\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+C:\Users\USER\Desktop\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+C:\Users\USER\Desktop\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+C:\Users\USER\Desktop\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+C:\Users\USER\Desktop\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+C:\Users\USER\Desktop\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+C:\Users\USER\Desktop\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+C:\Users\USER\Desktop\BackUpSystem\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+C:\Users\USER\Desktop\BackUpSystem\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+C:\Users\USER\Desktop\BackUpSystem\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+C:\Users\USER\Desktop\BackUpSystem\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+C:\Users\USER\Desktop\BackUpSystem\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+C:\Users\USER\Desktop\BackUpSystem\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+C:\Users\USER\Desktop\BackUpSystem\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+C:\Users\USER\Desktop\BackUpSystem\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+C:\Users\USER\Desktop\BackUpSystem\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+C:\Users\USER\Desktop\BackUpSystem\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+C:\Users\USER\Desktop\BackUpSystem\Skygo ONE NEW\New folder\HRISOnline\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+F:\Programming\Skygo Files\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+F:\Programming\Skygo Files\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+F:\Programming\Skygo Files\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+F:\Programming\Skygo Files\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+F:\Programming\Skygo Files\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+F:\Programming\Skygo Files\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+F:\Programming\Skygo Files\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+F:\Programming\Skygo Files\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+F:\Programming\Skygo Files\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+F:\Programming\Skygo Files\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+F:\Programming\Skygo Files\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+C:\Users\USER\Desktop\BackUpSystem\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+C:\Users\USER\Desktop\BackUpSystem\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+C:\Users\USER\Desktop\BackUpSystem\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+C:\Users\USER\Desktop\BackUpSystem\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+C:\Users\USER\Desktop\BackUpSystem\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+C:\Users\USER\Desktop\BackUpSystem\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+C:\Users\USER\Desktop\BackUpSystem\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+C:\Users\USER\Desktop\BackUpSystem\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+C:\Users\USER\Desktop\BackUpSystem\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+C:\Users\USER\Desktop\BackUpSystem\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+C:\Users\USER\Desktop\BackUpSystem\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+C:\Users\Skygo Marketing\Desktop\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+C:\Users\Skygo Marketing\Desktop\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+C:\Users\Skygo Marketing\Desktop\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+C:\Users\Skygo Marketing\Desktop\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+C:\Users\Skygo Marketing\Desktop\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+C:\Users\Skygo Marketing\Desktop\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+C:\Users\Skygo Marketing\Desktop\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+C:\Users\Skygo Marketing\Desktop\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+C:\Users\Skygo Marketing\Desktop\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+C:\Users\Skygo Marketing\Desktop\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+C:\Users\Skygo Marketing\Desktop\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+D:\siao backup\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+D:\siao backup\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+D:\siao backup\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+D:\siao backup\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+D:\siao backup\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+D:\siao backup\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+D:\siao backup\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+D:\siao backup\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+D:\siao backup\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+D:\siao backup\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+D:\siao backup\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+C:\Users\Skygo Marketing\Desktop\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+C:\Users\Skygo Marketing\Desktop\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+C:\Users\Skygo Marketing\Desktop\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+C:\Users\Skygo Marketing\Desktop\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+C:\Users\Skygo Marketing\Desktop\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+C:\Users\Skygo Marketing\Desktop\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+C:\Users\Skygo Marketing\Desktop\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+C:\Users\Skygo Marketing\Desktop\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+C:\Users\Skygo Marketing\Desktop\Deviation\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+C:\Users\Skygo Marketing\Desktop\Deviation\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+C:\Users\Skygo Marketing\Desktop\Deviation\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+E:\Systems\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+E:\Systems\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+E:\Systems\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+E:\Systems\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+E:\Systems\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+E:\Systems\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+E:\Systems\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+E:\Systems\Deviation\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+E:\Systems\Deviation\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+E:\Systems\Deviation\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+E:\Systems\Deviation\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+D:\System\SkygoOne System\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+D:\System\SkygoOne System\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+D:\System\SkygoOne System\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+D:\System\SkygoOne System\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+D:\System\SkygoOne System\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+D:\System\SkygoOne System\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+D:\System\SkygoOne System\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+D:\System\SkygoOne System\HRISOnlineNew\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+D:\System\SkygoOne System\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+D:\System\SkygoOne System\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+D:\System\SkygoOne System\HRISOnlineNew\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+C:\Users\MIS\Desktop\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+C:\Users\MIS\Desktop\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+C:\Users\MIS\Desktop\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+C:\Users\MIS\Desktop\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+C:\Users\MIS\Desktop\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+C:\Users\MIS\Desktop\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+C:\Users\MIS\Desktop\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+C:\Users\MIS\Desktop\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+C:\Users\MIS\Desktop\Git\SkygoOne\skygoone\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+C:\Users\MIS\Desktop\Git\SkygoOne\skygoone\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+C:\Users\MIS\Desktop\Git\SkygoOne\skygoone\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb
+D:\siao\Systems\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Business.dll
+D:\siao\Systems\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Business.pdb
+D:\siao\Systems\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Data.dll
+D:\siao\Systems\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Objects.dll
+D:\siao\Systems\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.dll
+D:\siao\Systems\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Data.pdb
+D:\siao\Systems\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Objects.pdb
+D:\siao\Systems\Git\SkygoOne\skygoone\HRISOnline.Business\bin\Debug\HRISOnline.Utilities.pdb
+D:\siao\Systems\Git\SkygoOne\skygoone\HRISOnline.Business\obj\Debug\HRISOnline.Business.csprojResolveAssemblyReference.cache
+D:\siao\Systems\Git\SkygoOne\skygoone\HRISOnline.Business\obj\Debug\HRISOnline.Business.dll
+D:\siao\Systems\Git\SkygoOne\skygoone\HRISOnline.Business\obj\Debug\HRISOnline.Business.pdb

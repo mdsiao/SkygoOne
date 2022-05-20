@@ -1,0 +1,54 @@
+﻿@model IEnumerable<HRISOnline.Objects.GatePassRegionalList>
+
+@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+    <div class="panel panel-primary">        
+        <div class="panel-body">            
+            <table class="table table-bordered table-heading" id="leave-table">
+                <thead>
+                    <tr>
+                        @*<th class="text-center" style="width:30px;">                         
+                            <input type="checkbox" id="chk-all" />
+                        </th> *@                        
+                        <th class="text-center col-sm-1">Date Filed</th>
+                        <th class="text-center col-sm-1">OB Date</th>     
+                        <th class="text-center col-sm-2">OB Time</th>     
+                        <th class="col-sm-2">Employee</th>
+                        <th class="col-sm-2">Branch</th> 
+                        <th>Reason</th>                       
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    { 
+                        <tr>
+                             @*<td class="text-center">                                
+                                <input type="checkbox" id="@item.intOlnLeaveApplicationHead" class="chk" />                                
+                            </td> *@                           
+                            <td class="text-center col-sm-1">@item.DateFiled.ToShortDateString()</td>
+                            <td class="text-center col-sm-1">@item.GatePassDate.ToShortDateString()</td>
+                            <td class="text-center col-sm-2">@item.GatePassTime</td>
+                            <td class="col-sm-2">@item.EmpName</td>
+                            <td class="col-sm-2">@item.BranchName</td>
+                            <td>@item.Remarks</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @*<div class="panel-footer">
+            <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#myModal">Cancel</button>
+        </div>*@
+    </div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#leave-table').dataTable();
+        });
+    </script>
+    
+}

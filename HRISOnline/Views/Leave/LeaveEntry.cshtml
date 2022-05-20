@@ -1,0 +1,233 @@
+﻿<form class="form-horizontal"  role="form">
+    <div class="form-group required">
+        <label class="col-sm-3 control-label">Date Of Leave</label>
+        <div class="col-sm-3">                       
+            <input type="text" id="DateOfLeave" class="form-control" onkeypress="javascript: return false;" />
+        </div> 
+        <div class="col-sm-3">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="isHalfDay" onclick="clickme(this);" />
+                    is Half Day?
+                    @*<i class="fa fa-square-o small"></i>*@
+                </label>
+            </div>
+        </div>        
+    </div>
+    <div class="form-group">        
+        <label class="col-sm-3 control-label">No of days</label>
+        <div class="col-sm-3">                       
+            <input type="text" id="NoOfDays" class="form-control" onkeypress="javascript: return false;" />
+        </div>
+
+        <div id="cbo"  class="col-sm-3 hide">
+            <select class="form-control" id="ampm">
+                <option>AM</option>
+                <option>PM</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">        
+        <label class="col-sm-3 control-label">Reason</label>
+        <div class="col-sm-9">                                   
+            <textarea id="Reason" class="form-control"></textarea>
+        </div>                 
+    </div>
+    
+</form>
+
+<script type="text/javascript">    
+    
+    $(document).ready(function () {
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+        var datestart = $('#DateOfLeave').datepicker({                        
+        }).on('changeDate', function (ev) {                
+            var valCheck = $("#isHalfDay").is(':checked');
+            if (valCheck == true) {
+                $("#NoOfDays").val("0.5");
+            }
+            else {
+                $("#NoOfDays").val("1");
+            }
+
+            datestart.hide();
+
+        }).data('datepicker');
+
+        disableWeekends(datestart.picker);            
+
+        var _fill = datestart.fill;
+        datestart.fill = function () {
+            {
+                _fill.call(this);
+                disableWeekends(datestart.picker);
+            }
+        };        
+
+        
+
+    });
+
+    //function isExistsInTable(dDate, ampm)
+    //{
+    //    var result = false;        
+    //    var tbl = $("#leave-application").dataTable().fnGetData();
+
+    //    for (var i = 0; i < tbl.length; i++) {
+    //        if ((tbl[i][1] == dDate) && (tbl[i][3] == ampm)) {
+    //            result += parseFloat(tbl[i][4]);
+    //        }
+    //    }
+
+    //    return result;
+    //}
+
+    function AddItem() {        
+        var isAdd = true;
+        var strMsg = "Below is the list of error(s):" + '\n';
+        var counter = 0;
+        var isWithPay = true;
+        var availableLeaves;
+        availableLeaves = parseFloat($('#avLeave').html());
+
+        if ($("#DateOfLeave").val().length == 0) {
+            strMsg = strMsg + "> Select date of leave.";
+            isAdd = false;
+        }
+
+        if ($("#Reason").val().length == 0) {
+            strMsg = strMsg + '\n' + "> Enter reason of leave.";
+            isAdd = false;
+        }
+
+        var chkVal = $("#isHalfDay").is(":checked").valueOf();
+        var tbl = $("#leave-application").dataTable().fnGetData();        
+        
+        for (var i = 0; i < tbl.length; i++) {
+            if (tbl[i][1] == $("#DateOfLeave").val()) {
+                if (chkVal == true) {
+                    var ampm = $("#ampm").val();
+                    
+                    if ((ampm == tbl[i][3]) && (tbl[i][4] != 1)) {
+                        strMsg = "Leave Date " + $("#DateOfLeave").val() + " - " + ampm + " already exists in the list.";
+                        isAdd = false;
+                        break;
+                    }
+                    else if (tbl[i][3] == "") {
+                        strMsg = "Leave Date " + $("#DateOfLeave").val() + " already exists in the list.";
+                        isAdd = false;
+                        break;
+                    }
+                }
+                else {
+                    strMsg = "Leave Date '" + $("#DateOfLeave").val() + "' already exists in the list.";
+                    isAdd = false;
+                    break;
+                }                
+            }
+        }        
+
+        if (isAdd) {
+
+            //trapping
+            for (var i = 0; i < tbl.length; i++) {
+                counter += parseFloat(tbl[i][4]);
+            }
+            counter += parseFloat($("#NoOfDays").val());
+
+            if (counter > availableLeaves) {
+                //isAdd = false;
+                isWithPay = false;
+                strMsg = "You don't have enough leave credits! If you continue this leave will not be paid." + '\n';
+                strMsg += "Do you want to continue?";
+
+                var confirm = window.confirm(strMsg);
+                isAdd = confirm;
+                if (confirm == false) {
+                    return;
+                }
+                else {
+
+                    var lvBalance = (counter - availableLeaves);
+                    //alert(availableLeaves);
+                    //alert(counter);
+                    //alert(lvBalance);
+                    
+                    if ((lvBalance == 0.5) && (parseFloat($("#NoOfDays").val()) == 1)) {
+                        $("#leave-application").dataTable()
+                            .fnAddData([
+                                0,
+                                $("#DateOfLeave").val(),
+                                'YES',
+                                "AM",
+                                "0.5",
+                                $("#Reason").val(),
+                                'YES',
+                                '<a href="javascript:void(0);" onclick="RemoveItem(this);" >Remove</a>'
+                            ]);
+
+                        chkVal = true;
+                        $("#ampm").val("PM");
+                        $("#NoOfDays").val("0.5");
+                        isWithPay == false;
+                    }
+                    else if ((lvBalance > 0.5) && (parseFloat($("#NoOfDays").val()) == 1)) {
+                        isWithPay == false;
+                    }
+                    else {
+                        chkVal = true;
+                        //$("#ampm").val("AM");
+                        $("#NoOfDays").val("0.5");
+                        isWithPay == false;
+                    }
+
+                }
+            }//trapping
+
+            var msg = '';
+            var showError = false;            
+
+            $("#leave-application").dataTable()
+                .fnAddData([
+                    0,
+                    $("#DateOfLeave").val(),
+                    (chkVal == true) ? 'YES' : 'NO',
+                    (chkVal == true) ? $("#ampm").val() : "",
+                    $("#NoOfDays").val(),
+                    $("#Reason").val(),
+                    (isWithPay == true) ? 'YES' : 'NO',
+                    '<a href="javascript:void(0);" onclick="RemoveItem(this);" >Remove</a>'
+                ]);
+
+            $('#totalDays').html(counter);           
+
+            if (counter > availableLeaves)
+            {
+                showError = true;
+                msg = "You don't have enough leave credits! Some leaves will not be paid.</br>";
+            }
+            if (counter >= 4)
+            {
+                showError = true;
+                msg += "Your leave is " + counter.toString() + " days. You need to have 2 approvals.";
+            }
+
+            if (showError == true)
+            {
+                $('#msg').addClass('active');
+                $('#msg').removeClass('hide');
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html(msg);
+            }
+
+        }
+        else {            
+            alert(strMsg);
+        }
+        
+        return isAdd;
+    }    
+</script>

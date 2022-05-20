@@ -1,0 +1,422 @@
+﻿@model HRISOnline.Objects.LeaveMaster
+
+@{
+    ViewBag.Title = ViewBag.MyTitle;
+}
+
+@*@section breadcrumb{
+    <div class="row">
+        <div id="breadcrumb" class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Leave</a></li>
+                <li><a href="#">@ViewBag.MyTitle</a></li>
+            </ol>
+        </div>
+    </div>
+}*@
+
+@*<div class="col-sm-12">*@
+    <div class="alert text-center" id="msg"></div>
+
+    <div class="panel panel-primary">
+        @*<div class="panel-heading">
+            <h3>@ViewBag.MyTitle</h3>
+        </div>*@
+
+        
+        <div class="panel-body">
+            @using (Html.BeginForm("Apply", "Leave", FormMethod.Post, new { @class = "form-horizontal", @role = "form" }))
+            {
+                @Html.HiddenFor(model => model.intOlnLeaveApplicationHead)
+                @Html.HiddenFor(model => model.intMstEmpPersonal)                
+                
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Year</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.YearPeriod, new { @class = "form-control", @onkeypress = "javascript: return false;" })
+                    </div>
+
+                    <label class="col-sm-5 control-label">Date Filed</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.DateFiled, "{0:MM/dd/yyyy}", new { @class = "form-control", @onkeypress = "javascript: return false;" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Leave Type</label>
+                    <div class="col-sm-3">
+                        @Html.DropDownListFor(model => model.intMstLeaveType, (SelectList)@ViewBag.leavetypes, new { @class = "form-control" })
+                    </div>
+                </div>
+                @*<div class="form-group">
+                     <label class="col-sm-2 control-label">Remarks</label>
+                    <div class="col-sm-10">
+                        @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control" })
+                    </div>
+                </div>*@
+
+                <table id="leave-application" class="table table-bordered table-striped table-heading">
+                    <thead>
+                        <tr>               
+                            <th></th>             
+                            <th style="width:70px;">Date</th>
+                            <th style="width:70px;">Half Day?</th>
+                            <th style="width:50px;">AM/PM</th>
+                            <th style="width:90px;">No. of Days</th>
+                            <th>Reason</th>
+                            <th style="width:70px;">With Pay?</th>
+                            <th style="width:70px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var itm in Model.LeaveDetails.ToList())
+                        { 
+                            <tr>
+                                <td>@itm.intOlnLeaveApplicationDetails</td>
+                                <td>@itm.DateOfLeave.ToShortDateString()</td>
+                                @if (itm.isHalfDay == true){ 
+                                    <td>YES</td>
+                                }
+                                else{
+                                    <td>NO</td>
+                                }
+                                <td>@itm.AMorPM</td>                                                                   
+                                <td>@itm.NoOfDays</td>
+                                <td>@itm.Reason</td>     
+                                @if (itm.isWithPay == true){ 
+                                    <td>YES</td>
+                                }
+                                else{
+                                    <td>NO</td>
+                                }
+                                <td>
+                                    <a href="#" onclick="RemoveItem(this);">Remove</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <p class="pull-left">Total days of leave: <strong><span id="totalDays"></span></strong></p>
+                if (ViewBag.MyTitle != "Leave Details")
+                { 
+                    <button type="button" class="btn btn-primary btn-lg pull-right" id="myBtn">Add Leave</button>   
+                }
+            }
+        </div>
+
+        <div class="panel-footer">
+            @if (ViewBag.isForApproval == false)
+            {
+                if (ViewBag.MyTitle != "Leave Details")
+                { 
+                    <button type="button" class="btn btn-success btn-lg" onclick="SaveRecord();">Submit</button>
+                    <p class="pull-right">Available Leaves:&nbsp; <strong><span id="avLeave"></span></strong></p>
+                }
+                if ((ViewBag.MyTitle == "Update Leave") || (ViewBag.MyTitle == "Leave Details"))
+                { 
+                    <a class="btn btn-danger btn-lg" href="@Url.Content("~/Leave")">Back to list</a>
+                }
+            }
+            else
+            {
+                <a class="btn btn-danger btn-lg" href="@Url.Content("~/Leave/forApproval")">Back to list</a>
+            }
+            
+        </div>
+    </div>
+@*</div>*@
+
+<div class="modal-dialog">
+<!--       
+
+    var dlg = new BootstrapDialog.show({
+            title: 'Leave Entry',
+            message: $('<div></div>').load('@Url.Content("~/Leave/LeaveEntry")'),
+            buttons: [{
+                label: 'Add Leave',
+                cssClass: 'btn btn-primary btn-lg',
+                hotkey: 13, // Enter.
+                action: function(dlg) {
+                    if(AddItem() == true){
+                        dlg.close();
+                    }                    
+                }
+            }],
+            draggable: true
+        });
+
+    dlg.open();
+-->
+</div>
+
+@section scripts{
+    <script src="@Url.Content("~/Scripts/js/myScripts.js")"></script>
+    <script src="@Url.Content("~/Scripts/js/TableTools.js")"></script>
+    @*<script src="@Url.Content("~/Scripts/js/TableTools.min.js")"></script>*@
+
+    <script type="text/javascript">        
+        var code = $(".modal-dialog").html().replace('<!--', '').replace('-->', '');
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        var table;
+
+        $(document).ready(function () {
+            //var table = $('#leave-application').DataTable();
+
+            $('#totalDays').html("0.0");
+
+            if ('@ViewBag.MyTitle' == "Leave Details") {
+                table = $("#leave-application").dataTable({
+                    "columnDefs": [{
+                        "targets": [0, 7],
+                        "visible": false,
+                        "searchable": false
+                    }],
+                    "bPaginate": false,
+                    "bLengthChange": false,
+                    "bFilter": false,
+                    "bSort": false,
+                    "bInfo": false,
+                    "oTableTools": {
+                        "sRowSelect": "single",
+                        "sSelectedClass": "selected"
+                    }
+                });
+
+                $('input[type="text"],textarea').attr('readonly', 'readonly');
+                $('select').attr('disabled', true);
+
+            }
+            else {
+                table = $("#leave-application").dataTable({
+                    "columnDefs": [{
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }],
+                    "bPaginate": false,
+                    "bLengthChange": false,
+                    "bFilter": false,
+                    "bSort": false,
+                    "bInfo": false,
+                    "oTableTools": {
+                        "sRowSelect": "single",
+                        "sSelectedClass": "selected"
+                    }
+                });
+            }                      
+
+            $("#myBtn").on('click', { code: code }, function (event) {                
+                eval(event.data.code);
+            });
+
+            //CountLeaveDays();
+            $('#totalDays').html(CountLeaveDays());
+
+            if ('@ViewBag.MyTitle' != "Leave Details") {
+                GetAvailableLeave();
+            }            
+
+            $('#intMstLeaveType').on('change', function (ev) {                
+                GetAvailableLeave();                
+            });
+
+            $('#msg').removeClass('active');
+            $('#msg').addClass('hide');
+        });
+
+        function clickme(val)
+        {
+            var xVal = $(val).is(':checked');
+            if (xVal == true) {
+                $("#cbo").removeClass("hide");
+                $("#cbo").addClass("active");
+                $("#NoOfDays").val("0.5");
+            }
+            else {
+                $("#cbo").addClass("hide");
+                $("#cbo").removeClass("active");
+                $("#NoOfDays").val("1");
+            }
+        }
+        
+        function RemoveItem(val) {            
+            var nRow = $(val).parents('tr')[0];
+
+            $('#msg').addClass('hide'); 
+            $('#msg').removeClass('active');
+            $('#msg').removeClass('bg-danger');            
+
+            table.fnDeleteRow(nRow);
+
+            var availableLeaves = parseFloat($('#avLeave').html());
+            var counter = CountLeaveDays();
+            var showError = false;
+            var msg = '';
+
+            $('#totalDays').html(counter);
+
+            if (counter > availableLeaves) {
+                showError = true;
+                msg = "You don't have enough leave credits! Some leaves will not be paid.</br>";
+            }
+            if (counter >= 4) {
+                showError = true;
+                msg += "Your leave is " + counter.toString() + " days. You need to have 2 approvals.";
+            }
+
+            if (showError == true) {
+                $('#msg').addClass('active');
+                $('#msg').removeClass('hide');
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html(msg);
+            }
+
+        }
+
+        function CountLeaveDays()
+        {
+            var tbl = $("#leave-application").dataTable().fnGetData();
+            var counter = 0;
+            for (var i = 0; i < tbl.length; i++) {
+                counter += parseFloat(tbl[i][4]);
+            }
+
+            //$('#totalDays').html(counter);
+            return counter;
+        }
+
+        function RedirectMe() {
+            window.location.href = "@Url.Content("~/Leave")";
+        }
+        
+        function GetAvailableLeave()
+        {
+            var url = '@Url.Action("GetAvailableLeave")';
+            var datax = { "leaveType": "", "lvDate": "" };            
+
+            $('#msg').addClass('hide');
+            $('#msg').removeClass('active');
+            $('#msg').removeClass('bg-danger');
+
+            datax.leaveType = $('#intMstLeaveType').val();
+            datax.lvDate = $('#DateFiled').val();
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                data: datax,
+                async: false,
+                success: function (data) {
+                    $('#avLeave').html(data.avLeave);
+                }
+            });
+
+            var availableLeaves = parseFloat($('#avLeave').html());
+            var counter = CountLeaveDays();
+            var showError = false;
+            var msg = '';
+
+            //$('#totalDays').html(counter);
+
+            if (counter > availableLeaves) {
+                showError = true;
+                msg = "You don't have enough leave credits! Some leaves will not be paid.</br>";
+            }
+            if (counter >= 4) {
+                showError = true;
+                msg += "Your leave is " + counter.toString() + " days. You need to have 2 approvals.";
+            }
+
+            if (showError == true) {
+                $('#msg').addClass('active');
+                $('#msg').removeClass('hide');
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html(msg);
+            }        
+        }
+
+        function SaveRecord()
+        {
+            var leaveheader = {
+                "intOlnLeaveApplicationHead": "", "intMstEmpPersonal": "", "YearPeriod": "",
+                "DateFiled": "", "intMstLeaveType": "", "Remarks": "", "LeaveDetails": []
+            };
+
+            var leavedetails = {
+                "intOlnLeaveApplicationDetails": "", "intOlnLeaveApplicationHead": "", "DateOfLeave": "",
+                "isHalfDay": "", "AMorPM": "", "NoOfDays": "", "Reason": "", "isWithPay": ""
+            };
+
+
+            leaveheader.intOlnLeaveApplicationHead = $("#intOlnLeaveApplicationHead").val();
+            leaveheader.intMstEmpPersonal = $("#intMstEmpPersonal").val();
+            leaveheader.YearPeriod = $("#YearPeriod").val();
+            leaveheader.DateFiled = $("#DateFiled").val();
+            leaveheader.intMstLeaveType = $("#intMstLeaveType").val();                        
+            leaveheader.Remarks = $("#Remarks").val();
+
+            //get the data of datatable
+            var oTable = $("#leave-application").dataTable().fnGetData();
+            //loop thru the data and push to the details
+            for (var i = 0; i < oTable.length; i++) {
+
+                leavedetails.intOlnLeaveApplicationHead = leaveheader.intOlnLeaveApplicationHead;
+                leavedetails.intOlnLeaveApplicationDetails = oTable[i][0];
+                leavedetails.DateOfLeave = oTable[i][1];
+                leavedetails.isHalfDay = (oTable[i][2] == "YES") ? true : false;
+                leavedetails.AMorPM = (oTable[i][2] == "YES") ? oTable[i][3] : "";
+                leavedetails.NoOfDays = oTable[i][4];
+                leavedetails.Reason = oTable[i][5];
+                leavedetails.isWithPay = (oTable[i][6] == "YES") ? true : false;
+
+                leaveheader.LeaveDetails.push(leavedetails);
+
+                leavedetails = {
+                    "intOlnLeaveApplicationDetails": "", "intOlnLeaveApplicationHead": "", "DateOfLeave": "",
+                    "isHalfDay": "", "AMorPM": "", "NoOfDays": "", "Reason": "", "isWithPay": ""
+                };
+            }
+
+            if (oTable.length == 0) {
+                $('#msg').addClass('active');
+                $('#msg').removeClass('hide');
+
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+
+                $('#msg').html("Please enter leave details below.");
+            }
+            else {
+                //saving part
+                $.ajax({
+                    url: '@Url.Action("SaveLeave")',
+                    data: JSON.stringify(leaveheader),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (result) {
+
+                        $('#msg').addClass('active');
+                        $('#msg').removeClass('hide');
+
+                        if (result.success == "True") {
+                            $('#msg').removeClass('bg-danger');
+                            $('#msg').addClass('bg-success');
+                            setTimeout('RedirectMe()', 2000);
+                        }
+                        else {
+                            $('#msg').removeClass('bg-success');
+                            $('#msg').addClass('bg-danger');
+                        }
+
+                        $('#msg').html(result.msg);
+                    }
+                });
+            }
+            
+        }
+    </script>    
+}

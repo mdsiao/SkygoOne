@@ -1,0 +1,197 @@
+﻿@model HRISOnline.Objects.GatePassApprovalInfo
+
+@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+<div class="panel panel-primary">       
+         <div class="panel-body">
+            <table class="table table-bordered table-heading" id="gp-table">
+                <thead>
+                    <tr>
+                        <th>Approver</th>
+                        <th class="col-sm-3 text-center">Approval Date & Time</th>                                                                                                
+                        <th class="col-sm-2 text-center">Status</th>                        
+                        <th class="col-sm-2 text-center">Timing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.EmpApprovalInfo)
+                    { 
+                        <tr>
+                            <td>@item.ApproverName</td>
+                            <td class="text-center">@item.ApprovedDateTime</td>
+                            @if (item.AppStatus == "Approved")
+                            { 
+                                <td style="color: green;" class="text-center">@item.AppStatus</td>
+                            }
+                            else
+                            {
+                                <td style="color: red;" class="text-center">@item.AppStatus</td>
+                            }                            
+                            @if ((item.Timing == "Within payroll period") || (item.Timing == "Encoded from HRIS") || (item.Timing == "Before payroll period"))
+                            { 
+                                <td style="color: green;" class="text-center">@item.Timing</td>    
+                            }
+                            else if (item.Timing == "-")
+                            {
+                                <td class="text-center">@item.Timing</td>    
+                            }
+                            else
+                            {
+                                <td style="color: red;" class="text-center">@item.Timing</td>    
+                            }
+                                                    
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" style="font-weight: bold;">
+                            <span style="font-weight: normal">Payroll Period:</span> @ViewBag.PaySched
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+         </div>
+
+         <div class="panel-footer">
+             @if (ViewBag.isForApproval == false)
+             { 
+                <a class="btn btn-danger btn-lg" href="@Url.Content("~/GatePass/Index/")@ViewBag.id">Back to list</a>            
+             }
+             else
+             {
+                <a class="btn btn-danger btn-lg" href="@Url.Content("~/GatePass/forApproval/")@ViewBag.id">Back to list</a>            
+             }
+        </div>        
+    </div>
+
+
+<div class="panel panel-primary">       
+        
+    <form class = "form-horizontal", role = "form">
+        <div class="panel-body">
+            @Html.HiddenFor(mdl => mdl.gp.intOlnGatePass)
+            @Html.HiddenFor(mdl => mdl.gp.intMstEmpPersonal)
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Date Filed</label>
+                <div class="col-sm-2">
+                    @Html.TextBoxFor(mdl => mdl.gp.DateFiled, "{0:MM/dd/yyyy}", new { @class = "form-control", @readonly = "true", @data_date_format = "mm/dd/yyyy" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @if (Model.gp.intOlnGatePassType == 1)
+                { 
+                    <label class="col-sm-2 control-label">OB Date</label>
+                }
+                else
+                {
+                    <label class="col-sm-2 control-label">Undertime Date</label>
+                }
+                <div class="col-sm-2">
+                    @Html.TextBoxFor(mdl => mdl.gp.GatePassDate, "{0:MM/dd/yyyy}", new { @class = "form-control", @onkeypress = "javascript: return false;", @data_date_format = "mm/dd/yyyy" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">From</label>
+                <div class="col-sm-2">
+                    <div class="bootstrap-timepicker">
+                        @Html.TextBoxFor(mdl => mdl.gp.TimeOut, new { @class = "form-control" })
+                    </div>                    
+                </div>
+
+                <label class="col-sm-1 control-label">To</label>
+                 <div class="col-sm-2">
+                    <div class="bootstrap-timepicker">
+                        @Html.TextBoxFor(mdl => mdl.gp.TimeIn, new { @class = "form-control" })
+                    </div>
+                </div>
+                
+                <label class="col-sm-2 control-label">Duration</label>
+                <div class="col-sm-2">
+                    @Html.HiddenFor(mdl => mdl.gp.NoOfHours, new { @class = "form-control", @required = "required", @readonly = "true" })
+                    <input type="text" id="duration" class="form-control" value="0 h 0 m" />
+                </div>
+
+                @Html.DropDownListFor(mdl => mdl.gp.intOlnGatePassType, (SelectList)@ViewBag.gatepasstype, new { @class = "form-control" })
+            </div>            
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Reason</label>
+                <div class="col-sm-10">
+                    @Html.TextAreaFor(mdl => mdl.gp.Remarks, new { @class = "form-control", @required = "" })
+                </div>
+            </div>
+
+            @if (Convert.ToBoolean(ViewBag.isDisapproved) == true)
+            { 
+                <div class="form-group">
+                    <label style="color:red;" class="col-sm-2 control-label">Disapprove By</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(mdl => mdl.gp.DisapproveByName, new { @class = "form-control" })
+                    </div>
+
+                    <label style="color:red;" class="col-sm-2 control-label">Disapprove Date</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(mdl => mdl.gp.DisapprovedDateTime, new { @class = "form-control" })
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label style="color:red;" class="col-sm-2 control-label">Disapprove Reason</label>
+                    <div class="col-sm-10">
+                        @Html.TextAreaFor(mdl => mdl.gp.DisapproveReason, new { @class = "form-control" })
+                    </div>
+                </div>
+            }
+        </div>
+    </form>
+</div>
+
+     
+@section scripts
+{
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#gp_intOlnGatePassType').hide();
+        $('input[type="text"],textarea').attr('readonly', 'readonly');
+        $('select').attr('disabled', true);
+
+        ComputeDuration();
+    });
+
+    function ComputeDuration()
+    {
+        var durationSplit;
+        var durationH = 0;
+        var durationM = 0;
+
+        durationSplit = $('#gp_NoOfHours').val().split('.');
+        durationH = durationSplit[0].toString();
+
+        if (typeof (durationSplit[1]) === "undefined")
+        { }
+        else {
+
+            durationM = parseFloat(durationSplit[1].toString());
+
+            switch (durationSplit[1]) {
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                    durationM = durationM * 10;
+                    break;
+            }
+        }
+
+        $('#duration').val(durationH + " h " + ((durationM.toString() != "0") ? durationM.toString() + " m" : ""));
+    }
+</script>
+}

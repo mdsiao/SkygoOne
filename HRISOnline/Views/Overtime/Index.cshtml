@@ -1,0 +1,170 @@
+﻿@model IEnumerable<HRISOnline.Objects.OvertimeList>
+
+@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+<style type="text/css">
+    #ot-table {
+        font-size:12px;
+    }
+</style>
+
+@*<div class="col-sm-12">*@
+
+    <div class="alert text-center" id="msg"></div>
+
+    <div class="panel panel-primary">
+        @*<div class="panel-heading">
+            <h3>@ViewBag.MyTitle</h3>
+        </div>*@
+
+        <div class="panel-body">
+            <table class="table table-bordered table-heading" id="ot-table">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1 text-center">Date Filed</th>
+                        <th class="col-sm-1 text-center">OT Date</th>
+                        <th class="col-sm-1 text-center">Duration</th>
+                        <th>Purpose of work</th>
+                        <th class="col-sm-1 text-center">Status</th>
+                        <th class="col-sm-2 text-center">Next Approver</th>
+                        <th class="col-sm-2 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    { 
+                        <tr>
+                            <td class="text-center">@item.DateFiled.ToShortDateString()</td>
+                            <td class="text-center">@item.OvertimeDate.ToShortDateString()</td>
+                            <td class="text-center">@item.NoOfHours</td>
+                            <td>@item.PurposeOfWork</td>
+                            @if (item.Status == "APPROVED")
+                            { 
+                                <td class="text-center" style="color: green; font-size:12px; font-weight:bold;">@item.Status</td>
+                            }
+                            else
+                            {
+                                <td class="text-center" style="color: red; font-size:12px; font-weight:bold;">@item.Status</td>
+                            }
+                            @if (item.isDisapproved == false)
+                            { 
+                                <td>@item.NextApprover</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }                           
+                            <td class="text-center">
+                                @if ((item.isCancelled == false) && (item.isDisapproved == false))
+                                {
+                                    if (item.isProcessed == false)
+                                    {                                        
+                                        <a class="btn btn-warning btn-xs" href="@Url.Content("~/Overtime/Details/" + item.intOlnOvertimeApplication)">Details</a>
+                                        <button type="button" onclick="SetID(@item.intOlnOvertimeApplication);" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal">Cancel</button>
+                                        <a class="btn btn-default btn-xs" href="@Url.Content("~/Overtime/ApprovalInfo?id=" + item.intOlnOvertimeApplication)">Approval Info</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-warning btn-xs" href="@Url.Content("~/Overtime/Details/" + item.intOlnOvertimeApplication)">Details</a>                                        
+                                        <a class="btn btn-default btn-xs" href="@Url.Content("~/Overtime/ApprovalInfo?id=" + item.intOlnOvertimeApplication)">Approval Info</a>
+                                    }
+                                }
+                                else if (item.isDisapproved == true)
+                                {
+                                    <a class="btn btn-warning btn-xs" href="@Url.Content("~/Overtime/Details/" + item.intOlnOvertimeApplication)">Details</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+@*</div>*@
+
+<input type="text" id="cancel-id" class="hide" />
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Cancel Overtime</h4>
+      </div>
+      <div class="modal-body">
+        Do you want to cancel this transaction?
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-success btn-lg" onclick="CancelOvertime();">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#ot-table").dataTable({
+                "columnDefs": [{
+                    "targets": [2,4,5],
+                    "visible": true,
+                    "searchable": false,
+                    "orderable": false
+                }],
+                aaSorting: [[1, 'desc']]
+            });
+            
+            $('#msg').removeClass('active');
+            $('#msg').addClass('hide');
+        });
+        
+        function RedirectMe() {
+            window.location.href = "@Url.Content("~/Overtime")";
+        }
+
+        function SetID(id)
+        {
+            $('#cancel-id').val(id);
+        }
+
+        function CancelOvertime()
+        {
+            var url = '@Url.Action("CancelOvertime")';
+            var data = { "intOlnOvertimeApplication": 0 };
+
+            data.intOlnOvertimeApplication = $('#cancel-id').val();
+
+            $.ajax({
+                url: url,
+                data: JSON.stringify(data),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+
+                    $('#msg').addClass('active');
+                    $('#msg').removeClass('hide');
+
+                    if (result.success == "True") {
+                        $('#msg').removeClass('bg-danger');
+                        $('#msg').addClass('bg-success');
+                        setTimeout('RedirectMe()', 2000);
+                        $('#myModal').modal('hide');
+                    }
+                    else {
+                        $('#msg').removeClass('bg-success');
+                        $('#msg').addClass('bg-danger');
+                    }
+
+                    $('#msg').html(result.msg);
+
+                }
+            });
+
+        }
+    </script>    
+}

@@ -1,0 +1,1891 @@
+﻿
+
+@model HRISOnline.Objects.GroupInsuranceDetails
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+ <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+
+    $(function () {
+        $("#FDateBirth").datepicker();
+    });
+    $(function () {
+        $("#SDateBirth").datepicker();
+    });
+
+    $(function () {
+        $("#DependDateOfBirth").datepicker();
+    });
+    
+    
+
+    function myAgeValidation() {
+
+        var lre = /^\s*/;
+        var datemsg = "";
+
+        var EffectiveDate = $("#empEffectiveDate").val();
+        var DateOfBirth = $("#DependDateOfBirth").val();
+
+        EffectiveDate = DateOfBirth.replace(lre, "");
+        datemsg = isValidDate(DateOfBirth);
+        if (datemsg != "") {
+            alert(datemsg);
+            return;
+        }
+        else {
+            //Now find the Age based on the Birth Date
+            getAge(new Date(DateOfBirth));
+        }
+
+    }
+
+    function isValidDate(dateStr) {
+
+
+        var msg = "";
+        // Checks for the following valid date formats:
+        // MM/DD/YY   MM/DD/YYYY   MM-DD-YY   MM-DD-YYYY
+        // Also separates date into month, day, and year variables
+
+        // To require a 2 & 4 digit year entry, use this line instead:
+        //var datePat = /^(\d{1,2})(\/|-)(\d{1,2})\2(\d{2}|\d{4})$/;
+        // To require a 4 digit year entry, use this line instead:
+        var datePat = /^(\d{1,2})(\/|-)(\d{1,2})\2(\d{4})$/;
+
+        var matchArray = dateStr.match(datePat); // is the format ok?
+        if (matchArray == null) {
+            msg = "Date is not in a valid format.";
+            return msg;
+        }
+
+        month = matchArray[1]; // parse date into variables
+        day = matchArray[3];
+        year = matchArray[4];
+
+
+        if (month < 1 || month > 12) { // check month range
+            msg = "Month must be between 1 and 12.";
+            return msg;
+        }
+
+        if (day < 1 || day > 31) {
+            msg = "Day must be between 1 and 31.";
+            return msg;
+        }
+
+        if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
+            msg = "Month " + month + " doesn't have 31 days!";
+            return msg;
+        }
+
+        if (month == 2) { // check for february 29th
+            var isleap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+            if (day > 29 || (day == 29 && !isleap)) {
+                msg = "February " + year + " doesn't have " + day + " days!";
+                return msg;
+            }
+        }
+
+        if (day.charAt(0) == '0') day = day.charAt(1);
+
+        //Incase you need the value in CCYYMMDD format in your server program
+        //msg = (parseInt(year,10) * 10000) + (parseInt(month,10) * 100) + parseInt(day,10);
+
+        return msg;  // date is valid
+    }
+
+
+    function getAge(birth) {
+
+        var EffectiveDate = Date.parse($("#empEffectiveDate").val());
+        var DateOfBirth = $("#DependDateOfBirth").val();
+
+        var today = new Date(EffectiveDate);
+        var birth = new Date(DateOfBirth);
+        //today = $("#empEffectiveDate").val();
+
+        
+
+        var nowyear = today.getFullYear();
+        var nowmonth = today.getMonth();
+        var nowday = today.getDate();
+
+        var birthyear = birth.getFullYear();
+        var birthmonth = birth.getMonth();
+        var birthday = birth.getDate();
+
+        var age = nowyear - birthyear;
+        var age_month = nowmonth - birthmonth;
+        var age_day = nowday - birthday;
+
+        if (age_month < 0 || (age_month == 0 && age_day < 0)) {
+            age = parseInt(age) - 1;
+        }
+
+        return age;
+
+        
+
+    }
+
+
+
+    function AddBenificiary() {
+
+        //$(document).ready(function () {
+
+            var FBenificiaryFName = $("#FBenificiary_FName").val();
+            var FBenificiaryLName = $("#FBenificiary_LName").val();
+            var FGender = $("#FBGender").val();
+            var FDateBirth = $("#FDateBirth").val();
+            var FRelationship = $("#FRelationship").val();
+            
+
+            if (FBenificiaryFName === '') {
+                $('#msg1').removeClass('bg-success');
+                $('#msg1').addClass('bg-danger');
+                $('#msg1').html('Please enter the Benificiary First Name!').show().slideDown(3000).fadeOut(8000);
+
+            } else if (FBenificiaryLName === '') {
+                $('#msg1').removeClass('bg-success');
+                $('#msg1').addClass('bg-danger');
+                $('#msg1').html('Please enter the Benificiary Gender!').show().slideDown(3000).fadeOut(8000);
+            }
+            else  if (FGender === '') {
+                $('#msg1').removeClass('bg-success');
+                $('#msg1').addClass('bg-danger');
+                $('#msg1').html('Please enter the Benificiary Last Name!').show().slideDown(3000).fadeOut(8000);
+
+            }
+            else if (FDateBirth === '') {
+                $('#msg1').removeClass('bg-success');
+                $('#msg1').addClass('bg-danger');
+                $('#msg1').html('Please enter the Date of Birth!').show().slideDown(3000).fadeOut(8000);
+
+            }
+            else if (FRelationship === '') {
+                $('#msg1').removeClass('bg-success');
+                $('#msg1').addClass('bg-danger');
+                $('#msg1').html('Please enter the Relationship to Employee!').show().slideDown(3000).fadeOut(8000);
+             
+            }
+            else {
+                var markup = "<tr><td><input type='checkbox' name='record' class='chk'></td><td>" + FBenificiaryFName + "</td><td>" + FBenificiaryLName + "</td><td>" + FGender + "</td><td>" + FDateBirth + "</td><td>" + FRelationship + "</td></tr>";
+
+                $("#Beni1").append(markup);
+                $("#FBenificiary_FName").val("");
+                $("#FBenificiary_LName").val("");
+                $("#FBGender").val("");
+                $("#FDateBirth").val("");
+                $("#FRelationship").val("");
+
+            }
+
+
+       // });
+
+    }
+
+    function DeleteBenificiary() {
+        $(document).ready(function () {
+            $("#Beni1").find('input[name="record"]').each(function () {
+                if ($(this).is(":checked")) {
+                    $(this).parents("tr").remove();
+                }
+            });
+
+        });
+    }
+
+
+    function AddSecondBenificiary() {
+
+        $(document).ready(function () {
+
+            var SBenificiaryFName = $("#SBenificiary_FName").val();
+            var SBenificiaryLName = $("#SBenificiary_LName").val();
+            var SGender = $("#SBGender").val();
+            var SDateBirth = $("#SDateBirth").val();
+            var SRelationship = $("#SRelationship").val();
+
+            if (SBenificiaryFName === '') {
+                $('#msg2').removeClass('bg-success');
+                $('#msg2').addClass('bg-danger');
+                $('#msg2').html('Please enter the Secondary Benificiary Name!').show().slideDown(3000).fadeOut(8000);
+
+            }
+            else if (SBenificiaryLName === '') {
+                $('#msg2').removeClass('bg-success');
+                $('#msg2').addClass('bg-danger');
+                $('#msg2').html('Please enter the Secondary Benificiary Name!').show().slideDown(3000).fadeOut(8000);
+
+            }
+            else if (SGender === '') {
+                $('#msg2').removeClass('bg-success');
+                $('#msg2').addClass('bg-danger');
+                $('#msg2').html('Please enter the Secondary Benificiary Name!').show().slideDown(3000).fadeOut(8000);
+
+            }
+            else if (SDateBirth === '') {
+                $('#msg2').removeClass('bg-success');
+                $('#msg2').addClass('bg-danger');
+                $('#msg2').html('Please enter the Date of Birth!').show().slideDown(3000).fadeOut(8000);
+
+            }
+            else if (SRelationship === '') {
+                $('#msg2').removeClass('bg-success');
+                $('#msg2').addClass('bg-danger');
+                $('#msg2').html('Please enter the Relationship to Employee!').show().slideDown(3000).fadeOut(8000);
+
+            }
+            else {
+                var markup = "<tr><td><input type='checkbox' name='record' class='chk'></td><td>" + SBenificiaryFName + "</td><td>" + SBenificiaryLName + "</td><td>" + SGender + "</td><td>" + SDateBirth + "</td><td>" + SRelationship + "</td></tr>";
+
+                $("#Beni2").append(markup);
+                $("#SBenificiary_FName").val("");
+                $("#SBenificiary_LName").val("");
+                $("#SBGender").val("");
+                $("#SDateBirth").val("");
+                $("#SRelationship").val("");
+
+            }
+
+
+        });
+    }
+
+    function DeleteSecondBenificiary() {
+        $(document).ready(function () {
+            $("#Beni2").find('input[name="record"]').each(function () {
+                if ($(this).is(":checked")) {
+                    $(this).parents("tr").remove();
+                }
+            });
+
+        });
+    }
+
+    function AddDependents() {
+
+        $(document).ready(function () {
+
+            var DependentFirstName = $("#DependentFirstName").val();
+            var DependentLastName = $("#DependentLastName").val();
+            var DependGender = $("#DependGender").val();
+            var DependDateOfBirth = $("#DependDateOfBirth").val();
+            //var DependAge = $("#DependAge").val();
+            var DependRelationship = $("#DependRelationship").val();
+
+            var EffectiveDate = $("#empEffectiveDate").val();
+
+ 
+
+            if (DependentFirstName === '') {
+                $('#msgerror').removeClass('bg-success');
+                $('#msgerror').addClass('bg-danger');
+                $('#msgerror').html('Please enter the Dependent FirstName!').show().slideDown(3000).fadeOut(8000);
+
+            }
+            else if (DependentLastName === '') {
+                $('#msgerror').removeClass('bg-success');
+                $('#msgerror').addClass('bg-danger');
+                $('#msgerror').html('Please enter the Dependent Last Name!').show().slideDown(3000).fadeOut(8000);
+
+            }
+            else if (DependGender === '') {
+                $('#msgerror').removeClass('bg-success');
+                $('#msgerror').addClass('bg-danger');
+                $('#msgerror').html('Please enter the Gender!').show().slideDown(3000).fadeOut(8000);
+            }
+            else if (DependDateOfBirth === '') {
+                $('#msgerror').removeClass('bg-success');
+                $('#msgerror').addClass('bg-danger');
+                $('#msgerror').html('Please enter the Date of Birth!').show().slideDown(3000).fadeOut(8000);
+
+            }
+            //else if (DependAge === '') {
+            //    $('#msg2').removeClass('bg-success');
+            //    $('#msg2').addClass('bg-danger');
+            //    $('#msg2').html('Please enter the Age!').show().slideDown(3000).fadeOut(8000);
+
+            //}
+            else if (DependRelationship === '') {
+                $('#msgerror').removeClass('bg-success');
+                $('#msgerror').addClass('bg-danger');
+                $('#msgerror').html('Please select Relationship!').show().slideDown(3000).fadeOut(8000);
+
+            }
+            else {
+
+                var EffectiveDate = Date.parse($("#empEffectiveDate").val());
+                var DateOfBirth = $("#DependDateOfBirth").val();
+
+                var today = new Date(EffectiveDate);
+                var birth = new Date(DateOfBirth);
+
+                var nowyear = today.getFullYear();
+                var nowmonth = today.getMonth();
+                var nowday = today.getDate();
+
+                var birthyear = birth.getFullYear();
+                var birthmonth = birth.getMonth();
+                var birthday = birth.getDate();
+
+                var age = nowyear - birthyear;
+                var age_month = nowmonth - birthmonth;
+                var age_day = nowday - birthday;
+
+                if (age_month < 0 || (age_month == 0 && age_day < 0)) {
+                    age = parseInt(age) - 1;
+                }
+
+                var empStats = $("#empStats").val();
+
+                if (empStats == '') {
+                    $('#msgerror').removeClass('bg-success');
+                    $('#msgerror').addClass('bg-danger');
+                    $('#msgerror').html("Pleae select your status first!").show().slideDown(3000).fadeOut(8000);
+
+
+                }
+                else {
+
+                    if (empStats == 'SINGLE') { //SINGLE STATUS
+
+
+                        var rowCount = $('table#Depend_record>tbody>tr').length;
+
+                        if (rowCount == 0) {
+                           
+                            var DependentId = "";
+                        }
+                        else {
+                           var t = document.getElementById('Depend_record');
+                            // jQuery to get the content of row 4, column 1                       
+                            var DependentId = $(t.rows[1].cells[6]).text();
+                        }
+                       
+
+                      
+                                    
+
+                                if (DependRelationship == 1) //SINGLE CHILDREN
+                                {
+                                    if ((DependentId == 'Siblings') || (DependentId == 'Parents')) {
+
+                                        $('#msgerror').removeClass('bg-success');
+                                        $('#msgerror').addClass('bg-danger');
+                                        $('#msgerror').html("You are not allowed to add Children!").show().fadeOut(8000);
+
+                                    }
+                                    else {
+
+                                        if (age > 21) {
+                                            $('#msgerror').removeClass('bg-success');
+                                            $('#msgerror').addClass('bg-danger');
+                                            $('#msgerror').html("Eligible Dependents for Children should not more than 21 years old!").show().fadeOut(8000);
+                                        }
+                                        else {
+
+                                            var Relation = 'Children';
+                                            var markup = "<tr><td><input type='checkbox' name='record' class='chk'></td><td>" + DependentFirstName + "</td><td>" + DependentLastName + "</td><td>" + DependGender + "</td><td>" + DependDateOfBirth + "</td><td>" + age + "</td><td>" + Relation + "</td></tr>";
+
+                                            $("#Depend").append(markup);
+                                            $("#DependentFirstName").val("");
+                                            $("#DependentLastName").val("");
+                                            $("#DependGender").val("");
+                                            $("#DependDateOfBirth").val("");
+                                            $("#DependRelationship").val("");
+                                        }
+
+                                    } //END OF SINGLE - CHILDREN
+                                }
+                                else if (DependRelationship == 2) //SINGLE SIBLINGS
+                                {
+                                    if (DependentId == 'Children') {
+
+                                        $('#msgerror').removeClass('bg-success');
+                                        $('#msgerror').addClass('bg-danger');
+                                        $('#msgerror').html("You are not allowed to add Siblings!").show().fadeOut(8000);
+                                    }
+                                    else {
+
+                                        if (age > 21) {
+                                            $('#msgerror').removeClass('bg-success');
+                                            $('#msgerror').addClass('bg-danger');
+                                            $('#msgerror').html("Eligible Dependents for Siblings should not more than 21 years old!").show().fadeOut(8000);
+                                        }
+                                        else {
+
+                                            var Relation = 'Siblings';
+                                            var markup = "<tr><td><input type='checkbox' name='record' class='chk'></td><td>" + DependentFirstName + "</td><td>" + DependentLastName + "</td><td>" + DependGender + "</td><td>" + DependDateOfBirth + "</td><td>" + age + "</td><td>" + Relation + "</td></tr>";
+
+                                            $("#Depend").append(markup);
+                                            $("#DependentFirstName").val("");
+                                            $("#DependentLastName").val("");
+                                            $("#DependGender").val("");
+                                            $("#DependDateOfBirth").val("");
+                                            $("#DependRelationship").val("");
+                                        }
+                                    } // END OF SINGLE CHILDREN
+                                }
+                                else if (DependRelationship == 3) //SINGLE PARENTS
+                                {
+                                    if (DependentId == 'Children') {
+
+                                        $('#msgerror').removeClass('bg-success');
+                                        $('#msgerror').addClass('bg-danger');
+                                        $('#msgerror').html("You are not allowed to add Parents!").show().fadeOut(8000);
+                                    }
+
+                                    else {
+
+                                        if (age > 65) {
+                                            $('#msgerror').removeClass('bg-success');
+                                            $('#msgerror').addClass('bg-danger');
+                                            $('#msgerror').html("Eligible Dependents for Parents should not more than 65 years old!").show().slideDown(3000).fadeOut(8000);
+                                        }
+                                        else {
+
+                                            var Relation = 'Parents';
+                                            var markup = "<tr><td><input type='checkbox' name='record' class='chk'></td><td>" + DependentFirstName + "</td><td>" + DependentLastName + "</td><td>" + DependGender + "</td><td>" + DependDateOfBirth + "</td><td>" + age + "</td><td>" + Relation + "</td></tr>";
+
+                                            $("#Depend").append(markup);
+                                            $("#DependentFirstName").val("");
+                                            $("#DependentLastName").val("");
+                                            $("#DependGender").val("");
+                                            $("#DependDateOfBirth").val("");
+                                            $("#DependRelationship").val("");
+                                        }
+                                    }
+
+                                }
+                                else {
+                                    $('#msgerror').removeClass('bg-success');
+                                    $('#msgerror').addClass('bg-danger');
+                                    $('#msgerror').html("Sorry your not allowed to add a spouse!").show().fadeOut(8000);
+                                }
+
+
+                        //   }
+                        //});
+                
+
+                    }
+                    else //MARRIED STATUS
+                    {
+                        if (DependRelationship == 1)   { //Children
+
+                            if (age > 21) {
+                                $('#msgerror').removeClass('bg-success');
+                                $('#msgerror').addClass('bg-danger');
+                                $('#msgerror').html("Eligible Dependents for Parents should not more than 65 years old!").show().fadeOut(8000);
+                            }
+                            else {
+                                var Relation = 'Children';
+
+                                var markup = "<tr><td><input type='checkbox' name='record' class='chk'></td><td>" + DependentFirstName + "</td><td>" + DependentLastName + "</td><td>" + DependGender + "</td><td>" + DependDateOfBirth + "</td><td>" + age + "</td><td>" + Relation + "</td></tr>";
+
+                                $("#Depend").append(markup);
+                                $("#DependentFirstName").val("");
+                                $("#DependentLastName").val("");
+                                $("#DependGender").val("");
+                                $("#DependDateOfBirth").val("");
+                                $("#DependRelationship").val("");
+                            }
+
+                        }
+                        else if (DependRelationship == 4) { //Spouse
+
+                            if (age > 65) {
+                                $('#msgerror').removeClass('bg-success');
+                                $('#msgerror').addClass('bg-danger');
+                                $('#msgerror').html("The age of your Spouse is not more than 65 years old!").show().fadeOut(8000);
+                            }
+                            else {
+                                var Relation = 'Spouse';
+                                var markup = "<tr><td><input type='checkbox' name='record' class='chk'></td><td>" + DependentFirstName + "</td><td>" + DependentLastName + "</td><td>" + DependGender + "</td><td>" + DependDateOfBirth + "</td><td>" + age + "</td><td>" + Relation + "</td></tr>";
+
+                                $("#Depend").append(markup);
+                                $("#DependentFirstName").val("");
+                                $("#DependentLastName").val("");
+                                $("#DependGender").val("");
+                                $("#DependDateOfBirth").val("");
+                                $("#DependRelationship").val("");
+                            }
+
+                        }
+                        else {
+                            $('#msgerror').removeClass('bg-success');
+                            $('#msgerror').addClass('bg-danger');
+                            $('#msgerror').html("Sorry your not allowed to add a Siblings and Parents!").show().fadeOut(8000);
+                        }
+                    }
+
+
+                }// end of checking empty
+
+  
+
+
+            }
+
+
+        });
+    }
+
+    function DeleteDependent() {
+        $(document).ready(function () {
+            $("#Depend").find('input[name="record"]').each(function () {
+                if ($(this).is(":checked")) {
+                    $(this).parents("tr").remove();
+                }
+            });
+
+        });
+    }
+
+    function SubmitGroupInsurance() {
+        $(document).ready(function () {
+
+            var empID = $("#EmployeeId").val();
+            var empName = $("#EmpName").val();
+            var empNick = $("#EmpNick").val();
+            var empGender = $("#empGender").val();
+            var empTitle = $("#empTitle").val();
+            var empStats = $("#empStats").val();
+
+            var empBirthdate = $("#empBirthdate").val();
+            var empAge = $("#empAge").val();
+            var empBirthplace = $("#empBirthplace").val();
+            var empNationality = $("#empNationality").val();
+            var EmpTin = $("#empTin").val();
+            var empSSS = $("#empSSS").val();
+            var empResidence = $("#empResidence").val();
+            var empCity = $("#empCity").val();
+            var empProvince = $("#empProvince").val();
+            var empCountry = $("#empCountry").val();
+            var empZipCode = $("#empZipCode").val();
+            var empOccupation = $("#empOccupation").val();
+            var empHomeNo = $("#empHomeNo").val();
+            var empCellNo = $("#empCellNo").val();
+
+
+            var empEmployName = $("#empEmployName").val();
+            var empDateEmployed = $("#empDateEmployed").val();
+            var empBResidence = $("#empBResidence").val();
+            var empBCity = $("#empBCity").val();
+            var empBProvince = $("#empBProvince").val();
+            var empBCountry = $("#empBCountry").val();
+            var empBZipcode = $("#empBZipcode").val();
+            var empBPhoneNo = $("#empBPhoneNo").val();
+            var empBEmail = $("#empBEmail").val();
+
+            //if (empNick === '') {
+            //    OpenModalConfirmation(6);
+            //}
+            //else 
+            if (empGender === '') {
+                OpenModalConfirmation(6);
+            }           
+            else if (empTitle === 0) {
+                OpenModalConfirmation(6);
+            }
+            else if (empStats === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empBirthdate === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empBirthplace === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empNationality === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empResidence === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empCity === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empProvince === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empCountry === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empZipCode === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empOccupation === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empHomeNo === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empCellNo === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empEmployName === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empDateEmployed === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empDateEmployed === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empBResidence === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empBCity === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empBProvince === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empBCountry === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empBZipcode === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empBPhoneNo === '') {
+                OpenModalConfirmation(6);
+            }
+            else if (empBEmail === '') {
+                OpenModalConfirmation(6);
+            }
+
+
+
+            if (empStats === 'SINGLE') {
+
+                var totalRowCount = $("#Depend tr").length;
+
+                //var message = "Total Row Count: " + totalRowCount;
+                //alert(message);
+
+               if (totalRowCount > 4) {                
+
+                   OpenModalConfirmation(1);
+
+                   return false;
+                    //alert(message);
+               }
+
+
+               //var primaryBen_array = Array();
+               //primaryBen_array = $("tbody tr", $("#FBeni_record")).map(function () {
+               //    return [$("td", this).map(function () {
+               //        return $(this).text();
+               //        //this.innerHTML;
+               //    }).get()];
+               //}).get();
+
+
+               var myStoreGeneralInfo = {
+                   "EmployeeId": empID,
+                   "EmployeeName": empName,
+                   "NickName": empNick,
+                   "Gender": empGender,
+                   "Title": empTitle,
+                   "Status": empStats,
+                   "Birthdate": empBirthdate,
+                   "Age": empAge,
+                   "Birthplace": empBirthplace,
+                   "Nationality": empNationality,
+                   "TIN": EmpTin,
+                   "SSS": empSSS,
+                   "ResidenceAddress": empResidence,
+                   "City": empCity,
+                   "Province": empProvince,
+                   "Country": empCountry,
+                   "Zipcode": empZipCode,
+                   "Occupation": empOccupation,
+                   "HomeNo": empHomeNo,
+                   "CellNo": empCellNo,
+
+                   "NameOfEmployer": empEmployName,
+                   "dateEmployed": empDateEmployed,
+                   "BResidence": empBResidence,
+                   "BCity": empBCity,
+                   "BProvince": empBProvince,
+                   "BCountry": empBCountry,
+                   "BZipcode": empBZipcode,
+                   "BPhoneNo": empBPhoneNo,
+                   "BEmail": empBEmail,
+              
+
+    
+               };
+
+              
+               $.ajax({
+                   url: '@Url.Action("UpdateGeneralRecord", "GroupInsurance")',
+                    type: 'POST',
+                    data: JSON.stringify(myStoreGeneralInfo),
+                    datatype: 'json',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        $('#msg1').addClass('active');
+                        $('#msg1').removeClass('hide');
+
+                        if (result != null && result.success) {
+                           
+                            PrimaryBenificiary();
+                          
+                        }
+                        else {
+                            OpenModalConfirmation(3);
+                        }
+                    }
+                });
+
+
+            }
+            else if (empStats === 'MARRIED') {
+
+                
+
+
+                var myStoreGeneralInfo = {
+                    "EmployeeId": empID,
+                    "EmployeeName": empName,
+                    "NickName": empNick,
+                    "Gender": empGender,
+                    "Title": empTitle,
+                    "Status": empStats,
+                    "Birthdate": empBirthdate,
+                    "Age": empAge,
+                    "Birthplace": empBirthplace,
+                    "Nationality": empNationality,
+                    "TIN": EmpTin,
+                    "SSS": empSSS,
+                    "ResidenceAddress": empResidence,
+                    "City": empCity,
+                    "Province": empProvince,
+                    "Country": empCountry,
+                    "Zipcode": empZipCode,
+                    "Occupation": empOccupation,
+                    "HomeNo": empHomeNo,
+                    "CellNo": empCellNo,
+
+                    "NameOfEmployer": empEmployName,
+                    "dateEmployed": empDateEmployed,
+                    "BResidence": empBResidence,
+                    "BCity": empBCity,
+                    "BProvince": empBProvince,
+                    "BCountry": empBCountry,
+                    "BZipcode": empBZipcode,
+                    "BPhoneNo": empBPhoneNo,
+                    "BEmail": empBEmail,
+
+                };
+
+                $.ajax({
+                    url: '@Url.Action("UpdateGeneralRecord", "GroupInsurance")',
+                    type: 'POST',
+                    data: JSON.stringify(myStoreGeneralInfo),
+                    datatype: 'json',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        $('#msg1').addClass('active');
+                        $('#msg1').removeClass('hide');
+
+                        if (result != null && result.success) {                         
+                            PrimaryBenificiary();
+
+                        }
+                        else {
+                            OpenModalConfirmation(3);
+                        }
+                    }
+                });
+
+
+            }
+
+
+        });
+    }
+
+
+    function OpenModalConfirmation(type) {
+        if (type == 1) {
+            $('.modal-title').html("Confirmation");
+            $('.modal-body').html("Your Dependents is more than 4 (four)!");
+        }
+        if (type == 2) {
+            $('.modal-title').html("Confirmation");
+            $('.modal-body').html("Transaction Successfully Saved!");
+        }
+        if (type == 3) {
+            $('.modal-title').html("Error");
+            $('.modal-body').html("Failed Save Transaction!");
+        }
+        if (type == 4) {
+            $('.modal-title').html("Error");
+            $('.modal-body').html("Failed Cancel Transaction!");
+        }
+         if (type == 5) {
+            $('.modal-title').html("Error");
+            $('.modal-body').html("Please select Employer Name!");
+        }
+        if (type == 6) {
+            $('.modal-title').html("Error");
+            $('.modal-body').html("Please review your General Information! Missing Field!");
+        }
+        $('#type-id').val(type);
+        $('#myModal').modal();
+
+    }
+
+    function RedirectMe() {
+        window.location.href = "@Url.Content("~/GroupInsurance/")";
+    }
+
+    function PrimaryBenificiary() {
+
+        var empID = $("#EmployeeId").val();
+
+        var primaryBen_array = Array();
+        primaryBen_array = $("tbody tr", $("#FBeni_record")).map(function () {
+            return [$("td", this).map(function () {
+                return $(this).text();
+                //this.innerHTML;
+            }).get()];
+        }).get()
+
+
+        var tempPrimary = {
+            "EducRecord": primaryBen_array,
+            "intMstEmpPersonal": empID,
+        };
+
+
+        $.ajax({
+            url: '@Url.Action("UpdatePrimaryBenificiary", "GroupInsurance")',
+            type: 'GET',
+            data: {
+                primary: primaryBen_array.toString(),
+                intMstEmpPersonal: empID
+            },
+            datatype: 'json',
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+
+                if (result != null && result.success) {
+                    //$('#myModal').modal('hide');
+                    //$('#msg3').removeClass('bg-danger');
+                    //$('#msg3').addClass('bg-success');
+                    //document.getElementById("UpdateEducation").disabled = true;
+                    //$('#msg3').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                    //setTimeout('RedirectMe()', 6000);
+
+                    SecondBenificiary();
+                }
+
+                else {
+                    $('#myModal').modal('hide');
+                    $('#msg3').removeClass('bg-success');
+                    $('#msg3').addClass('bg-danger');
+                    $('#msg3').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                }
+            }
+        });
+
+
+    }
+
+
+    function SecondBenificiary() {
+
+        var empID = $("#EmployeeId").val();
+
+        var secondBen_array = Array();
+        secondBen_array = $("tbody tr", $("#SBeni_record")).map(function () {
+            return [$("td", this).map(function () {
+                return $(this).text();
+                //this.innerHTML;
+            }).get()];
+        }).get()
+
+
+        //var tempSecondary = {
+        //    "EducRecord": secondBen_array,
+        //    "intMstEmpPersonal": empID,
+        //};
+
+
+        $.ajax({
+            url: '@Url.Action("UpdateSecondaryBenificiary", "GroupInsurance")',
+            type: 'GET',
+            data: {
+                secondary: secondBen_array.toString(),
+                intMstEmpPersonal: empID
+            },
+            datatype: 'json',
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+
+                if (result != null && result.success) {
+                    //$('#myModal').modal('hide');
+                    //$('#msg3').removeClass('bg-danger');
+                    //$('#msg3').addClass('bg-success');
+                    //document.getElementById("UpdateEducation").disabled = true;
+                    //$('#msg3').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                    //setTimeout('RedirectMe()', 6000);
+                    UpdateDependents();
+                }
+                else {
+                    $('#myModal').modal('hide');
+                    $('#msg3').removeClass('bg-success');
+                    $('#msg3').addClass('bg-danger');
+                    $('#msg3').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                }
+            }
+        });
+
+    }
+
+    function UpdateDependents() {
+
+        var empID = $("#EmployeeId").val();
+
+        var Dependents_array = Array();
+        Dependents_array = $("tbody tr", $("#Depend_record")).map(function () {
+            return [$("td", this).map(function () {
+                return $(this).text();
+                //this.innerHTML;
+            }).get()];
+        }).get()
+
+
+        $.ajax({
+            url: '@Url.Action("UpdateDependents", "GroupInsurance")',
+            type: 'GET',
+            data: {
+                depends: Dependents_array.toString(),
+                intMstEmpPersonal: empID
+            },
+            datatype: 'json',
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+
+                if (result != null && result.success) {
+
+                    RedirectMe();
+                }
+                else {
+                    OpenModalConfirmation(3);
+                }
+            }
+        });
+
+    }
+
+    function CancelTransaction() {
+
+        var empID = $("#EmployeeId").val();
+
+        $.ajax({
+            url: '@Url.Action("CancelTransaction", "GroupInsurance")',
+            type: 'GET',
+            data: {
+                intMstEmpPersonal: empID
+            },
+            datatype: 'json',
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+
+                if (result != null && result.success) {
+
+                    RedirectMe();
+                }
+                else {
+                    OpenModalConfirmation(4);
+                }
+            }
+        });
+
+    }
+
+
+
+</script>
+
+<h2>Group Insurance</h2>
+
+
+
+
+    <div class="container-fluid">
+
+        <div class="panel-body" style="background-color:#ECEEF1; border-radius:5px;" >
+            <div class="row" style="font-weight:bold; font-size:large; margin-top:20px; margin-left:20px; margin-bottom:20px;">
+                    <span class="fa fa-user"></span>
+                General Information                                   
+            </div>
+
+        
+
+    <div class="container">
+
+    
+    @foreach (var item in Model.EmpProfile)
+    {
+
+        if (item.intTranStatus == 1)
+        {
+            if (item.isProcess == 1)
+            {
+             <div class="alert alert-info" style="height:40px;text-align:center; padding:10px; width:980px;">
+                <strong>Info!</strong> Your Health Insurance is being processed by HR personnel! 
+            </div>
+            }
+            else
+            {
+            <div class="alert alert-success" style="height:40px;text-align:center; padding:10px; width:980px;">
+                <strong>Info!</strong> You have already successfully submitted the form!
+            </div>
+            }
+      <div style="max-width:970px; border: 1px solid #428bca; border-radius:5px;">
+            <div class="form-group row" style="margin-top:20px; margin-left:20px;">
+                <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Employee ID</label>
+                <div class="col-sm-5">                         
+                    @Html.TextBoxFor(a => item.EmployeeID, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "EmployeeId", })
+                </div>
+            </div>
+           
+        
+            <div class="form-group row" style="margin-left:20px;">
+                <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Employee Name</label>
+                <div class="col-sm-5">                         
+                @Html.TextBoxFor(a => item.EmployeeName, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "EmpName", })
+                </div>
+            </div>
+                
+             @*<div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Other Legal Name (A.K.A)</label>
+                        <div class="col-sm-5">                          
+                            @Html.TextBoxFor(a => item.NickName, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "EmpNick", required = "required" })
+                        </div>
+              </div>*@  
+                
+                            
+               <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Gender</label>
+                        <div class="col-sm-5">                          
+                         @*@Html.DropDownListFor(model => item.Gender, new SelectList(new[] { "Male", "Female" }), new { @class = "form-control form-control-lg", @id = "Gender" })*@
+                         @*@Html.DropDownList("GenderDropDown", new List<SelectListItem>  
+                             { new SelectListItem { Text = "Male", Value = "1"},  
+                               new SelectListItem { Text = "Female", Value = "2"},  
+                               }, "Select Gender", new { @class = "form-control form-control-lg", @id = "empGender" })*@
+
+                            @Html.TextBoxFor(a => item.Gender, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empGender" })
+                        </div>
+              </div>  
+                 
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Title</label>
+                        <div class="col-sm-5">                          
+                         @*@Html.DropDownListFor(model => item.Title, new SelectList(new[] { "Mr", "Mrs", "Miss" }), new { @class = "form-control form-control-lg", @id = "Title" })*@
+                        @*@Html.DropDownList("GenderDropDown", new List<SelectListItem>  
+                            { new SelectListItem { Text = "Mr", Value = "1"},  
+                            new SelectListItem { Text = "Mrs", Value = "2"},
+                            new SelectListItem { Text = "Miss", Value = "3"},   
+                            }, "Select Title", new { @class = "form-control form-control-lg", @id = "empTitle" })*@
+                            @Html.TextBoxFor(a => item.Title, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empTitle" })
+                        </div>
+              </div>         
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Status</label>
+                        <div class="col-sm-5">                          
+                         @*@Html.DropDownListFor(model => item.Status, new SelectList(new[] { "Single", "Married", "Widowed", "Divorced", "Separated" }), new { @class = "form-control form-control-lg", @id = "Status" })*@
+                            @*@Html.DropDownList("Mobiledropdown3", new List<SelectListItem>  
+                             { new SelectListItem { Text = "Single", Value = "1"},  
+                               new SelectListItem { Text = "Married", Value = "2"},  
+                               new SelectListItem { Text = "Divorced", Value = "3"},  
+                               new SelectListItem { Text = "Separated", Value = "4"}, 
+                               new SelectListItem { Text = "Widowed", Value = "5"} 
+                               }, "Select Mobile", new { @class = "form-control form-control-lg", @id = "empStats" })*@
+
+                             @Html.TextBoxFor(a => item.Status, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empStats" })
+                        </div>
+               </div> 
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">BirthDate</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.Birthdate, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empBirthdate" })
+                        </div>
+               </div> 
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Age</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.Age, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empAge" })
+                        </div>
+               </div> 
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Birth Place</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BirthPlace, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empBirthplace" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Nationality</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.Nationality, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empNationality" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">TIN</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.TIN, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empTin" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">SSS/GSIS No.</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.SSS, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empSSS" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">No..,Street</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.ResidenceAddress, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empResidence" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">City/Municipality</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.City, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empCity" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Province</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.Province, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empProvince" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Country</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.Country, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empCountry" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">ZipCode</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.ZipCode, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empZipCode" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Occupation</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.Occupation, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empOccupation" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Home Phone</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.HomeNo, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empHomeNo" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Cell No</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.CellNo, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empCellNo" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px; display:none;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Effective Date</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.EffectiveDate, null, new { style = "display: none;", @readonly = true, @class = "form-control form-control-lg", @id = "empEffectiveDate" })
+                        </div>
+               </div>
+              
+                
+            </div>
+            //Company Information
+                
+                <div class="row" style="font-weight:bold; font-size:large; margin-top:20px; margin-left:20px; margin-bottom:20px;" hidden>
+                    <span class="fa fa-user"></span>
+                    Company Information                                   
+                </div>
+                
+                <div style=" max-width:970px; border: 1px solid #428bca; border-radius:5px;" hidden>
+                
+                <div class="form-group row" style="margin-top:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">Name of Employer</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.NameOfEmployer, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empEmployName" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">Date Employed</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.dateEmployed, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empDateEmployed" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">No..,Street</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BResidence, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empBResidence" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">City/Municipality</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BCity, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empBCity" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">Province</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BProvince, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empBProvince" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">Country</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BCountry, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empBCountry" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">Company ZipCode</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BZipcode, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empBZipcode" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">Company Tel No.</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BPhoneNo, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empBPhoneNo" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">Company Email Address</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BEmail, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empBEmail" })
+                        </div>
+               </div>
+                
+              </div>
+        }
+        else
+        {
+            @*<div class="alert alert-info" style="height:40px;text-align:center;align-content:center;padding:10px; width:980px;">
+                <strong>Info!</strong> Please fill out the form and don't leav
+            </div>*@
+            
+            <div style="max-width:970px; border: 1px solid #428bca; border-radius:5px;">
+            <div class="form-group row" style="margin-top:20px; margin-left:20px;">
+                <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Employee ID</label>
+                <div class="col-sm-5">                         
+                    @Html.TextBoxFor(a => item.EmployeeID, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "EmployeeId", })
+                </div>
+            </div>
+           
+        
+            <div class="form-group row" style="margin-left:20px;">
+                <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Employee Name</label>
+                <div class="col-sm-5">                         
+                @Html.TextBoxFor(a => item.EmployeeName, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "EmpName", })
+                </div>
+            </div>
+                
+             @*<div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Other Legal Name (A.K.A)</label>
+                        <div class="col-sm-5">                          
+                            @Html.TextBoxFor(a => item.NickName, null, new { @class = "form-control form-control-lg", @id = "EmpNick", required = "required" })
+                        </div>
+              </div>  *@
+                
+                            
+               <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Gender</label>
+                        <div class="col-sm-5">                          
+                         @*@Html.DropDownListFor(model => item.Gender, new SelectList(new[] { "Male", "Female" }), new { @class = "form-control form-control-lg", @id = "Gender" })*@
+                         @*@Html.DropDownList("GenderDropDown", new List<SelectListItem>  
+                             { new SelectListItem { Text = "Male", Value = "1"},  
+                               new SelectListItem { Text = "Female", Value = "2"},  
+                               }, "Select Gender", new { @class = "form-control form-control-lg", @id = "empGender" })*@
+
+                            @Html.TextBoxFor(a => item.Gender, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empGender" })
+                        </div>
+              </div>  
+                 
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Title</label>
+                        <div class="col-sm-5">                          
+                         @*@Html.DropDownListFor(model => item.Title, new SelectList(new[] { "Mr", "Mrs", "Miss" }), new { @class = "form-control form-control-lg", @id = "Title" })*@
+                        @*@Html.DropDownList("GenderDropDown", new List<SelectListItem>  
+                            { new SelectListItem { Text = "Select Title", Value = "0"},
+                             new SelectListItem { Text = "Mr", Value = "1"},  
+                            new SelectListItem { Text = "Mrs", Value = "2"},
+                            new SelectListItem { Text = "Miss", Value = "3"},   
+                            },  new { @class = "form-control form-control-lg", @id = "empTitle" })*@
+
+                            @Html.TextBoxFor(a => item.Title, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empTitle" })
+                        </div>
+              </div>         
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Status</label>
+                        <div class="col-sm-5">                          
+                         @*@Html.DropDownListFor(model => item.Status, new SelectList(new[] { "Single", "Married", "Widowed", "Divorced", "Separated" }), new { @class = "form-control form-control-lg", @id = "Status" })*@
+                            @*@Html.DropDownList("Mobiledropdown3", new List<SelectListItem>  
+                             { new SelectListItem { Text = "Single", Value = "1"},  
+                               new SelectListItem { Text = "Married", Value = "2"},  
+                               new SelectListItem { Text = "Divorced", Value = "3"},  
+                               new SelectListItem { Text = "Separated", Value = "4"}, 
+                               new SelectListItem { Text = "Widowed", Value = "5"} 
+                               }, "Select Mobile", new { @class = "form-control form-control-lg", @id = "empStats" })*@
+
+                             @Html.TextBoxFor(a => item.Status, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empStats" })
+                        </div>
+               </div> 
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">BirthDate</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.Birthdate, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empBirthdate" })
+                        </div>
+               </div> 
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Age</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.Age, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empAge" })
+                        </div>
+               </div> 
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Birth Place</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BirthPlace, null, new { @class = "form-control form-control-lg", @id = "empBirthplace", @required = "required" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Nationality</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.Nationality, null, new { @class = "form-control form-control-lg", @id = "empNationality", @required = "required" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">TIN</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.TIN, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empTin" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">SSS/GSIS No.</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.SSS, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empSSS" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">No..,Street</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.ResidenceAddress, null, new { @class = "form-control form-control-lg", @id = "empResidence" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">City/Municipality</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.City, null, new { @class = "form-control form-control-lg", @id = "empCity" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Province</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.Province, null, new { @class = "form-control form-control-lg", @id = "empProvince" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Country</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.Country, null, new { @class = "form-control form-control-lg", @id = "empCountry" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">ZipCode</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.ZipCode, null, new { @class = "form-control form-control-lg", @id = "empZipCode" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Occupation</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.Occupation, null, new { @class = "form-control form-control-lg", @id = "empOccupation" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Home Phone</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.HomeNo, null, new { @class = "form-control form-control-lg", @id = "empHomeNo" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Cell No</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.CellNo, null, new { @class = "form-control form-control-lg", @id = "empCellNo" })
+                        </div>
+               </div>
+                <div class="form-group row" style="margin-left:20px; display:none;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg">Effective Date</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.EffectiveDate, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empEffectiveDate" })
+                        </div>
+               </div>
+              
+                
+            </div>
+            //Company Information
+                
+                <div class="row" style="font-weight:bold; font-size:large; margin-top:20px; margin-left:20px; margin-bottom:20px;" hidden>
+                    <span class="fa fa-user"></span>
+                    Company Information                                   
+                </div>
+                
+                <div style=" max-width:970px; border: 1px solid #428bca; border-radius:5px;" hidden>
+                
+                <div class="form-group row" style="margin-top:20px;">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">Name of Employer</label>
+                        <div class="col-sm-5">                          
+                         @*@Html.TextBoxFor(a => item.Province, null, new { @class = "form-control form-control-lg", @id = "empEmployName" })*@
+                            @*@Html.DropDownList("EmployerDropDown", new List<SelectListItem>  
+                            { 
+                            new SelectListItem { Text = "Select Employer", Value = " "},
+                            new SelectListItem { Text = "Skygo Marketing Corporation (SKYGO)", Value = "Skygo Marketing Corporation"},  
+                            new SelectListItem { Text = "Santo Niño de Cebu (SNDC)", Value = "Santo Niño de Cebu"},   
+                            }, new { @class = "form-control form-control-lg", @id = "empEmployName" })*@
+                            @Html.TextBoxFor(a => item.NameOfEmployer, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empEmployName" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">Date Employed</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.dateEmployed, null, new { @readonly = true, @class = "form-control form-control-lg", @id = "empDateEmployed" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">No..,Street</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BResidence, null, new { @class = "form-control form-control-lg", @id = "empBResidence" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">City/Municipality</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BCity, null, new { @class = "form-control form-control-lg", @id = "empBCity" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">Province</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BProvince, null, new { @class = "form-control form-control-lg", @id = "empBProvince" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">Country</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BCountry, null, new { @class = "form-control form-control-lg", @id = "empBCountry" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">Company ZipCode</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BZipcode, null, new { @class = "form-control form-control-lg", @id = "empBZipcode" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">Company Tel No.</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BPhoneNo, null, new { @class = "form-control form-control-lg", @id = "empBPhoneNo" })
+                        </div>
+               </div>
+                <div class="form-group row">
+                        <label for="lgFormGroupInput" class="col-sm-2 col-form-label col-form-label-lg" style="margin-left:20px;">Company Email Address</label>
+                        <div class="col-sm-5">                          
+                         @Html.TextBoxFor(a => item.BEmail, null, new { @class = "form-control form-control-lg", @id = "empBEmail" })
+                        </div>
+               </div>
+                
+              </div>
+            
+        }
+    }
+
+        <div class="row" style="font-weight:bold; font-size:large; margin-top:20px; margin-left:20px; margin-bottom:20px;">
+                    <span class="fa fa-user"></span>
+                    Eligible Dependents <i style="color:red;">(Health Insurance or Medical Care)</i>                                
+         </div>
+        <div style="border:0px solid black; height:150px;">
+            <p style="float:left; border:0px solid black; width:550px; font-weight:bold;">Status: Single</p>  <p style="border:0px solid black; font-weight:bold;">Status: Married</p>
+	        <p style="float:left; border:0px solid black; width:550px; margin-left:50px;">* Spouse is not allowed. </p> <p>* Parents and siblings are not allowed.</p>           
+            <p style="float:left; border:0px solid black; width:550px; margin-left:50px;">* You can only choose either parents and siblings or children only.</p>
+            <p style="border:0px solid black;">* Children more than 21 years old is not allowed.</p>
+            <p style="float:left; border:0px solid black; width:550px; margin-left:50px;">* Siblings or children not more than 21 years old is not allowed.</p>
+            @*<p style="border:0px solid black;">* Parents  not more than 65 years old</p>*@
+            <p style="float:left; border:0px solid black; width:550px; margin-left:50px;">* Parents not more than 65 years old.</p><p></p>
+        </div>
+        <br />  
+            
+        <div class="container" >
+            <div class="row">
+                <div class="table-responsive" style="max-width:970px; border: 1px solid #428bca; border-radius:5px;">
+                     <table class="table table-bordered table-hover" style="width: 950px;">
+                         <tr>
+                            <td>
+                                <input type="text" id="DependentFirstName" placeholder="First Name" class="form-control"></td>
+                            <td>
+                            <td>
+                                <input type="text" id="DependentLastName" placeholder="Last Name" class="form-control"></td>
+                            <td>
+
+                                 @Html.DropDownList("GenderDropDown", new List<SelectListItem>  
+                                 { new SelectListItem { Text = "MALE", Value = "MALE"},  
+                                   new SelectListItem { Text = "FEMALE", Value = "FEMALE"},  
+                                   }, "Gender", new { @class = "form-control form-control-lg", @id = "DependGender", @placeholder = "Gender" })    
+
+                            </td>
+                            <td>
+                                <input type="text" id="DependDateOfBirth" placeholder="Date of Birth" class="form-control"></td>
+                            @*<td>
+                                <input type="text" id="DependAge" placeholder="Age" class="form-control"></td>*@                
+                             <td>
+                                @*<input type="text" id="DependRelationship" placeholder="Relationship to Employee" class="form-control"></td> *@  
+                                 
+                              
+                                 @Html.DropDownList("RelationDropDown", new List<SelectListItem>  
+                                 { new SelectListItem { Text = "Children", Value = "1"},  
+                                   new SelectListItem { Text = "Siblings", Value = "2"},  
+                                   new SelectListItem { Text = "Parents", Value = "3"}, 
+                                   new SelectListItem { Text = "Spouse", Value = "4"}, 
+                                   }, "Relationship", new { @class = "form-control form-control-lg", @id = "DependRelationship", @placeholder = "Relationship" })                
+                            
+                                 
+                             <td>
+                                <input type="button" class="add btn btn-success" value="Add" onclick="AddDependents();" /></td>
+                            <td> 
+                                <button type="button" class="add btn btn-danger" onclick="DeleteDependent();">Delete</button></td>
+                        </tr>
+                      </table>
+                     
+                     <table id="Depend_record" class="table table-bordered table-hover" style="width: 950px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20px;">Select</th> 
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Gender</th>
+                                        <th>Date of Birth</th>
+                                        <th>Age</th>
+                                        <th>Relationship</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody id="Depend">
+                                  
+                                     @foreach (var item4 in Model.EmpDependents)
+                                     {                                         
+                                        <tr>
+                                            <td><input type='checkbox' name='record' class="chk"></td>
+                                            <td>@Html.DisplayFor(a => item4.DependentsFirstName)</td>
+                                            <td>@Html.DisplayFor(a => item4.DependentsLastName)</td>
+                                            <td>@Html.DisplayFor(a => item4.DependentsGender)</td>
+                                            <td>@Html.DisplayFor(a => item4.DateOfBirth)</td>
+                                            <td>@Html.DisplayFor(a => item4.Age)</td>
+                                            <td class="relation">@Html.DisplayFor(a => item4.Relationship)</td>
+                                        </tr>
+                                     }
+                                </tbody>
+
+                            </table>
+
+                     <div class="alert text-center" id="msgerror" style="float:left; display:none; margin-left:20px;"></div>
+                </div>
+            </div>
+
+        </div>
+
+        @*dasd*@
+            
+        <div class="row" style="font-weight:bold; font-size:large; margin-top:20px; margin-left:20px; margin-bottom:20px;">
+                    <span class="fa fa-user"></span>
+                    Beneficiary <i style="color:red;">(Life Insurance)</i>                                 
+         </div>
+
+     
+        <div class="container" >
+            <div class="row">
+                 <div class="table-responsive" style="max-width:970px; border: 1px solid #428bca; border-radius:5px;">
+                     <table class="table table-bordered table-hover" style="width: 950px;">
+                         <tr>
+                            <td>
+                                <input type="text" id="FBenificiary_FName" placeholder="First Name" class="form-control">
+                            </td>
+                             <td>
+                                 <input type="text" id="FBenificiary_LName" placeholder="Last Name" class="form-control">
+                             </td>
+                             <td>
+                                 @Html.DropDownList("GenderDropDown", new List<SelectListItem>  
+                                 { new SelectListItem { Text = "MALE", Value = "MALE"},  
+                                   new SelectListItem { Text = "FEMALE", Value = "FEMALE"},  
+                                   }, "Gender", new { @class = "form-control form-control-lg", @id = "FBGender", @placeholder = "Gender" })
+                             </td>
+                            <td>
+                                <input type="text" id="FDateBirth" placeholder="Date of Birth" class="form-control"></td>
+                            <td>
+                                <input type="text" id="FRelationship" placeholder="Relationship" class="form-control"></td>                   
+                            <td>
+                                <input type="button" class="add btn btn-success" value="Add" onclick="AddBenificiary();" /></td>
+                            <td> 
+                                <button type="button" class="add btn btn-danger" onclick="DeleteBenificiary();">Delete</button></td>
+                        </tr>
+                      </table>
+
+                     <table id="FBeni_record" class="table table-bordered table-hover" style="width: 950px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20px;">Select</th> 
+                                        <th>First Name</th>   
+                                        <th>Last Name</th> 
+                                        <th>Gender</th>                                    
+                                        <th >Date of Birth</th>
+                                        <th>Relationship</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody id="Beni1">
+                                   @foreach (var item2 in Model.EmpPrimary)
+                                   {
+                                        <tr>
+                                            <td><input type='checkbox' name='record' class="chk"></td>
+                                            <td>@Html.DisplayFor(a => item2.PrimaryFirstName)</td>
+                                            <td>@Html.DisplayFor(a => item2.PrimaryLastName)</td>
+                                            <td>@Html.DisplayFor(a => item2.PrimaryGender)</td>
+                                            <td>@Html.DisplayFor(a => item2.DateOfBirth)</td>
+                                            <td>@Html.DisplayFor(a => item2.Relationship)</td>
+                                        </tr>
+                                   }
+                                </tbody>
+
+                            </table>
+
+                     <div class="alert text-center" id="msg1" style="float:left; display:none; margin-left:20px;"></div>
+                </div>
+           </div>
+        </div>
+       
+
+        <div class="row" style="font-weight:bold; font-size:large; margin-top:20px; margin-left:20px; margin-bottom:20px;" hidden>
+                    <span class="fa fa-user"></span>
+                    Second Beneficiary (Life Insurance)                                  
+         </div>
+
+
+        <div class="container" hidden>
+            <div class="row">
+                 <div class="table-responsive" style="max-width:970px; border: 1px solid #428bca; border-radius:5px;">
+                     <table class="table table-bordered table-hover" style="width: 950px;">
+                         <tr>
+                            <td>
+                                <input type="text" id="SBenificiary_FName" placeholder="First Name" class="form-control">
+                            </td>
+                             <td>
+                                 <input type="text" id="SBenificiary_LName" placeholder="Last Name" class="form-control">
+                             </td>
+                             <td>
+                                 @Html.DropDownList("GenderDropDown", new List<SelectListItem>  
+                                 { new SelectListItem { Text = "MALE", Value = "MALE"},  
+                                   new SelectListItem { Text = "FEMALE", Value = "FEMALE"},  
+                                   }, "Gender", new { @class = "form-control form-control-lg", @id = "SBGender", @placeholder = "Gender" })
+                             </td>
+                            <td>
+                                <input type="text" id="SDateBirth" placeholder="Date of Birth" class="form-control"></td>
+                            <td>
+                                <input type="text" id="SRelationship" placeholder="Relationship to Employee" class="form-control"></td>                   
+                            <td>
+                                <input type="button" class="add btn btn-success" value="Add" onclick="AddSecondBenificiary();" /></td>
+                            <td> 
+                                <button type="button" class="add btn btn-danger" onclick="DeleteSecondBenificiary();">Delete</button></td>
+                        </tr>
+                      </table>
+                     
+                     <table id="SBeni_record" class="table table-bordered table-hover" style="width: 950px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20px;">Select</th> 
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Gender</th>
+                                        <th>Date of Birth</th>
+                                        <th>Relationship</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody id="Beni2">
+                                  
+                                     @foreach (var item3 in Model.EmpSecondary)
+                                     {                                     
+                                        <tr>
+                                            <td><input type='checkbox' name='record' class="chk"></td>
+                                            <td>@Html.DisplayFor(a => item3.SecondaryFirstName)</td>
+                                            <td>@Html.DisplayFor(a => item3.SecondaryLastName)</td>
+                                            <td>@Html.DisplayFor(a => item3.SecondaryGender)</td>
+                                            <td>@Html.DisplayFor(a => item3.DateOfBirth)</td>
+                                            <td>@Html.DisplayFor(a => item3.Relationship)</td>
+                                        </tr>
+                                     }
+                                </tbody>
+
+                            </table>
+
+                     <div class="alert text-center" id="msg2" style="float:left; display:none; margin-left:20px;"></div>
+                </div>
+           </div>
+        </div>
+           
+            
+        @*<div class="row" style="font-weight:bold; font-size:large; margin-top:20px; margin-left:20px; margin-bottom:20px;">
+                    <span class="fa fa-user"></span>
+                    Eligible Dependents (Health Insurance)                                  
+         </div>*@
+
+        @*<div class="container" >
+            <div class="row">
+                <div class="table-responsive" style="max-width:970px; border: 1px solid #428bca; border-radius:5px;">
+                     <table class="table table-bordered table-hover" style="width: 950px;">
+                         <tr>
+                            <td>
+                                <input type="text" id="DependentFirstName" placeholder="First Name" class="form-control"></td>
+                            <td>
+                            <td>
+                                <input type="text" id="DependentLastName" placeholder="Last Name" class="form-control"></td>
+                            <td>
+
+                                 @Html.DropDownList("GenderDropDown", new List<SelectListItem>  
+                                 { new SelectListItem { Text = "MALE", Value = "MALE"},  
+                                   new SelectListItem { Text = "FEMALE", Value = "FEMALE"},  
+                                   }, "Gender", new { @class = "form-control form-control-lg", @id = "DependGender", @placeholder = "Gender" })    
+
+                            </td>
+                            <td>
+                                <input type="text" id="DependDateOfBirth" placeholder="Date of Birth" class="form-control"></td>
+                                      
+                             <td>
+                              
+                                 
+                              
+                                 @Html.DropDownList("RelationDropDown", new List<SelectListItem>  
+                                 { new SelectListItem { Text = "Children", Value = "1"},  
+                                   new SelectListItem { Text = "Siblings", Value = "2"},  
+                                   new SelectListItem { Text = "Parents", Value = "3"}, 
+                                   new SelectListItem { Text = "Spouse", Value = "4"}, 
+                                   }, "Relationship", new { @class = "form-control form-control-lg", @id = "DependRelationship", @placeholder = "Relationship" })                
+                            
+                                 
+                             <td>
+                                <input type="button" class="add btn btn-success" value="Add" onclick="AddDependents();" /></td>
+                            <td> 
+                                <button type="button" class="add btn btn-danger" onclick="DeleteDependent();">Delete</button></td>
+                        </tr>
+                      </table>
+                     
+                     <table id="Depend_record" class="table table-bordered table-hover" style="width: 950px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20px;">Select</th> 
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Gender</th>
+                                        <th>Date of Birth</th>
+                                        <th>Age</th>
+                                        <th>Relationship</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody id="Depend">
+                                  
+                                     @foreach (var item4 in Model.EmpDependents)
+                                     {                                         
+                                        <tr>
+                                            <td><input type='checkbox' name='record' class="chk"></td>
+                                            <td>@Html.DisplayFor(a => item4.DependentsFirstName)</td>
+                                            <td>@Html.DisplayFor(a => item4.DependentsLastName)</td>
+                                            <td>@Html.DisplayFor(a => item4.DependentsGender)</td>
+                                            <td>@Html.DisplayFor(a => item4.DateOfBirth)</td>
+                                            <td>@Html.DisplayFor(a => item4.Age)</td>
+                                            <td class="relation">@Html.DisplayFor(a => item4.Relationship)</td>
+                                        </tr>
+                                     }
+                                </tbody>
+
+                            </table>
+
+                     <div class="alert text-center" id="msgerror" style="float:left; display:none; margin-left:20px;"></div>
+                </div>
+            </div>
+
+        </div>*@
+            
+        @foreach (var item5 in Model.EmpGroupInsuranceStatus)
+        {
+            if (item5.intStatus == 1)
+            {
+                
+                <div class="container">
+                    <div class="row">
+                        <div class="table-responsive" style="max-width:970px; border-radius:5px; margin-top:20px;">
+                            <button type="button" class="btn btn-primary btn-lg btn-block" onclick="SubmitGroupInsurance();" disabled>Enroll</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+       
+                <div class="container">
+                    <div class="row">
+                        <div class="table-responsive" style="max-width:970px; border-radius:5px; margin-top:20px;">
+                            <button type="button" class="btn btn-primary btn-lg btn-block" onclick="SubmitGroupInsurance();" >Enroll</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            
+        }
+
+        <input type="text" id="type-id" class="hide" />
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel4"></h4>
+              </div>
+              <div class="modal-body">
+              </div>
+              <div class="modal-footer">
+                @*<button type="button" class="btn btn-success btn-lg" onclick="SubmitGroupInsurance();">&nbsp;&nbsp;Yes&nbsp;&nbsp;</button>
+                <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">&nbsp;&nbsp;No&nbsp;&nbsp;</button>*@
+              </div>
+            </div>
+          </div>
+        </div>
+
+        </div>
+    </div>
+
+</div>

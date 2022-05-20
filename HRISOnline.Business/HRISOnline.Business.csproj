@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1AFC3A93-4E55-475D-A077-782123B3D362}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HRISOnline.Business</RootNamespace>
+    <AssemblyName>HRISOnline.Business</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ContactsBAL.cs" />
+    <Compile Include="CoopLoanBAL.cs" />
+    <Compile Include="MissedPunchBAL.cs" />
+    <Compile Include="TaxReportBAL.cs" />
+    <Compile Include="DTRAdjustmentBAL.cs" />
+    <Compile Include="Employee201BAL.cs" />
+    <Compile Include="EmployeeBAL.cs" />
+    <Compile Include="EvaluationBAL.cs" />
+    <Compile Include="GatePassBAL.cs" />
+    <Compile Include="GroupInsuranceBAL.cs" />
+    <Compile Include="LeaveBAL.cs" />
+    <Compile Include="OvertimeBAL.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportBAL.cs" />
+    <Compile Include="TaskMonitoringBAL.cs" />
+    <Compile Include="UserBAL.cs" />
+    <Compile Include="UtilitiesBAL.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HRISOnline.Data\HRISOnline.Data.csproj">
+      <Project>{e1d05904-9b0e-481b-9b08-c767638c28a6}</Project>
+      <Name>HRISOnline.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRISOnline.Objects\HRISOnline.Objects.csproj">
+      <Project>{0219d187-65c6-46c7-9bef-02f196ac6054}</Project>
+      <Name>HRISOnline.Objects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRISOnline.Utilities\HRISOnline.Utilities.csproj">
+      <Project>{76513419-a376-4ded-bd29-e19b4ebb5b02}</Project>
+      <Name>HRISOnline.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

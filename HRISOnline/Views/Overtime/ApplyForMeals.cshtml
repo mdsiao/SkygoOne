@@ -1,0 +1,227 @@
+﻿@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#DateFiled").datepicker();
+    });
+
+    function AddEmployee() {
+
+        var EmployeeID = $("#EmpName").val();
+        var EmpName = $("#EmpName option:selected").text();
+
+
+
+        $.ajax({
+            url: '@Url.Action("GetPosition", "Overtime")',
+            type: 'GET',
+            data: {            
+                intMstEmpPersonal: EmployeeID
+            },
+            datatype: 'json',
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+              
+                //$('#PositionName').val(result.responseText);
+               
+            if (EmployeeID === '') {
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html('Please select Employee Name!').show().slideDown(3000).fadeOut(8000);
+
+            } else {
+                var markup = "<tr><td><input type='checkbox' name='record' class='chk'></td><td style='display:none;'>" + EmployeeID + "</td><td>" + EmpName + "</td><td>" + result.responseText + "</td></tr>";
+
+                $("#OTMeals").append(markup);
+                $("#EmpName").val("");
+          
+            }
+    
+            }
+        });
+
+    }
+
+    function DeleteEmployee() {
+        $(document).ready(function () {
+            $("#OTMeals").find('input[name="record"]').each(function () {
+                if ($(this).is(":checked")) {
+                    $(this).parents("tr").remove();
+                }
+            });
+
+        });
+    }
+
+    function SubmitMealAllowance()
+    {
+        var OvertimeMeals_array = Array();
+        OvertimeMeals_array = $("tbody tr", $("#OTMeals_record")).map(function () {
+            return [$("td", this).map(function () {
+                return $(this).text();
+            }).get()];
+        }).get()
+
+        var tempOTMeal= {
+            "OTMealRecord": OvertimeMeals_array
+        };
+        var DateFiled = $("#DateFiled").val();
+        var Reason = $("#Reason").val();
+
+       
+        if ((DateFiled === '') || (DateFiled === null)){
+            OpenModalConfirmation(1);
+            return false;
+        }
+        if ((Reason === '') || (Reason === null)) {
+            OpenModalConfirmation(2);
+            return false;
+        }
+
+
+
+        $.ajax({
+            url: '@Url.Action("InsertOvertimeMeals", "Overtime")',
+            type: 'GET',
+            data: {
+                OTMealRecord: OvertimeMeals_array.toString(),
+                Reason: Reason,
+                DateFiled: DateFiled
+            },
+            datatype: 'json',
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+
+                if (result != null && result.success) {
+                    //$('#myModal').modal('hide');
+                    $('#msg').removeClass('bg-danger');
+                    $('#msg').addClass('bg-success');
+                    //document.getElementById("UpdateEducation").disabled = true;
+                    $('#msg').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                    setTimeout('RedirectMe()', 6000);
+
+               
+                }
+
+                else {
+                   // $('#myModal').modal('hide');
+                    $('#msg').removeClass('bg-success');
+                    $('#msg').addClass('bg-danger');
+                    $('#msg').html(result.responseText).show().slideDown(3000).fadeOut(8000);
+                }
+            }
+        });
+    }
+
+    function RedirectMe() {
+        window.location.href = "@Url.Content("~/Overtime/ListOfOvertimeMeals")";
+    }
+
+    function OpenModalConfirmation(type) {
+        if (type == 1) {          
+            //$('#msg').html("Please select Date Applied Overtime Meals!").show().slideDown(3000).fadeOut(8000);
+            //return false;
+
+            $('#myModalLabel4').html("Error");
+            $('#myModalBody').html("Please select Date Applied Overtime Meals!");
+        }
+        else if (type == 2) {
+            $('#myModalLabel4').html("Error");
+            $('#myModalBody').html("Please type in the reason of your applied overtime meals!");
+        }
+
+
+        $('#type-id').val(type);
+        $('#myModal').modal();
+    }
+
+
+</script>
+<div class="alert text-center" id="msg"></div>
+
+<div class="container" >
+    <div class="row">
+        <div class="table-responsive" style="max-width:970px; border: 1px solid #428bca; border-radius:5px;">
+                     <table class="table table-bordered table-hover" style="width: 550px; margin-left:10px; margin-top:10px;">
+                         <tr>  
+                             <td>
+                                 @Html.DropDownList("EmpName",null," " ,new { @class = "form-control", @style="width: 100%;" })
+                             </td>
+                          @*   <td>
+                                <input type="text" id="PositionName" class="form-control">
+                             </td>  *@            
+                            <td style="width: 20px;"><input type="button" class="add btn btn-success" value="Add" onclick="AddEmployee();" /></td>
+                            <td style="width: 20px;"> <button type="button" class="add btn btn-danger" onclick="DeleteEmployee();">Delete</button></td>
+                        </tr>
+                      </table>
+                    <div style="text-align:center;">
+                     <label style="float:left; margin-left:10px;"> Date Applied Overtime Meals</label>
+                        <input type="text" id="DateFiled" class="form-control" style="width:150px; margin-bottom:10px; margin-left:10px; float: left;">
+                        </div>
+                     <table id="OTMeals_record" class="table table-bordered table-hover" style="width: 950px; margin-left:10px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20px;">Select</th> 
+                                        <th style="display:none;">intMstEmpPersonal</th>
+                                        <th>Employee Name</th>   
+                                        <th>Designation</th> 
+                                    </tr>
+
+                                </thead>
+                                <tbody id="OTMeals">
+                                   @*@foreach (var item2 in Model.EmpPrimary)
+                                   {
+                                        <tr>
+                                            <td><input type='checkbox' name='record' class="chk"></td>
+                                            <td>@Html.DisplayFor(a => item2.PrimaryFirstName)</td>
+                                            <td>@Html.DisplayFor(a => item2.PrimaryLastName)</td>
+                                            <td>@Html.DisplayFor(a => item2.PrimaryGender)</td>
+                                            <td>@Html.DisplayFor(a => item2.DateOfBirth)</td>
+                                            <td>@Html.DisplayFor(a => item2.Relationship)</td>
+                                        </tr>
+                                   }*@
+                                </tbody>
+
+                            </table>
+                            <div class="form-group">
+                            <label style="color:red;" class="col-sm-1 control-label">Reason</label>
+                            <div class="col-sm-10" style="margin-bottom:20px;">
+                                    @Html.TextArea("Reason", null, new { @class = "form-control" }) 
+                              </div>
+                            </div>
+                </div>
+
+
+                  
+                        <div class="table-responsive" style="max-width:970px; border-radius:5px; margin-top:20px;">
+                            <button type="button" class="btn btn-primary btn-lg btn-block" onclick="SubmitMealAllowance();" >Submit</button>
+                        </div>
+                    </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel4"></h4>
+              </div>
+              <div class="modal-body" id="myModalBody">
+              </div>
+              <div class="modal-footer">
+              </div>
+            </div>
+          </div>
+        </div>
+

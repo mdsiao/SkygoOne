@@ -1,0 +1,972 @@
+﻿@model HRISOnline.Objects.EmpData
+
+@{
+    ViewBag.Title = @ViewBag.MyTitle;    
+}
+
+<style type="text/css">
+    .page-header-index {color: red;}
+    .label-value {color: #337ab7;}
+</style>
+
+@*<div class="col-xs-12 col-sm-12">*@
+    <ul class="nav nav-tabs">
+        <li id="id-start-up"><a data-toggle="tab" href="#personal">Personal</a></li>        
+        <li><a data-toggle="tab" href="#family">Family</a></li>
+        <li><a data-toggle="tab" href="#education">Education</a></li>
+        <li><a data-toggle="tab" href="#work">Work Exp</a></li>
+        <li><a data-toggle="tab" href="#elig">Eligibility</a></li>
+        <li><a data-toggle="tab" href="#dtr-data">DTR</a></li>
+        <li><a data-toggle="tab" href="#payroll-detail">Payroll Detail</a></li>
+        <li><a data-toggle="tab" href="#awards">Awards & Bonuses</a></li>
+    </ul>
+@*</div>*@
+
+@*<div class="col-xs-12 col-sm-12">*@
+    <div class="alert text-center" id="msg"></div>
+
+    <div class="tab-content">
+        @*Personal Information*@
+        <div class="panel panel-primary tab-pane fade" id="personal">            
+            <div class="panel-body">
+                @Html.HiddenFor(mdl => mdl.EmpPersonal.intMstCompany)                
+
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Employee ID</label>
+                        <div class="col-sm-10">
+                            <label class="control-label label-value">@Model.EmpPersonal.intMstEmpPersonal</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Employee Name</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value">@Model.EmpPersonal.LastName, @Model.EmpPersonal.FirstName @Model.EmpPersonal.MiddleName @Model.EmpPersonal.ExtensionName</label>
+                        </div>                        
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Current Address</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value">@Model.EmpPersonal.CurrentAddress</label>
+                        </div>                        
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Company</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value">@Model.EmpPersonal.Company</label>
+                        </div> 
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Position</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value" id="position-id"></label>
+                        </div> 
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Branch</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value" id="branch-id"></label>
+                        </div> 
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Date Hired</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value">@Model.DTR.DateHired.ToShortDateString()</label>
+                        </div> 
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Department</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value" id="dept-id"></label>
+                        </div> 
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Employment Status</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value" id="empstat-id"></label>
+                        </div> 
+                    </div>                  
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Civil Status</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value">@Model.EmpPersonal.CivilStatus</label>
+                        </div> 
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Tax Code</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value">@Model.EmpPersonal.TaxCode</label>
+                        </div> 
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">HDMF No.</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value">@Model.EmpPersonal.HDMFNo</label>
+                        </div> 
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">EYEE ID</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value">@Model.EmpPersonal.EYEEId</label>
+                        </div> 
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">PhilHealth</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value">@Model.EmpPersonal.PHICNo</label>
+                        </div> 
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">SSS No.</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value">@Model.EmpPersonal.SSSNo</label>
+                        </div> 
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">TIN No.</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value">@Model.EmpPersonal.TIN</label>
+                        </div> 
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Person to Nofity Incase of Emergency</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value">@Model.EmpPersonal.PersonToNotify</label>
+                        </div> 
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Relation</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value">@Model.EmpPersonal.Relation</label>
+                        </div> 
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Contact Number</label>
+                        <div class="col-sm-10">                            
+                            <label class="control-label label-value">@Model.EmpPersonal.ContactNum</label>
+                        </div> 
+                    </div>
+                </form>
+            </div>
+            
+        </div>        
+
+        @* DTR/Payroll Information *@
+        <div class="panel panel-primary tab-pane fade" id="dtr">
+            <div class="panel-body">
+                <form class="form-horizontal" role="form">
+                    <h4 class="page-header-index">Payroll Information</h4>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">Branch</label>
+                        <div class="col-sm-2">
+                            @Html.DropDownListFor(model => model.DTR.codeMstBranch, (SelectList)@ViewBag.branches, new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+
+                        <label class="col-sm-2 control-label">Home Branch</label>
+                        <div class="col-sm-2">
+                            @Html.DropDownListFor(model => model.DTR.codeMstBranchHome, (SelectList)@ViewBag.homebranches, new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+
+                        <label class="col-sm-2 control-label">Work Status</label>
+                        <div class="col-sm-2">
+                            @Html.DropDownListFor(model => model.DTR.intMstWorkStatus, (SelectList)@ViewBag.workstatus, new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">Department</label>
+                        <div class="col-sm-2">
+                            @Html.DropDownListFor(model => model.DTR.intMstDepartment, (SelectList)@ViewBag.depts, new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+
+                        <label class="col-sm-2 control-label">Date Hired</label>
+                        <div class="col-sm-2">                            
+                            @Html.TextBoxFor(mdl => mdl.DTR.DateHired, "{0:MM/dd/yyyy}", new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+                        
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-2">
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(mdl => mdl.DTR.IsSupervisor, new { @Value = Model.DTR.IsSupervisor, @disabled = "disabled" })
+                                    is Supervisor                                    
+                                </label>                            
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">Position</label>
+                        <div class="col-sm-2">                            
+                            @Html.DropDownListFor(model => model.DTR.intMstPosition, (SelectList)@ViewBag.positions, new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+
+                        <label class="col-sm-2 control-label">Separated Date</label>
+                        <div class="col-sm-2">                           
+                            @Html.TextBoxFor(mdl => mdl.DTR.DateSeparated, "{0:MM/dd/yyyy}", new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+
+                        <label class="col-sm-2 control-label">Reason for separation</label>
+                        <div class="col-sm-2">
+                            @Html.TextBoxFor(mdl => mdl.DTR.ReasonForSeparation, new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">Shift</label>
+                        <div class="col-sm-2">
+                            @Html.DropDownListFor(model => model.DTR.intMstWorkShift, (SelectList)@ViewBag.workshifts, new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+
+                        <label class="col-sm-2 control-label">Probationary Date</label>
+                        <div class="col-sm-2">
+                            @Html.TextBoxFor(mdl => mdl.DTR.DateProbationary, "{0:MM/dd/yyyy}", new { @class = "form-control", @disabled = "disabled" })
+                        </div>                        
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            <h4 class="page-header-index">Salary</h4>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Monthly Rate</label>
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(mdl => mdl.DTR.MonthlyRate, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Daily Rate</label>
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(mdl => mdl.DTR.DailyRate, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-6">
+                            <h4 class="page-header-index">DTR Settings</h4>
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    <div class="checkbox">
+                                    <label>                                        
+                                        @Html.CheckBoxFor(mdl => mdl.DTR.LateDeduction, new { @Value = Model.DTR.LateDeduction, @disabled = "disabled" })
+                                        No Late Deduction                                        
+                                    </label>                            
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    <div class="checkbox">
+                                    <label>
+                                        @Html.CheckBoxFor(mdl => mdl.DTR.DTRPunches, new { @Value = Model.DTR.DTRPunches, @disabled = "disabled" })
+                                        No DTR Punches                                        
+                                    </label>                            
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    <div class="checkbox">
+                                    <label>
+                                        @Html.CheckBoxFor(mdl => mdl.DTR.Biometrics, new { @Value = Model.DTR.Biometrics, @disabled = "disabled" })
+                                        No Biometrics                                        
+                                    </label>                            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h4 class="page-header-index">Discretionary Allowance</h4>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Amount</label>
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(mdl => mdl.DTR.DiscAllowance, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <h4 class="page-header-index">Contribution Settings</h4>
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    <div class="checkbox">
+                                    <label>
+                                        @Html.CheckBoxFor(mdl => mdl.DTR.CoopMember, new { @Value = Model.DTR.CoopMember, @disabled = "disabled" })
+                                        Coop Member                                        
+                                    </label>                            
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="checkbox">
+                                    <label>
+                                        @Html.CheckBoxFor(mdl => mdl.DTR.IncludeHDMF, new { @Value = Model.DTR.IncludeHDMF, @disabled = "disabled" })
+                                        Include HDMF                                        
+                                    </label>                            
+                                    </div>
+                                </div>
+                            </div>
+                                                        
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h4 class="page-header-index">HDMF Contribution</h4>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Employer Amount</label>
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(mdl => mdl.DTR.HDMFEmployer, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    <div class="checkbox">
+                                    <label>
+                                        @Html.CheckBoxFor(mdl => mdl.DTR.IncludeSSS, new { @Value = Model.DTR.IncludeSSS, @disabled = "disabled" })
+                                        Include SSS                                        
+                                    </label>                            
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="checkbox">
+                                    <label>
+                                        @Html.CheckBoxFor(mdl => mdl.DTR.IncludeWithTax, new { @Value = Model.DTR.IncludeWithTax, @disabled = "disabled" })
+                                        Include W/Tax                                        
+                                    </label>                            
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    <div class="checkbox">
+                                    <label>
+                                        @Html.CheckBoxFor(mdl => mdl.DTR.IncludePHIC, new { @Value = Model.DTR.IncludePHIC, @disabled = "disabled" })
+                                        Include PHIC                                        
+                                    </label>                            
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="checkbox">
+                                    <label>
+                                        @Html.CheckBoxFor(mdl => mdl.DTR.IncludeHealthInsurance, new { @Value = Model.DTR.IncludeHealthInsurance, @disabled = "disabled" })
+                                        With Health Insurance                                        
+                                    </label>                            
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Coop Deposit</label>
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(mdl => mdl.DTR.CoopDeposit, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+
+                                <label class="col-sm-3 control-label">Coop Savings</label>
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(mdl => mdl.DTR.CoopSavings, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @* Family/Education Information *@
+        <div class="panel panel-primary tab-pane fade" id="family">
+            <div class="panel-body">
+                <form class="form-horizontal" role="form">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h4 class="page-header-index">Spouse</h4>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Full Name</label>
+                                <div class="col-sm-9">                                                                        
+                                    <label class="control-label label-value">@Model.Family.SpouseLastname, @Model.Family.SpouseFirstname @Model.Family.SpouseMiddlename</label>
+                                </div>
+                            </div>                            
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Address</label>
+                                <div class="col-sm-9">                                    
+                                    <label class="control-label label-value">@Model.Family.SpouseAddress</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Telephone</label>
+                                <div class="col-sm-9">                                    
+                                    <label class="control-label label-value">@Model.Family.SpouseTelephone</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <h4 class="page-header-index">Children</h4>
+                            <table class="table table-bordered table-striped table-heading">
+                                <thead>
+                                    <tr>
+                                        <th>Child's Name</th>
+                                        <th class="col-sm-2">Birth Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var child in Model.Children)
+                                    { 
+                                        <tr>
+                                            <td>@child.ChildName</td>
+                                            <td>@child.BirthDate.ToShortDateString()</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h4 class="page-header-index">Father</h4>
+                            <div class="form-group">                                
+                                <label class="col-sm-2 control-label">Full Name</label>
+                                <div class="col-sm-9">                                    
+                                    <label class="control-label label-value">@Model.Family.FatherLastname, @Model.Family.FatherFirstname @Model.Family.FatherMiddlename</label>
+                                </div>
+                            </div>                            
+                        </div>
+                        <div class="col-sm-6">
+                            <h4 class="page-header-index">Mother</h4>
+                            <div class="form-group">                                
+                                <label class="col-sm-2 control-label">Full Name</label>
+                                <div class="col-sm-9">                                   
+                                    <label class="control-label label-value">@Model.Family.MotherLastname, @Model.Family.MotherFirstname @Model.Family.MotherMiddlename</label>
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>                    
+                </form>
+            </div>
+           @* <div class="panel-footer">
+                <button type="button" class="btn btn-success btn-lg" onclick="SaveMyEmployee();">Submit</button>
+            </div>*@
+        </div>
+
+        @*Education*@
+        <div class="panel panel-primary tab-pane fade" id="education">
+            <div class="panel-body">
+                <form class="form-horizontal" role="form">
+                    <table class="table table-bordered table-striped table-heading" id="tbl-educ">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-2">Educational Attained</th>
+                                <th class="col-sm-3">Name School</th>
+                                <th class="col-sm-3">Degree</th>
+                                <th class="col-sm-2">Date From</th> 
+                                <th class="col-sm-2">Date To</th>                                      
+                                <th class="col-sm-2">Honors</th>
+                                        @*<th class="col-sm-1">Action</th>*@
+                            </tr>                                    
+                        </thead>
+                        <tbody>
+                            @foreach (var educ in Model.Education)
+                            { 
+                                <tr>
+                                    <td>@educ.EduLevel</td>
+                                    <td>@educ.School</td>
+                                    <td>@educ.Degree</td>
+                                    <td>@educ.DateFrom</td>
+                                    <td>@educ.DateTo</td>
+                                    <td>@educ.Honors</td>
+                                    @*<td><a href="javascript:void(0);" onclick="">Remove</a></td>*@
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+
+        @* Work Experience *@
+
+        <div class="panel panel-primary tab-pane fade" id="work">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @*<h4 class="page-header-index">Eligibility</h4>*@
+                        <table class="table table-bordered table-striped table-heading" id="tbl-work">
+                            <thead>
+                                <tr>
+                                    <th class="col-sm-2">Date Employed</th>
+                                    <th class="col-sm-2 text-center">Position</th>
+                                    <th class="col-sm-3">Employer Name</th>
+                                    <th class="col-sm-2">Employer Contact No.</th>
+                                    <th class="col-sm-4 text-center">Reason to Leave</th>                                                          
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var workexp in Model.WorkExp)
+                                { 
+                                    <tr>
+                                        <td>@workexp.DateStart</td>
+                                        <td>@workexp.Position</td>
+                                        <td>@workexp.OfficeCompany</td>
+                                        <td>@workexp.ContactNumber</td>
+                                        <td>@workexp.Reason</td>                                                                     
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        
+                    </div>
+                </div>               
+            </div>
+        </div>
+
+        @* End Work Experience *@
+
+
+
+        @* Eligibility/Work Experience *@
+        <div class="panel panel-primary tab-pane fade" id="elig">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @*<h4 class="page-header-index">Eligibility</h4>*@
+                        <table class="table table-bordered table-striped table-heading" id="tbl-elig">
+                            <thead>
+                                <tr>
+                                    <th>Title of Training/Seminars</th>
+                                    <th>Conducted By/Sponsors</th>
+                                    <th>Date of Training</th>
+                                    <th>Locations</th>                                                                  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var train in Model.Training)
+                                { 
+                                    <tr>
+                                        <td>@train.TrainingTitle</td>
+                                        <td>@train.strSponsor</td>
+                                        <td>@train.DateStart</td>
+                                        <td>@train.Location</td>                                
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        @*<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modal-elig">Add</button>*@        
+
+                    </div>
+                </div>               
+            </div>
+        </div>
+
+        
+
+
+        @* Employee LogIn/LogOut Data *@
+        <div class="panel panel-primary tab-pane fade" id="dtr-data">
+            <div class="panel-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">Periods</label>
+                        <div class="col-sm-3">
+                            @Html.DropDownListFor(model => model.PayrollPeriods, (SelectList)@ViewBag.payperiods, "-- SELECT --" , new { @class = "form-control" })
+                        </div>                        
+                    </div>
+                </form>
+
+                <div class="col-sm-12">                    
+                    @*<div class="col-sm-9">*@
+                        <table class="table table-heading table-bordered" id="dtr-table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center col-sm-1">Date</th>
+                                    <th class="text-center col-sm-1">Day</th>
+                                    <th class="text-center col-sm-2">Day Type</th>
+                                    <th class="text-center col-sm-2">Day Status</th>                            
+                                    <th class="text-center col-sm-1">Work (Hour)</th>                            
+                                    <th class="text-center col-sm-1">Tardy (Minutes)</th>
+                                    <th class="text-center col-sm-1">Undertime (Minutes)</th>                            
+                                    <th class="text-center col-sm-1">Overtime (Minutes)</th>
+                                    <th class="text-center col-sm-1"></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    @*</div>*@
+                </div>                                
+            </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-warning btn-lg" onclick="GenerateDTR();">Generate PDF</button>
+            </div>
+        </div>
+
+        @* Employee Payroll Detail *@
+        <div class="panel panel-primary tab-pane fade" id="payroll-detail">
+            <div class="panel-body">
+                <table class="table table-heading table-bordered" id="payroll-table">
+                    <thead>
+                        <tr>
+                            <th class="col-sm-2 text-center">Payroll Date</th>
+                            <th>Date Covered</th>
+                            <th class="col-sm-1 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var pay in Model.PayrollDetail)
+                        { 
+                            <tr>
+                                <td class="col-sm-2 text-center">@pay.PayrollDate</td>
+                                <td>@pay.Remarks</td>
+                                <td class="col-sm-1 text-center">
+                                    @*<a onclick="EncodePayrollId(@pay.intTrnPayroll);" data-toggle="modal" data-target="#modal-pwd" href="#mdl-pwd">Payslip</a>*@
+                                    <a onclick="GenerateReport('@pay.intTrnPayroll.ToString()~@pay.intMstEmpPersonal.ToString()')" href="javascript:void(0);">Payslip</a>                                    
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>                
+            </div>
+        </div>
+        
+         @* Awards & Bonuses *@
+        <div class="panel panel-primary tab-pane fade" id="awards">
+            <div class="panel-body">
+                <table class="table table-heading table-bordered" id="tbl-awards">
+                    <thead>
+                        <tr>
+                            <th class="col-sm-1 text-center">Date Released</th>
+                            <th class="col-sm-2 text-center">Type</th>
+                            <th>Remarks</th>
+                            <th class="col-sm-1 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                          @foreach (var award in Model.AwardsAndBonus)
+                          { 
+                            <tr>                                
+                                <td class="col-sm-1 text-center">@award.IncentiveDate.ToShortDateString()</td>
+                                <td class="col-sm-2">@award.AwardAndBonusDesc</td>
+                                <td>@award.Remarks</td>
+                                <td class="col-sm-1 text-center">
+                                    <a onclick="GenerateAward('@award.intTrnIncentive.ToString()~@award.intMstEmpPersonal.ToString()~@award.IncentiveDate.ToShortDateString().Replace("/","-")~@award.AwardAndBonusDesc')" href="javascript:void(0);">Payslip</a>
+                                </td>
+                            </tr>
+                          }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+@*</div>*@
+
+@*VIEWING OF PAYSLIP*@
+<div class="modal fade" id="modal-pwd" role="dialog" aria-labelledby="myModalLabel-elig" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel-pwd">Enter Password</h4>
+      </div>
+      <div class="modal-body">
+          <form class="form-horizontal">            
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Password</label>
+                <div class="col-sm-8">
+                    <input type="password" id="check-password" class="form-control" />
+                </div>
+            </div>                                
+          </form>        
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-success btn-lg" onclick="CheckPassword();">Submit</button>
+        <button type="button" class="btn btn-danger  btn-lg" onclick=""  data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@*VIEWING OF LOG IN DETAILS*@
+<div class="modal fade" id="modal-logs" role="dialog" aria-labelledby="myModalLabel-elig" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">DTR Details</h4>
+      </div>
+      <div class="modal-body">
+          <form class="form-horizontal">
+              <div class="form-group">
+                  <label class="col-sm-2 control-label">Date</label>
+                  <div class="col-sm-5">
+                      <input type="text" id="mdl-dDate" class="form-control" readonly="true" />
+                  </div>
+              </div>
+
+              <table class="table table-heading table-bordered" id="tbl-log-detail">
+                    <thead>
+                         <tr>
+                             <th class="text-center">Time In</th>
+                             <th class="text-center">Time Out</th>
+                         </tr>
+                     </thead>
+                    <tbody></tbody>
+                </table> 
+          </form>           
+      </div>
+      @*<div class="modal-footer">        
+        <button type="button" class="btn btn-success" onclick="CheckPassword();">Submit</button>
+        <button type="button" class="btn btn-warning" onclick=""  data-dismiss="modal">Cancel</button>
+      </div>*@
+    </div>
+  </div>
+</div>
+
+<input type="text" id="payrollId-container" style="display:none;" />
+<style type="text/css">
+    #dtr-table, #logs-table {
+        font-size:12px;
+    }
+</style>
+@section scripts{
+
+<script src="@Url.Content("~/Scripts/employee.js")"></script>
+
+<script type="text/javascript">
+    var tableWE;
+    var tableElig;
+
+    $(document).ready(function () {
+        $('#msg').removeClass('active');
+        $('#msg').addClass('hide');
+
+        $('#payroll-table').dataTable({
+            "columnDefs": [{
+                "targets": [2],
+                "visible": true,
+                "searchable": false,
+                "orderable": false
+            }],
+            aaSorting: [[0, 'desc']]
+        });
+
+        $('#tbl-awards').dataTable({
+            "columnDefs": [{
+                "targets": [3],
+                "visible": true,
+                "searchable": false,
+                "orderable": false
+            }],
+            aaSorting: [[0, 'desc']]
+        });
+
+        $("#id-start-up").addClass("active");
+        $("#personal").addClass("active in");
+        $('input[type="text"]').keypress(function () {
+            return false;
+        });            
+
+        $('#PayrollPeriods').change(function () {
+            GetDTRData();
+        });
+
+        $('#position-id').html($('#DTR_intMstPosition option:selected').text());
+        $('#branch-id').html($('#DTR_codeMstBranch option:selected').text());
+        $('#dept-id').html($('#DTR_intMstDepartment option:selected').text());
+        $('#empstat-id').html($('#DTR_intMstWorkStatus option:selected').text());
+
+    });
+
+    function GetDTRData()
+    {
+        $('#dtr-table tbody>tr').remove();
+        $('#logs-table tbody>tr').remove();
+
+        if ($("#PayrollPeriods").val() != "")
+        {
+            var url = '@Url.Action("GetDTR")';
+            url += '?id=' + $("#PayrollPeriods").val();
+
+            $.get(
+                url,
+                function (data) {
+
+                    //var arrL = JSON.parse(data.objL);
+                    var arr = JSON.parse(data.obj);                    
+
+                    var x;
+                    for (x = 0; x < arr.length; x++) {
+
+                        var row = "";
+                        if (arr[x]["EmpDayStat"] == "REST DAY") {
+                            row += '<tr style="background-color:#ADD8E6;">';
+                        }
+                        else if (arr[x]["EmpDayStat"] == "NO RECORD") {
+                            row += '<tr style="background-color:#A8A8A8;">';
+                        }
+                        else if (arr[x]["EmpDayStat"] == "MISSING PUNCH") {
+                            row += '<tr style="background-color:#F16868;">';
+                        }
+                        //else if (arr[x]["EmpDayStat"] == "ABSENT") {
+                        //    row += '<tr style="background-color:#F16868;">';
+                        //}
+                        else {
+                            row += '<tr>';
+                        }
+                        row += '<td class="text-center">' + arr[x]["DayDate"] + '</td>';
+                        row += '<td class="text-center">' + arr[x]["dDayName"] + '</td>';
+                        row += '<td class="text-center">' + arr[x]["DayType"] + '</td>';
+                        row += '<td class="text-center">' + arr[x]["EmpDayStat"] + '</td>';
+                        row += '<td class="text-center">' + arr[x]["WorkHourStr"] + '</td>';
+                        row += '<td class="text-center">' + arr[x]["Tardy"] + '</td>';
+                        row += '<td class="text-center">' + arr[x]["Undertime"] + '</td>';
+                        row += '<td class="text-center">' + arr[x]["Overtime"] + '</td>';
+                        //row += '<td style="background-color:white;" class="text-center">' + arr[x]["urlDetails"] + '</td>';
+
+                        if (arr[x]["EmpDayStat"] == "REST DAY") {
+                            row += '<td style="background-color:white;" class="text-center"></td>';
+                        }
+                        else {
+                            row += '<td style="background-color:white;" class="text-center"><a onclick="GetDTRDetails(\''+arr[x]["DayDate"]+'\');" data-toggle="modal" href="#modal-logs">Details</a></td>';    
+                        }                        
+                        row += '</tr>';
+
+                        $('#dtr-table > tbody:last').append(
+                            row
+                        );
+                    }                   
+                }
+            );
+        }
+        
+    }
+
+    function GetDTRDetails(dDate) {        
+        $('#tbl-log-detail tbody>tr').remove();
+        
+        var url = '@Url.Action("GetDTRDetail")';
+        url += '?id=' + dDate;
+
+        $('#mdl-dDate').val(dDate);
+
+
+        $.get(
+            url,
+            function (data) {
+
+                var arrL = JSON.parse(data.objL);                    
+                    
+                //get the Logs
+                var y;
+                for (y = 0; y < arrL.length; y++)
+                {
+                    var row = "";                    
+                    row += '<tr>';                        
+                    row += '<td class="text-center">' + arrL[y]["LogTimeIn"] + '</td>';
+                    row += '<td class="text-center">' + arrL[y]["LogTimeOut"] + '</td>';
+                    row += '</tr>';
+
+                    $('#tbl-log-detail > tbody:last').append(row);
+                }
+
+            }
+        );        
+    }
+
+    function GetPayrollDetail()
+    {
+        $('#payroll-table tbody>tr').remove();
+        var urlString = '@Url.Action("GetPayrollDetailList")';
+        
+        $.get(
+            urlString,
+            function (data) {
+
+                var arr = JSON.parse(data.obj);
+                var x;
+
+                for (x = 0; x < arr.length; x++)
+                {
+                    var row = "";
+                    row += '<tr>';
+                    row += '<td class="text-center">' + arr[x]['PayrollDate'] + '</td>';
+                    row += '<td>' + arr[x]['Remarks'] + '</td>';
+                    row += '<td class="text-center">';
+                    //comment this, remove the viewing of payroll details in another tab
+                    //row += '<td class="text-center"><a target="_blank" href="@Url.Content("~/Employee/PayrollDetails/")' + arr[x]["intTrnPayroll"] + '">Payroll Details</a> | ';                                                            
+                    row += '<a onclick="EncodePayrollId(' + arr[x]["intTrnPayroll"] + ');" data-toggle="modal" href="#modal-pw">Payslip</a></td>';
+                    row += '</tr>';
+
+                    $('#payroll-table > tbody:last').append(row);
+                }
+
+            });
+    }
+
+    function EncodePayrollId(id)
+    {
+        $('#payrollId-container').val(id);
+    }
+
+    function CheckPassword(payrollId) {
+        //$('#myModal').modal('hide');
+        var payrollId = $('#payrollId-container').val();
+        var urlString = '@Url.Action("CheckPassword")';
+        urlString += '?id=' + $('#check-password').val();
+
+        $.get(
+            urlString,
+            function (data) {
+
+                if (data.success == "True") {
+                    GenerateReport(payrollId);
+                    $('#modal-pwd').modal('hide');
+                }
+                else {
+                    $('#check-password').val("");
+                    alert(data.msg);
+                }
+
+            });
+
+        $('#check-password').val("");
+    }
+
+    function GenerateReport(intTrnPayroll) {       
+        var win = window.open("@Url.Action("ViewPaySlip/")" + "" + intTrnPayroll +  "", "_blank");
+        win.document.title = "Pay Slip";
+    }
+
+    function GenerateAward(intTrnIncentive) {
+        var win = window.open("@Url.Action("ViewAwardAndBonus/")" + "" + intTrnIncentive + "", "_blank");
+        win.document.title = "Award and Bonus Pay Slip";
+    }
+
+    function SaveMyEmployee()
+    {
+        var urlString = '@Url.Content("~/Employee/SaveEmployee")';
+
+        SaveEmployee(urlString);
+    }
+
+    function GenerateDTR() {
+        var win = window.open("@Url.Content("~/Employee/GetDTRReport?id=")" + $('#PayrollPeriods option:selected').text() + "", "_blank");
+        win.document.title = "Employee Gate Pass";
+    }
+</script>
+}

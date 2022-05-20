@@ -1,0 +1,797 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5711E116-9668-477C-986E-ACC1BE8AA0FE}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HRISOnline</RootNamespace>
+    <AssemblyName>HRISOnline</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.7.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="LoginVerification, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\HRISOnline\HRISOnline\bin\LoginVerification.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.Entity">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Entity">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.ApplicationServices">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Abstractions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Extensions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Transactions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Services">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.EnterpriseServices">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.0.0\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20710.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebMatrix.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.2.0.20710.0\lib\net40\WebMatrix.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebPages.OAuth, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.OAuth.2.0.20710.0\lib\net40\Microsoft.Web.WebPages.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.WebData, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.WebData.2.0.20710.0\lib\net40\WebMatrix.WebData.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.AspNet, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\DotNetOpenAuth.AspNet.4.0.3.12153\lib\net40-full\DotNetOpenAuth.AspNet.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\DotNetOpenAuth.Core.4.0.3.12153\lib\net40-full\DotNetOpenAuth.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth.Consumer, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Consumer.4.0.3.12153\lib\net40-full\DotNetOpenAuth.OAuth.Consumer.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Core.4.0.3.12153\lib\net40-full\DotNetOpenAuth.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.Core.4.0.3.12153\lib\net40-full\DotNetOpenAuth.OpenId.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId.RelyingParty, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.RelyingParty.4.0.3.12153\lib\net40-full\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.1.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\AuthConfig.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ContactsController.cs" />
+    <Compile Include="Controllers\CoopLoanController.cs" />
+    <Compile Include="Controllers\MissingPunchController.cs" />
+    <Compile Include="Controllers\TaxReportController.cs" />
+    <Compile Include="Controllers\DTRAdjustmentController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\EmployeeTwoOhOneController.cs" />
+    <Compile Include="Controllers\EvaluationController.cs" />
+    <Compile Include="Controllers\GatePassController.cs" />
+    <Compile Include="Controllers\GroupInsuranceController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LeaveController.cs" />
+    <Compile Include="Controllers\OvertimeController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\TaskMonitoringController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Images\Filters\InitializeSimpleMembershipAttribute.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Content\Models\AccountModels.cs" />
+    <Compile Include="Content\Models\CheckSessionOutAttribute.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\AwardAndBonus_Payslip.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AwardAndBonus_Payslip.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\GroupInsurancePerEmp.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GroupInsurancePerEmp.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\HR_RequisitionForm.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HR_RequisitionForm.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptApproveAdjustment.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptApproveAdjustment.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptApprovedTransLeave.cs">
+      <DependentUpon>rptApprovedTransLeave.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptApprovedTrans.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptApprovedTrans.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptCancelOT.cs">
+      <DependentUpon>rptCancelOT.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\rptCancelLeave.cs">
+      <DependentUpon>rptCancelLeave.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\rptDisapproveAdjustment.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptDisapproveAdjustment.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptDisapproveLeave.cs">
+      <DependentUpon>rptDisapproveLeave.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\rptDisapproveOT.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptDisapproveOT.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptDTR.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptDTR.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptGatePass.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGatePass.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptHRLeave.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptHRLeave.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptHROB.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptHROB.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptOvertimeApprovalList.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptOvertimeApprovalList.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptOvertimeMeals.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptOvertimeMeals.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptPaySlip.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPaySlip.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptSubordinateDTR.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptSubordinateDTR.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\bootstrap-dialog.min.css" />
+    <Content Include="Content\bootstrap-timepicker.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\dataTables.bootstrap.css" />
+    <Content Include="Content\datepicker.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\loadBar\loadme.css" />
+    <Content Include="Content\loadBar\loadme.min.css" />
+    <Content Include="Content\template\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\fullcalendar.css" />
+    <Content Include="Content\template\img\devoops_pattern_b10.png" />
+    <Content Include="Content\template\img\noavatar.png" />
+    <Content Include="Content\template\img\one-image.png" />
+    <Content Include="Content\template\img\select2-spinner.gif" />
+    <Content Include="Content\template\img\select2.png" />
+    <Content Include="Content\template\img\select2x2.png" />
+    <Content Include="Content\template\img\skygoLogo.png" />
+    <Content Include="Content\jquery-ui.min.css" />
+    <Content Include="Content\jquery.fancybox.css" />
+    <Content Include="Content\metisMenu.min.css" />
+    <Content Include="Content\morris.css" />
+    <Content Include="Content\sb-admin-2.css" />
+    <Content Include="Content\select2.css" />
+    <Content Include="Content\style.css" />
+    <Content Include="Content\timeline.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content\timepicker.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\template\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\template\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\template\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\fonts\FontAwesome.otf" />
+    <None Include="Properties\PublishProfiles\HRISOnline.pubxml" />
+    <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Images\blank-user.png" />
+    <Content Include="Images\dislikebutton.gif" />
+    <Content Include="Images\dislikebutton.png" />
+    <Content Include="Images\heart1.gif" />
+    <Content Include="Images\heart2.gif" />
+    <Content Include="Images\heartheart.gif" />
+    <Content Include="Images\heartheart.png" />
+    <Content Include="Images\heartIcon.jpg" />
+    <Content Include="Images\heartIcon1.png" />
+    <Content Include="Images\like.gif" />
+    <Content Include="Images\likefb.gif" />
+    <Content Include="Images\likefb.jpg" />
+    <Content Include="Images\likefb.png" />
+    <Content Include="Images\LikeIcon.png" />
+    <Content Include="Images\loaderIcon.gif" />
+    <Content Include="Images\love.gif" />
+    <Content Include="Images\ObrigadoGif.gif" />
+    <Content Include="Images\sad2.gif" />
+    <Content Include="Images\sad2.png" />
+    <Content Include="Images\skygoIcon.png" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\TaxReport.js" />
+    <Content Include="Scripts\employee.js" />
+    <Content Include="Scripts\global-notifications.js" />
+    <Content Include="Scripts\jquery-1.7.1x.js" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\accounting.js" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
+    <Content Include="Scripts\bootstrap-dialog.min.js" />
+    <Content Include="Scripts\bootstrap-timepicker.min.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\dataTables.bootstrap.js" />
+    <Content Include="Scripts\devoops.js" />
+    <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery.complexify.js" />
+    <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.justifiedgallery.min.js" />
+    <Content Include="Scripts\jquery.maskedinput.js" />
+    <Content Include="Scripts\jquery.min.js" />
+    <Content Include="Scripts\jquery.tinymce.min.js" />
+    <Content Include="Scripts\json2.js" />
+    <Content Include="Scripts\js\bootstrap-checkbox.js" />
+    <Content Include="Scripts\js\bootstrap-checkbox.min.js" />
+    <Content Include="Scripts\metisMenu.min.js" />
+    <Content Include="Scripts\morris-data.js" />
+    <Content Include="Scripts\morris.min.js" />
+    <Content Include="Scripts\myScripts.js" />
+    <Content Include="Scripts\raphael-min.js" />
+    <Content Include="Scripts\sb-admin-2.js" />
+    <Content Include="Scripts\select2.min.js" />
+    <Content Include="Scripts\TableTools.js" />
+    <Content Include="Scripts\TableTools.min.js" />
+    <Content Include="Scripts\timepicker.js" />
+    <Content Include="Scripts\tinymce.min.js" />
+    <Content Include="Scripts\knockout-2.1.0.debug.js" />
+    <Content Include="Scripts\knockout-2.1.0.js" />
+    <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Content\Site.css" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Images\accent.png" />
+    <Content Include="Images\bullet.png" />
+    <Content Include="Images\heroAccent.png" />
+    <Content Include="Images\orderedList0.png" />
+    <Content Include="Images\orderedList1.png" />
+    <Content Include="Images\orderedList2.png" />
+    <Content Include="Images\orderedList3.png" />
+    <Content Include="Images\orderedList4.png" />
+    <Content Include="Images\orderedList5.png" />
+    <Content Include="Images\orderedList6.png" />
+    <Content Include="Images\orderedList7.png" />
+    <Content Include="Images\orderedList8.png" />
+    <Content Include="Images\orderedList9.png" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Account\_RemoveExternalLoginsPartial.cshtml" />
+    <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Manage.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\User\Login.cshtml" />
+    <Content Include="Views\Shared\_Login.cshtml" />
+    <Content Include="Views\Employee\Index.cshtml" />
+    <Content Include="Views\Overtime\Index.cshtml" />
+    <Content Include="Views\Overtime\Applyxx.cshtml" />
+    <Content Include="Views\Leave\Apply.cshtml" />
+    <Content Include="Views\Leave\Index.cshtml" />
+    <Content Include="Views\Leave\LeaveEntry.cshtml" />
+    <Content Include="Views\CoopLoan\Index.cshtml" />
+    <Content Include="Views\CoopLoan\Apply.cshtml" />
+    <Content Include="Views\Overtime\forApproval.cshtml" />
+    <Content Include="Views\Overtime\WholeRegion.cshtml" />
+    <Content Include="Views\Leave\forApproval.cshtml" />
+    <Content Include="Views\Leave\WholeRegion.cshtml" />
+    <Content Include="Views\CoopLoan\WholeRegion.cshtml" />
+    <Content Include="Views\CoopLoan\forApproval.cshtml" />
+    <Content Include="Views\User\ChangePassword.cshtml" />
+    <Content Include="Views\Evaluation\Evaluate.cshtml" />
+    <Content Include="Views\Evaluation\Employees.cshtml" />
+    <Content Include="Views\Evaluation\List.cshtml" />
+    <Content Include="Views\Employee\PayrollDetails.cshtml" />
+    <Content Include="Views\Shared\_Report.cshtml" />
+    <Content Include="Views\GatePass\Index.cshtml" />
+    <Content Include="Views\GatePass\Apply.cshtml" />
+    <Content Include="Views\GatePass\forApproval.cshtml" />
+    <Content Include="Views\DTRAdjustment\Index.cshtml" />
+    <Content Include="Views\DTRAdjustment\Apply.cshtml" />
+    <Content Include="Views\DTRAdjustment\forApproval.cshtml" />
+    <Content Include="Views\Employee\Memo.cshtml" />
+    <Content Include="Views\Shared\_LayoutDup.cshtml" />
+    <Content Include="Views\Employee\Notification.cshtml" />
+    <Content Include="Views\Employee\EmployeeNotice.cshtml" />
+    <Content Include="Views\Employee\Policy.cshtml" />
+    <Content Include="Views\Overtime\FinanceApproval.cshtml" />
+    <Content Include="Views\Employee\CancelledTrans.cshtml" />
+    <Content Include="Views\CoopLoan\ViewDetails.cshtml" />
+    <Content Include="Views\Leave\Copy of Apply.cshtml" />
+    <Content Include="Views\Overtime\Apply.cshtml" />
+    <Content Include="Views\GatePass\Copy of Apply.cshtml" />
+    <Content Include="Views\Employee\ApprovalNotification.cshtml" />
+    <Content Include="Views\Employee\ErrorNoRightsToolbox.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\GatePass\ApprovalInfo.cshtml" />
+    <Content Include="Views\Leave\ApprovalInfo.cshtml" />
+    <Content Include="Views\Overtime\ApprovalInfo.cshtml" />
+    <Content Include="Views\GatePass\WholeRegion.cshtml" />
+    <Content Include="Views\Contacts\ContactList.cshtml" />
+    <Content Include="Views\Contacts\EditDetails.cshtml" />
+    <Content Include="Views\Contacts\Index.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\Index.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\myEmployee201Profile.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\EmployeeTwoOhOneforApproval.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\ViewDetailsUpdateLogs.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\ViewDetails.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\ViewDetailsApproval.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\ViewDetailLogs.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\ViewDetailLogsLegal.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\ViewDetailEducAttained.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\ViewDetailWorkExp.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\ViewDetailTrainingExp.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\ViewDetailApprovalPersonal.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\ViewDetailApprovalLegal.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\ViewDetailApprovalEducational.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\ViewDetailApprovalWorkExp.cshtml" />
+    <Content Include="Views\EmployeeTwoOhOne\ViewDetailApprovalTraining.cshtml" />
+    <Content Include="Views\GroupInsurance\Index.cshtml" />
+    <Content Include="Views\TaskMonitoring\Index.cshtml" />
+    <Content Include="Views\TaxReport\Index.cshtml" />
+    <Content Include="Views\Employee\AuditReport.cshtml" />
+    <Content Include="Views\MissingPunch\Index.cshtml" />
+    <Content Include="Views\MissingPunch\ListOfMissingPunch.cshtml" />
+    <Content Include="Views\MissingPunch\MissingPunchApproval.cshtml" />
+    <Content Include="Views\MissingPunch\ViewMissedDetails.cshtml" />
+    <Content Include="Views\Overtime\ApplyForMeals.cshtml" />
+    <Content Include="Views\Overtime\ListOfOvertimeMeals.cshtml" />
+    <Content Include="Views\Overtime\ViewOvertimeMealsDetails.cshtml" />
+    <Content Include="Views\Overtime\OvertimeMealsForApproval.cshtml" />
+    <Content Include="Views\Overtime\ViewOvertimeMealsDetailsForApproval.cshtml" />
+    <Content Include="Views\Overtime\ApplyOvertimeMeals.cshtml" />
+    <Content Include="Views\Employee\GetAuditReportWithoutDeviationToolbox.cshtml" />
+    <Content Include="Views\Employee\GetAuditReportWithMinorDeviationToolbox.cshtml" />
+    <Content Include="Views\Employee\GetAuditReportWithMajorDeviationToolbox.cshtml" />
+    <Content Include="Views\GroupInsurance\GenerateInsurance.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Scripts\functions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HRISOnline.Business\HRISOnline.Business.csproj">
+      <Project>{1afc3a93-4e55-475d-a077-782123b3d362}</Project>
+      <Name>HRISOnline.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRISOnline.Data\HRISOnline.Data.csproj">
+      <Project>{e1d05904-9b0e-481b-9b08-c767638c28a6}</Project>
+      <Name>HRISOnline.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRISOnline.Objects\HRISOnline.Objects.csproj">
+      <Project>{0219d187-65c6-46c7-9bef-02f196ac6054}</Project>
+      <Name>HRISOnline.Objects</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\AwardAndBonus_Payslip.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>AwardAndBonus_Payslip.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\GroupInsurancePerEmp.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>GroupInsurancePerEmp.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\HR_RequisitionForm.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>HR_RequisitionForm.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptApproveAdjustment.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptApproveAdjustment.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptApprovedTransLeave.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptApprovedTransLeave.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptApprovedTrans.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptApprovedTrans.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptCancelOT.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptCancelOT.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptCancelLeave.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptCancelLeave.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptDisapproveAdjustment.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptDisapproveAdjustment.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptDisapproveLeave.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptDisapproveLeave.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptDisapproveOT.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptDisapproveOT.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptDTR.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptDTR.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptGatePass.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGatePass.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptHRLeave.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptHRLeave.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptHROB.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptHROB.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptOvertimeApprovalList.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptOvertimeApprovalList.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptOvertimeMeals.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptOvertimeMeals.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptPaySlip.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPaySlip.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptSubordinateDTR.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptSubordinateDTR.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:52241/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

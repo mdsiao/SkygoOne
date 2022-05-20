@@ -1,0 +1,223 @@
+﻿@model IEnumerable<HRISOnline.Objects.CoopLoanHRRegionalList>
+
+@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div id="breadcrumb" class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Coop Loan</a></li>
+                <li><a href="#">@ViewBag.MyTitle</a></li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="col-sm-12">
+    <div class="alert text-center" id="msg"></div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3>@ViewBag.MyTitle</h3>
+        </div>
+
+        <div class="panel-body">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <select class="form-control" id="select-type">
+                            <option value="1">ALL</option>
+                            <option value="2">PENDING</option>
+                            <option value="3">APPROVED BY HR</option>
+                        </select>
+                    </div>
+
+                    <label class="col-sm-8 control-label">Search:</label>
+                    <div class="col-sm-2">
+                        <input type="text" id="searchbox" placeholder="enter parameter here..."  class="form-control" />
+                    </div>
+                </div>
+            </form>
+
+            <table class="table table-bordered table-heading" id="coop-table">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width:30px;">                         
+                            <input type="checkbox" id="chk-all" />
+                        </th>
+                        <th class="text-center col-sm-1">ID</th>
+                        <th class="text-center col-sm-1">Date Filed</th>
+                        <th>Employee</th>
+                        <th class="text-center col-sm-1">Immediate Superior</th>
+                        <th class="text-center col-sm-1">Area Supervisor</th>
+                        <th class="text-center col-sm-1">HR</th>
+                    </tr>
+                </thead>
+                <tbody>                    
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-footer">
+            <button type="button" class="btn btn-primary btn-lg" onclick="ApproveLoan();">Approve</button>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#msg').removeClass('active');
+            $('#msg').addClass('hide');
+
+            $("#searchbox").focus();
+
+            $('#chk-all').on('click', function (ev) {
+                $('.chk').prop('checked', $('#chk-all').prop('checked'));
+            });
+            
+            $("#searchbox").focusout(function () {
+                SearchData();
+            });
+
+            $("#select-type").change(function () {
+                SearchData();
+            });
+        });
+
+        function SearchData() {
+            $('#coop-table tbody>tr').remove();
+
+            var url = '@Url.Action("GetWholeRegion")';
+            url += '?option=' + $("#select-type").val() + '&param=' + $("#searchbox").val();
+
+            $.get(
+                url,
+                function (data) {
+
+                    arr = JSON.parse(data.obj);
+
+                    //alert(arr.length);
+                    var x;
+                    for (x = 0; x <= arr.length - 1; x++) {
+                        //alert(arr[x]["intOlnOvertimeApplication"]);
+                        //alert(arr[x]["intMstEmpPersonal"]);
+                        //alert(arr[x]["EmpName"]);
+                        var row = "";
+                        row += '<tr>';
+                        row += '<td class="text-center">';
+                        if ((arr[x]["isCancelled"] == false) && (arr[x]["isDisapproved"] == false)) {
+                            row += '<input type="checkbox" class="chk" />';
+                        }
+                        row += '</td>';
+                        row += '<td class="text-center">' + arr[x]["intOlnCoopLoanApplication"] + '</td>';
+                        row += '<td class="text-center">' + arr[x]["DateFiled"] + '</td>';
+                        row += '<td>' + arr[x]["EmpName"]
+                        if (arr[x]["isCancelled"] == true) {
+                            row += '<span class="label label-warning"> CANCELLED</span>';
+                        }
+                        if (arr[x]["isDisapproved"] == true) {
+                            row += '<span class="label label-danger"> DISAPPROVED</span>';
+                        }
+                        row += '</td>';
+                        row += '<td class="text-center">';
+                        if (arr[x]["ApprovalLevel"] == 2 && arr[x]["ImmediateSuperior"] != "") {
+                            row += '<span class="label label-success">APPROVED</span>';
+                        }
+                        else if (arr[x]["ApprovalLevel"] == 2 && arr[x]["ImmediateSuperior"] == "") {
+                            row += '<span class="label label-danger">PENDING</span>';
+                        }
+                        row += '</td>';
+                        row += '<td class="text-center">';
+                        if (arr[x]["ApprovalLevel"] == 2 && arr[x]["ImmediateSuperior"] != "") {
+                            row += '<span class="label label-success">APPROVED</span>';
+                        }
+                        else if (arr[x]["ApprovalLevel"] == 2 && arr[x]["ImmediateSuperior"] == "") {
+                            row += '<span class="label label-danger">PENDING</span>';
+                        }
+                        else if (arr[x]["ApprovalLevel"].ApprovalLevel == 1 && arr[x]["AreaSupervisor"] != "") {
+                            row += '<span class="label label-success">APPROVED</span>';
+                        }
+                        else if (arr[x]["ApprovalLevel"].ApprovalLevel == 1 && arr[x]["AreaSupervisor"] == "") {
+                            row += '<span class="label label-danger">PENDING</span>';
+                        }
+                        row += '</td>';
+                        row += '<td class="text-center">';
+                        if (arr[x]["HR"] != "") {
+                            row += '<span class="label label-success">APPROVED</span>';
+                        }
+                        else {
+                            row += '<span class="label label-danger">PENDING</span>';
+                        }
+                        row += '</td>';
+                        row += '</tr>';
+
+
+                        $('#coop-table > tbody:last').append(
+                                row
+                            );
+                    }
+
+                });
+        }
+
+        function RedirectMe() {
+            window.location.href = "@Url.Content("~/CoopLoan/WholeRegion")";
+        }
+
+        function ApproveLoan() {
+            var id = { "details": [] };
+            var sub = { "intOlnCoopLoanApplication": "" };
+
+            $('#coop-table > tbody > tr input[type="checkbox"]:checked').each(function () {
+                var $row = $(this).parents('tr');
+
+                sub.intOlnCoopLoanApplication = $row.find('td:eq(1)').html();
+                id.details.push(sub);
+
+                sub = { "intOlnCoopLoanApplication": "" };
+            });
+
+            if (id.details.length == 0) {
+                $('#msg').removeClass('hide');
+                $('#msg').addClass('active');
+
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html("Please select atleast one(1) item.");
+            }
+            else {
+
+                $.ajax({
+                    url: '@Url.Action("ApproveLoan")',
+                    data: JSON.stringify(id),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (result) {
+
+                        $('#msg').addClass('active');
+                        $('#msg').removeClass('hide');
+
+                        if (result.success == 'True') {
+                            $('#msg').removeClass('bg-danger');
+                            $('#msg').addClass('bg-success');
+                            setTimeout('RedirectMe()', 2000);
+                        }
+                        else {
+                            $('#msg').removeClass('bg-success');
+                            $('#msg').addClass('bg-danger');
+                        }
+
+                        $('#msg').html(result.msg);
+
+                    }
+                });
+
+            }
+
+        }
+    </script>
+}

@@ -1,0 +1,118 @@
+﻿@model HRISOnline.Objects.CoopLoanMain
+
+@{
+    ViewBag.Title = @ViewBag.MyTitle;
+}
+
+<ul class="nav nav-tabs">
+    <li id="id-start-up"><a data-toggle="tab" href="#active-loans">Active Loans</a></li>
+    <li><a data-toggle="tab" href="#fullypaid-loans">Fully Paid Loans</a></li>
+</ul>
+
+<div class="tab-content">
+        <div class="panel panel-primary tab-pane fade" id="active-loans">        
+            <div class="panel-body">
+                <table class="table table-bordered table-heading" id="cooploan-table">
+                    <thead>
+                        <tr>
+                            <th class="col-sm-2 text-center">Date Filed</th>
+                            <th class="col-sm-2">Loan Type</th>                        
+                            <th class="col-sm-1 text-center">Months</th>                        
+                            <th>Remarks</th>
+                            <th class="col-sm-1 text-center">Amount</th>    
+                            <th class="col-sm-1 text-center">Deduction</th>    
+                            <th class="col-sm-1 text-center">Balance</th>    
+                            <th class="col-sm-1 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    
+                        @foreach (var item in Model.CoopUnpaidList)
+                        { 
+                            <tr>
+                                <td class="text-center">@item.DateFiled.ToShortDateString()</td>
+                                <td class="col-sm-2">@item.LoanType</td>                            
+                                <td class="text-center">@item.NoOfMonths</td>                            
+                                <td>@item.PurposeOfLoan</td>
+                                <td class="text-right">@item.TotalAmount.ToString("###, ##0.00")</td>
+                                <td class="text-right">@item.TotalDeduction.ToString("###, ##0.00")</td>
+                                <td class="text-right">@item.Balance.ToString("###, ##0.00")</td>
+                                <td class="text-center"><a href="@Url.Content("~/CoopLoan/ViewDetails/" + item.intOlnCoopLoanApplication)">Details</a></td>                            
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="panel panel-primary tab-pane fade" id="fullypaid-loans">        
+            <div class="panel-body">
+                <table class="table table-bordered table-heading" id="paid-table">
+                    <thead>
+                        <tr>
+                            <th class="col-sm-2 text-center">Date Filed</th>
+                            <th class="col-sm-2">Loan Type</th>                        
+                            <th class="col-sm-1 text-center">Months</th>                        
+                            <th>Remarks</th>
+                            <th class="col-sm-1 text-center">Amount</th>    
+                            @*<th class="col-sm-1 text-center">Deduction</th>    
+                            <th class="col-sm-1 text-center">Balance</th>    *@
+                            <th class="col-sm-1 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    
+                        @foreach (var item in Model.CoopFullyPaidList)
+                        { 
+                            <tr>
+                                <td class="text-center">@item.DateFiled.ToShortDateString()</td>
+                                <td class="col-sm-2">@item.LoanType</td>                            
+                                <td class="text-center">@item.NoOfMonths</td>                            
+                                <td>@item.PurposeOfLoan</td>
+                                <td class="text-right">@item.TotalAmount.ToString("###, ##0.00")</td>
+                                @*<td class="text-right">@item.TotalDeduction.ToString("###, ##0.00")</td>
+                                <td class="text-right">@item.Balance.ToString("###, ##0.00")</td>*@
+                                <td class="text-center"><a href="@Url.Content("~/CoopLoan/ViewDetails/" + item.intOlnCoopLoanApplication)">Details</a></td>                            
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {            
+            $("#cooploan-table").dataTable({
+                "columnDefs": [{
+                    "targets": [4,5,6,7,3],
+                    "visible": true,
+                    "searchable": false,
+                    "orderable": false
+                }],
+                aaSorting: [[0, 'desc']]
+            });
+
+            $("#paid-table").dataTable({
+                "columnDefs": [{
+                    "targets": [4, 3],
+                    "visible": true,
+                    "searchable": false,
+                    "orderable": false
+                }],
+                aaSorting: [[0, 'desc']]
+            });
+
+            //$('#msg').removeClass('active');
+            //$('#msg').addClass('hide');
+
+            $("#id-start-up").addClass("active");
+            $("#active-loans").addClass("active in");
+        });
+
+    </script>
+}

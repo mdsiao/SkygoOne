@@ -1,0 +1,486 @@
+﻿@model HRISOnline.Objects.GatePass
+
+@{
+    ViewBag.Title = ViewBag.MyTitle;
+}
+
+@*@section breadcrumb{
+    <div class="row">
+        <div id="breadcrumb" class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Gate Pass</a></li>
+                <li><a href="#">@ViewBag.MyTitle</a></li>
+            </ol>
+        </div>
+    </div>
+}*@
+
+@*<div class="col-sm-12">*@
+    <div class="alert text-center" id="msg"></div>
+
+    <div class="panel panel-primary">
+        @*<div class="panel-heading">
+            <h3>@ViewBag.MyTitle</h3>
+        </div>*@
+
+        @using (Html.BeginForm("Apply", "GatePass", FormMethod.Post, new { @class = "form-horizontal", @role = "form" }))
+        { 
+        <div class="panel-body">
+            @Html.HiddenFor(mdl => mdl.intOlnGatePass)
+            @Html.HiddenFor(mdl => mdl.intMstEmpPersonal)
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Date Filed</label>
+                <div class="col-sm-2">
+                    @Html.TextBoxFor(mdl => mdl.DateFiled, "{0:MM/dd/yyyy}", new { @class = "form-control", @readonly = "true", @data_date_format = "mm/dd/yyyy" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @if (Model.intOlnGatePassType == 1)
+                { 
+                    <label class="col-sm-2 control-label">OB Date</label>
+                }
+                else
+                {
+                    <label class="col-sm-2 control-label">Undertime Date</label>
+                }
+                <div class="col-sm-2">
+                    @Html.TextBoxFor(mdl => mdl.GatePassDate, "{0:MM/dd/yyyy}", new { @class = "form-control", @onkeypress = "javascript: return false;", @data_date_format = "mm/dd/yyyy" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">From</label>
+                <div class="col-sm-3">
+                    <div class="input-group bootstrap-timepicker timepicker">
+                        <i>@Html.TextBoxFor(mdl => mdl.TimeOut, new { @class = "form-control" })</i>
+                    </div>                    
+                </div>
+
+                <label class="col-sm-1 control-label">To</label>
+                 <div class="col-sm-3">
+                    <div class="input-group bootstrap-timepicker timepicker">
+                        <i>@Html.TextBoxFor(mdl => mdl.TimeIn, new { @class = "form-control" })</i>
+                    </div>
+                </div>
+                
+                <label class="col-sm-1 control-label">Duration</label>
+                <div class="col-sm-2">
+                    @Html.HiddenFor(mdl => mdl.NoOfHours, new { @class = "form-control", @required = "required", @readonly = "true" })
+                    <input type="text" id="duration" class="form-control" value="0 h 0 m" />
+                </div>
+
+                @Html.DropDownListFor(mdl => mdl.intOlnGatePassType, (SelectList)@ViewBag.gatepasstype, new { @class = "form-control" })
+            </div>
+            @*<div class="form-group">
+                <label class="col-sm-2 control-label">Time IN</label>
+                <div class="col-sm-2">
+                    <div class="bootstrap-timepicker">
+                        @Html.TextBoxFor(mdl => mdl.TimeIn, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <label class="col-sm-2 control-label">No. of hours</label>
+                <div class="col-sm-2">
+                    @Html.TextBoxFor(mdl => mdl.NoOfHours, new { @class = "form-control", @required = "required", @readonly = "true" })
+                </div>
+            </div>*@
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Reason</label>
+                <div class="col-sm-10">
+                    @Html.TextAreaFor(mdl => mdl.Remarks, new { @class = "form-control", @required = "" })
+                </div>
+            </div>
+
+            @if ((Convert.ToBoolean(Session["emp_canApplyOBHoliday"]) == true) && (Model.intOlnGatePassType == 1))
+            { 
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-2 checkbox">
+                        <label>
+                            @*<input type="checkbox" value="" />
+                            Apply for OB Holiday*@
+                            @Html.CheckBoxFor(mdl => mdl.isOBHoliday, new { @value = Model.isOBHoliday })
+                            Apply for OB Holiday
+                        </label>
+                    </div>
+
+                    <label class="col-sm-1 control-label holiday-x">Holiday</label>
+                    <div class="col-sm-5">
+                        @Html.DropDownListFor(mdl => mdl.intTrnHoliday, (SelectList)@ViewBag.holiday, new { @class = "form-control holiday-x" })
+                    </div>
+                </div>
+            }
+
+            @if (Convert.ToBoolean(ViewBag.isDisapproved) == true)
+            { 
+                <div class="form-group">
+                    <label style="color:red;" class="col-sm-2 control-label">Disapprove By</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(mdl => mdl.DisapproveByName, new { @class = "form-control" })
+                    </div>
+
+                    <label style="color:red;" class="col-sm-2 control-label">Disapprove Date</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(mdl => mdl.DisapprovedDateTime, new { @class = "form-control" })
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label style="color:red;" class="col-sm-2 control-label">Disapprove Reason</label>
+                    <div class="col-sm-10">
+                        @Html.TextAreaFor(mdl => mdl.DisapproveReason, new { @class = "form-control" })
+                    </div>
+                </div>
+            }
+        </div>
+        }
+ 
+        <div class="panel-footer">
+            @if (ViewBag.isForApproval == false)
+            {
+                if ((ViewBag.MyTitle != "Official Business Details") && (ViewBag.MyTitle != "Undertime Details"))
+                { 
+                <a class="btn btn-success btn-lg" onclick="setValConfirmation();" data-toggle="modal" data-target="#modal-confirm" href="#mdl-confirm">Submit</a>
+                }
+                if ((ViewBag.MyTitle == "Update Official Business") || (ViewBag.MyTitle == "Update Undertime") || (ViewBag.MyTitle == "Official Business Details") || (ViewBag.MyTitle == "Undertime Details"))
+                { 
+                    <button type="button" class="btn btn-warning btn-lg" onclick="GenerateReport(@Model.intOlnGatePass);">Preview form</button>
+                    <a class="btn btn-danger btn-lg" href="@Url.Content("~/GatePass/Index/")@ViewBag.id">Back to list</a>
+                }
+            }
+            else
+            {                
+                <a class="btn btn-danger btn-lg" href="@Url.Content("~/GatePass/forApproval/")@ViewBag.id">Back to list</a>
+            }
+            
+        </div>        
+    </div>
+    
+    @if (Convert.ToBoolean(ViewBag.isForApproval) == false)
+    { 
+        <div style="font-size:12px; font-style:italic;">
+            <strong class="text-danger">Approval Level:</strong><br />
+            <span class="text-danger">First Level: <strong style="color:black;">@Session["emp_firstApprover"].ToString()</strong></span>
+            @*@if (Session["emp_approvallevel"].ToString() == "2")
+            { <br /><span class="text-danger">Second Level: <strong style="color:black;">@Session["emp_secondApprover"].ToString()</strong></span> }*@
+        </div> 
+        <br />
+    }    
+    <p class="text-danger" style="font-size:11px; font-style:italic">
+        <strong>Note:</strong><br /> 
+        <strong>FROM</strong> is the time that you leave the office and <strong>TO</strong> is the time that you will be back. <br />
+        <strong>DURATION</strong> is the no. of hours and minutes that you are not in the office.
+    </p>    
+@*</div>*@
+
+@*CONFIRMATION*@
+<div class="modal fade" id="modal-confirm" role="dialog" aria-labelledby="myModalLabel-elig" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel-pwd">Confirmation</h4>
+      </div>
+      <div class="modal-body">
+          You are about to apply for <span class="gtype"></span>.
+          <br />
+          <br />
+          <h4>@Session["emp_name"]</h4>
+          <span class="gtype"></span> Date: <label id="ot_date"></label><br />
+          From: <label id="dt_start"></label><br />
+          To: <label id="dt_end"></label><br />
+          Duration: <label id="dur"></label>
+
+          <br />
+          <br />
+          Do you want to continue?
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-success btn-lg" onclick="SaveRecord();">Continue</button>
+        <button type="button" class="btn btn-danger  btn-lg" onclick=""  data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section scripts
+{
+
+    <script src="@Url.Content("~/Scripts/myScripts.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.maskedinput.js")"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+          
+            $('#TimeOut').timepicker();
+            $('#TimeIn').timepicker();
+
+
+            var nowTemp = new Date();
+            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+            var gpdate;
+
+            $('#intOlnGatePassType').hide();
+
+            $('#msg').removeClass('active');
+            $('#msg').addClass('hide');
+
+            if (parseInt('@Model.intOlnGatePass') > 0 && Boolean('@Model.isOBHoliday') == true)
+                $('.holiday-x').show();
+            else
+                $('.holiday-x').hide();
+
+            $('#isOBHoliday').on('click', function (e) {
+                var chkVal = $('#isOBHoliday').is(':checked');
+
+                if (chkVal == true)
+                    $('.holiday-x').show();
+                else
+                    $('.holiday-x').hide();
+            });
+           
+            if (('@ViewBag.MyTitle' == "Official Business Details") || ('@ViewBag.MyTitle' == "Undertime Details")) {
+                $('input[type="text"],textarea').attr('readonly', 'readonly');
+                $('select').attr('disabled', true);
+                $('#isOBHoliday').attr('disabled', true);
+
+                var durationSplit;
+                var durationH = 0;
+                var durationM = 0;
+
+                durationSplit = $('#NoOfHours').val().split('.');
+                durationH = durationSplit[0].toString();
+
+                if (typeof (durationSplit[1]) === "undefined")
+                { }
+                else {
+
+                    durationM = parseFloat(durationSplit[1].toString());
+
+                    switch (durationSplit[1]) {
+                        case "1":
+                        case "2":
+                        case "3":
+                        case "4":
+                        case "5":
+                        case "6":
+                            durationM = durationM * 10;
+                            break;
+                    }
+                }
+
+                $('#duration').val(durationH + " h " + ((durationM.toString() != "0") ? durationM.toString() + " m" : ""));
+            }
+            else {
+                //$('#TimeOut, #TimeIn').mask('99:99 aa', { placeholder: "hh:mm tt" });                
+
+                if ('@ViewBag.MyTitle' == "Apply for Undertime") {
+                    //$('#TimeIn').attr('readonly', 'readonly');
+
+                    $('#TimeOut, #TimeIn').timepicker({
+                        minuteStep: 1,
+                        showInputs: false,
+                        disableFocus: true
+                    });
+                }
+                else {
+                    $('#TimeOut, #TimeIn').timepicker({
+                        minuteStep: 1,
+                        showInputs: false,
+                        disableFocus: true
+                    });
+                }                
+
+                gpdate = $("#GatePassDate").datepicker({
+                }).on('changeDate', function (ev) {
+                    gpdate.hide();
+                }).data('datepicker');
+
+                if (('@ViewBag.MyTitle' == "Apply for Undertime") || ('@ViewBag.MyTitle' == "Apply for Official Business")) {
+                    GetShifts();
+                }
+
+                //disable week ends here
+                disableWeekends(gpdate.picker);
+
+                var _fill = gpdate.fill;
+                gpdate.fill = function () {
+                    {
+                        _fill.call(this);
+                        disableWeekends(gpdate.picker);
+                    }
+                };
+                //end disable week ends here
+
+            }
+
+
+            $("#TimeOut, #TimeIn").on('change', function (ev) {
+
+                var url = '@Url.Action("SetDates")';
+                var datax = { "gpDate": "", "TimeIn": "", "TimeOut": "" };
+                var durationSplit;
+                var durationH = 0;
+                var durationM = 0;
+
+                datax.gpDate = $('#GatePassDate').val();
+                datax.TimeOut = $("#TimeOut").val();
+                datax.TimeIn = $("#TimeIn").val();
+
+                $.get(
+                    url,
+                    datax,
+                    function (data) {
+
+                        if (data.datanum == "1") {
+                            $('#TimeOut').val(data.shift);
+                        }
+                        else if (data.datanum == "2") {
+                            $('#TimeIn').val(data.shift);
+                        }
+
+                        $('#NoOfHours').val(data.NoOfHrs);
+                        durationSplit = data.NoOfHrs.toString().split('.');
+                        durationH = durationSplit[0].toString();
+
+                        if (typeof (durationSplit[1]) === "undefined")
+                        { }
+                        else {
+
+                            durationM = parseFloat(durationSplit[1].toString());
+
+                            switch (durationSplit[1]) {
+                                case "1":
+                                case "2":
+                                case "3":
+                                case "4":
+                                case "5":
+                                case "6":
+                                    durationM = durationM * 10;
+                                    break;
+                            }
+                        }
+
+                        $('#duration').val(durationH + " h " + ((durationM.toString()!="0") ? durationM.toString() + " m" : ""));
+                    });
+            });            
+
+        });        
+
+        function setValConfirmation() {
+            $('.gtype').html($('#intOlnGatePassType option:selected').text());
+
+            $('#ot_date').html($('#GatePassDate').val());
+            $('#dt_start').html($('#TimeOut').val());
+            $('#dt_end').html($('#TimeIn').val());
+            $('#dur').html($('#duration').val());
+        }
+
+        function RedirectMe() {
+            window.location.href = "@Url.Content("~/GatePass/Index/")@ViewBag.id";
+        }
+
+        function GetShifts() {
+            var url = '@Url.Action("GetShifts")';
+            var datax = { "gpDate": "" };
+
+            datax.gpDate = $('#GatePassDate').val();
+
+            $.get(
+                url,
+                datax,
+                function (data) {                    
+                    $('#TimeOut').val(data.startOfTime);
+                    $('#TimeIn').val(data.endOfTime);
+                });
+        }
+
+        function SaveRecord()
+        {
+            if ($('#Remarks').val() == "")
+            {
+                $('#msg').addClass('active');
+                $('#msg').removeClass('hide');
+
+                $('#msg').removeClass('bg-success');
+                $('#msg').addClass('bg-danger');
+                $('#msg').html("Please enter your reason.");
+
+                $('#modal-confirm').modal('hide');
+                return;
+            }
+
+            var gatepass = {
+                "intOlnGatePass": "", "intMstEmpPersonal": "", "GatePassDate": "", "intOlnGatePassType": "",
+                "TimeOut": "", "TimeIn": "", "Remarks": "", "NoOfHours": "", "DateFiled": "",
+                "isOBHoliday": 0, "intTrnHoliday": 0
+            };
+
+            gatepass.intOlnGatePass = $('#intOlnGatePass').val();
+            gatepass.intMstEmpPersonal = $('#intMstEmpPersonal').val();
+            gatepass.GatePassDate = $('#GatePassDate').val();
+            gatepass.intOlnGatePassType = $('#intOlnGatePassType').val();
+            gatepass.TimeOut = $('#TimeOut').val();
+            gatepass.TimeIn = $('#TimeIn').val();
+            gatepass.Remarks = $('#Remarks').val();
+            gatepass.NoOfHours = $('#NoOfHours').val();
+            gatepass.DateFiled = $('#DateFiled').val();
+            gatepass.isOBHoliday = $("#isOBHoliday").is(':checked');
+
+            if (gatepass.intOlnGatePassType == 1) {
+                if (gatepass.isOBHoliday == 1) {
+                    gatepass.intTrnHoliday = $('#intTrnHoliday').val();
+
+                    if (gatepass.intTrnHoliday == 0) {
+                        $('#msg').addClass('active');
+                        $('#msg').removeClass('hide');
+
+                        $('#msg').removeClass('bg-success');
+                        $('#msg').addClass('bg-danger');
+                        $('#msg').html('Please select Holiday.');
+
+                        $('#modal-confirm').modal('hide');
+                        return;
+                    }
+                }
+            }            
+
+            //saving part
+            $.ajax({
+                url: '@Url.Action("SaveGatePass")',
+                data: JSON.stringify(gatepass),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+
+                    $('#msg').addClass('active');
+                    $('#msg').removeClass('hide');
+
+                    if (result.success == "True") {
+                        $('#msg').removeClass('bg-danger');
+                        $('#msg').addClass('bg-success');
+                        setTimeout('RedirectMe()', 2000);
+                    }
+                    else {
+                        $('#msg').removeClass('bg-success');
+                        $('#msg').addClass('bg-danger');
+                    }
+
+                    $('#msg').html(result.msg);
+                }
+            });
+
+            $('#modal-confirm').modal('hide');
+        }
+
+        function GenerateReport(id) {
+            var win = window.open("@Url.Content("~/Report/ReportPerTransaction?id=")" + id + "&reportName=rptGatePass.rpt&moduleName=Gate+Pass&reportIndex=1", "_blank");
+            win.document.title = "Employee Gate Pass";
+        }        
+    </script>    
+}

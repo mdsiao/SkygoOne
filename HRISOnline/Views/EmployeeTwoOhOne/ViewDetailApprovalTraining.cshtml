@@ -1,0 +1,85 @@
+﻿@model HRISOnline.Objects.EmpViewDetailsForApproval
+@{
+    ViewBag.Title = "ViewDetailApprovalTraining";
+}
+
+<p style="float:right;">
+         @Html.ActionLink(" Back", "EmployeeTwoOhOneforApproval", null, new { @class="btn btn-danger" })
+</p>
+<div class="panel panel-primary">
+            <div class="panel-heading">
+                Training and Semenars (Current)
+            </div>
+            <div class="panel-body">
+                 <div class="container">
+                     <div class="row">
+                       <div class="col-xs-12">                                        
+                        <div class="table-responsive" >
+                     <table class="table table-striped" style="width:1000px;">
+                         <thead>
+                             <tr>
+                               <th class="col-sm-2">Title of Training/Semenars</th>
+                               <th class="col-sm-2">Conducted By/Sponsor</th>
+                               <th class="col-sm-2">Date of Training/Semenar</th>
+                               <th class="col-sm-2">Place</th>
+                             </tr>
+                           </thead>
+                         <tbody>
+                             @foreach (var item in Model.Current_Training)
+                             {
+                                 <tr>
+                                     <td>@Html.DisplayFor(a => item.current_intMstEmpPersonal)</td>
+                                     <td>@Html.DisplayFor(a => item.current_strSponsor)</td>
+                                     <td>@Html.DisplayFor(a => item.current_strDateTraining)</td>
+                                     <td>@Html.DisplayFor(a => item.current_Place)</td>
+                                 </tr>
+                             }
+                         </tbody>
+                      </table>
+                    </div>
+                   </div>
+                   </div>
+                  </div>
+            </div>
+
+        </div>
+<br /> <br />
+
+<div class="panel panel-primary">
+            <div class="panel-heading">
+                Training and Semenars (New)
+            </div>
+            <div class="panel-body">
+                 <div class="container">
+                     <div class="row">
+                       <div class="col-xs-12">                                        
+                        <div class="table-responsive" >
+                     <table class="table table-striped" style="width:1000px;">
+                         <thead>
+                             <tr>
+                               <th class="col-sm-2">Title of Training/Semenars</th>
+                               <th class="col-sm-2">Conducted By/Sponsor</th>
+                               <th class="col-sm-2">Date of Training/Semenar</th>
+                               <th class="col-sm-2">Place</th>
+                             </tr>
+                           </thead>
+                         <tbody>
+                             @foreach (var item in Model.Train_Sem)
+                             {
+                                 <tr>
+                                     <td>@Html.DisplayFor(a => item.strTraining)</td>
+                                     <td>@Html.DisplayFor(a => item.strSponsor)</td>
+                                     <td>@Html.DisplayFor(a => item.strDateTraining)</td>
+                                     <td>@Html.DisplayFor(a => item.Place)</td>
+                                 </tr>
+                             }
+                         </tbody>
+                      </table>
+                    </div>
+                   </div>
+                   </div>
+                  </div>
+            </div>
+
+        </div>
+

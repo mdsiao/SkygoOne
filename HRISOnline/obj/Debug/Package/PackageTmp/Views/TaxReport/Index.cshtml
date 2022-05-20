@@ -1,0 +1,74 @@
+﻿@model IEnumerable<HRISOnline.Objects.EmployeeReports>
+
+@{
+    ViewBag.Title = ViewBag.MyTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .badge {
+  padding: 1px 9px 2px;
+  font-size: 12.025px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: #ffffff;
+  background-color: #999999;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 9px;
+}
+    .badge:hover {
+  color: #ffffff;
+  text-decoration: none;
+  cursor: pointer;
+}
+    .badge-error {
+  background-color: #b94a48;
+}
+
+    .badge-warning {
+  background-color: #f0ad4e;
+}
+
+    .chat-body .header {
+        cursor: pointer;
+    }
+</style>
+
+@section scripts{
+    <script src="@Url.Content("~/Scripts/TaxReport.js")"></script>
+}
+
+@*<div class="col-lg-12">
+    <h2 class="page-header">Tax Refund/Payable Report</h2>
+</div>*@
+
+<div style="margin-top:20px;">
+    <table class="table table-heading table-bordered table-hover" id="tblReports">
+        <thead>
+            <tr>
+                <th style="display:none">tblName</th>
+                <th style="display:none">tblID</th>
+                <th class="col-sm-2" style="text-align:center">Date Filed</th>
+                <th class="col-sm-3">Report Name</th>
+                <th>Remarks</th>
+                <th class="col-sm-1" style="text-align:center">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td style="display:none">@Html.DisplayFor(i => item.tblName)</td>
+                    <td style="display:none">@Html.DisplayFor(i => item.tblID)</td>
+                    <td class="col-sm-2" style="text-align:center">@Html.DisplayFor(i => item.DateFiled)</td>
+                    <td class="col-sm-3">@Html.DisplayFor(i => item.ReportName)</td>
+                    <td>@Html.DisplayFor(i => item.Remarks)</td>
+                    <td class="col-sm-1" style="text-align:center">
+                        <a onclick="GenerateReport('@item.tblName.ToString()~@item.tblID.ToString()~@item.strParameter','@item.ReportName')" href="javascript:void(0);">View</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

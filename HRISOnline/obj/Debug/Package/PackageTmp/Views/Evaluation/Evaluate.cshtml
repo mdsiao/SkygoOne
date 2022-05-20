@@ -1,0 +1,415 @@
+﻿@model HRISOnline.Objects.EvaluationData
+
+@{
+    ViewBag.Title = ViewBag.MyTitle;
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div id="breadcrumb" class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Evaluation</a></li>
+                <li><a href="#">Employees</a></li>
+                <li><a href="#">@ViewBag.MyTitle</a></li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="col-sm-12">
+    <div class="alert text-center" id="msg"></div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3>Employee's Appraisal</h3>
+        </div>
+        
+        @Html.HiddenFor(model => model.Eval.intOlnEvaluation)
+        @Html.HiddenFor(model => model.Eval.intMstEmpPersonal)
+        @Html.HiddenFor(model => model.Eval.EvaluationDate)
+
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <div class="col-xs-10">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Employee</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" value="@Model.EmpPersonal.LastName, @Model.EmpPersonal.FirstName"  onkeypress="javascript: return false;" />
+                        </div>
+                        <label class="control-label col-sm-2">Location/Branch</label>
+                        <div class="col-sm-4">                        
+                            @Html.DropDownListFor(model => model.EmpDTR.codeMstBranch, (SelectList)@ViewBag.branches, new { @class = "form-control", @disabled="" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Position</label>
+                        <div class="col-sm-3">
+                            @Html.DropDownListFor(model => model.EmpDTR.intMstPosition, (SelectList)@ViewBag.positions, new { @class = "form-control", @disabled="" })
+                        </div>
+                        <label class="control-label col-sm-2">Period Covered</label>                        
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" id="periodfrom" onkeypress="javascript: return false;"  />                                                        
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" value="" id="periodto" onkeypress="javascript: return false;" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Date Hired</label>
+                        <div class="col-sm-3">                            
+                            @Html.TextBoxFor(model => model.EmpDTR.DateHired, "{0:MM/dd/yyyy}", new { @class = "form-control",  @onkeypress="javascript: return false;" })
+                        </div>
+                        <label class="control-label col-sm-2">Date of Effectivity</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="effectivitydate" class="form-control" value="@DateTime.Now.ToShortDateString()" onkeypress="javascript: return false;" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Department</label>
+                        <div class="col-sm-3">
+                            @Html.DropDownListFor(model => model.EmpDTR.intMstDepartment, (SelectList)@ViewBag.depts, new { @class = "form-control", @disabled="" })
+                        </div>
+                        <label class="control-label col-sm-2">Last Evaluation</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" value="" onkeypress="javascript: return false;" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="form-group text-center">
+                        <label class="control-label">CONVERSION RATING</label>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="control-label">A = 1</label><br />
+                        <label class="control-label">B = 2</label><br />
+                        <label class="control-label">C = 3</label><br />
+                        <label class="control-label">D = 4</label><br />
+                        <label class="control-label">E = 5</label>                    
+                    </div>
+                </div>
+
+                <div class="col-xs-12">
+                <table class="table table-heading table-bordered" id="eval-table">
+                    <thead>
+                        <tr>
+                            <th>intOlnEvaluationDetail</th>
+                            <th>intOlnEvaluation</th>
+                            <th>PerformanceID</th>
+                            <th class="text-center col-sm-4">PERFORMANCE FACTORS</th>
+                            <th class="text-center">PERFORMANCE RATING(Description)</th>
+                            <th class="text-center" style="width:50px;">SCORE</th>
+                            <th class="text-center col-sm-2">COMMENTS & OBSERVATION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Performance)
+                        { 
+                            <tr>
+                                <td>@item.intOlnEvaluationDetail</td>
+                                <td>@item.intOlnEvaluation</td>
+                                <td>@item.intMstPerformance</td>
+                                <td>
+                                    <strong>@item.PerformanceName</strong><br />
+                                    @item.Description
+                                </td>
+                                <td>
+                                    @foreach (var sub in Model.PerformanceDetail)
+                                    {
+                                        if (item.intMstPerformance == sub.intMstPerformance) 
+                                        { 
+                                            @ViewBag.arr[sub.OrderNo - 1]@:.)&nbsp
+                                            @sub.PerformanceDescription
+                                            <br />
+                                        }                                        
+                                    }
+                                </td>
+                                <td>
+                                    <input type="text" class="text-center" id="@item.intMstPerformance" onchange="ComputeFinalScore();" />
+                                </td>
+                                <td>
+                                    <textarea class="form-control" id="comments-@item.intMstPerformance"></textarea>
+                                </td>
+                            </tr>                        
+                        }
+                    </tbody>                    
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right"><strong>FINAL SCORE</strong></td>
+                            <td>
+                                <input type="text" class="text-center" id="final-score" />
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                </div>
+
+                <div class="col-xs-4">
+                    <div class="form-group">
+                        <label class="col-sm-8 control-label">RATER RECOMMENDATION</label>                    
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="isWithMeritIncrease" />
+                                    With merit increase
+                                    <i class="fa fa-square-o small"></i>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="isWithoutMeritIncrease" />
+                                    Without merit increase
+                                    <i class="fa fa-square-o small"></i>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="transfer" onclick="checkTransfer(this);" />
+                                    Transfer/Promote to
+                                    <i class="fa fa-square-o small"></i>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-5 hide transferDestination">
+                            <select class="form-control" id="option-select">
+                                <option value="" selected="selected">- - - select - - -</option>
+                                <option value="Position">Position</option>
+                                <option value="Department">Department</option>
+                                <option value="Branch">Branch</option>
+                            </select>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-8">             
+                    <div class="form-group"></div>                    
+                    <div class="form-group">
+                        <label class="control-label" style="margin-left:15px;">General Observation and Comments</label>
+                        <div class="col-sm-12">
+                            <textarea class="form-control" id="Comments"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group hide transferDestination" style="margin-top:-12px;">
+                        <div class="col-sm-6">
+                            <select class="form-control" id="option-data">                                                                
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="panel-footer">
+            <button type="button" class="btn btn-primary btn-lg" onclick="SaveRecord();">Submit</button>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+<script type="text/javascript">
+    var arr;
+    $(document).ready(function () {
+        table = $("#eval-table").dataTable({
+            "columnDefs": [{
+                "targets": [0, 1, 2],
+                "visible": false
+            }],
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bSort": false,
+            "bInfo": false
+        });
+
+        $('#msg').removeClass('active');
+        $('#msg').addClass('hide');
+
+        var effdate = $('#effectivitydate').datepicker({
+        }).on('changeDate', function (eve) {
+            effdate.hide();
+        }).data('datepicker');
+
+        $('#periodfrom, #periodto').datepicker({
+            'minViewMode': 'months',
+            'format': 'MM, yyyy'
+        });
+
+        var pFrom = $('#periodfrom').datepicker({            
+        }).on('changeDate', function (eve) {
+            pFrom.hide();
+            $('#periodto')[0].focus();
+        }).data('datepicker');
+
+        var pTo = $('#periodto').datepicker({
+        }).on('changeDate', function (eve) {
+            pTo.hide();            
+        }).data('datepicker');
+        
+        $('#option-select').change(function () {
+            var $dropdown = $(this);            
+            var url = "@Url.Action("GetTransferData")";
+            url += '?strValue=' + $('#option-select').val();
+
+            var a = document.getElementById('option-select').selectedIndex;
+            $('#option-data').html("");
+
+            if (a > 0)
+            {                
+                $.getJSON(url, function (data) {
+
+                    arr = JSON.parse(data.obj);
+                    $('#option-data').html("");
+
+                    var x = 0;
+                    for (x = 0; x < arr.length; x++) {
+                        $('#option-data').append("<option value=" + arr[x]['ValueMember'] + ">" + arr[x]['DisplayMember'] + "</option>");
+                    }
+                });
+            }            
+        });
+
+
+
+    });
+
+    function checkTransfer(val)
+    {
+        var valCheck = $(val).is(':checked');
+        $('#option-data').html("");
+        $("#option-select").prop('selectedIndex', 0);
+
+
+        if (valCheck == true) {
+            $('.transferDestination').removeClass('hide');
+            $('.transferDestination').addClass('show');
+        }
+        else {
+            $('.transferDestination').removeClass('show');
+            $('.transferDestination').addClass('hide');
+        }
+    }
+
+    function ComputeFinalScore()
+    {
+        var oTable = $('#eval-table').dataTable().fnGetData();
+        var runningTotal = 0;        
+
+        for (var i = 1; i <= oTable.length; i++)
+        {
+            var val = $('#' + i).val();
+            if (val == "")
+            {
+                val = 0;
+            }
+            if (val > 5)
+            {                
+                alert("Please enter a value below 5.");
+                $('#' + i).val("");
+                val = 0;
+            }
+            runningTotal += parseInt(val);
+        }        
+
+        $('#final-score').val(runningTotal);
+    }
+
+    function RedirectMe() {
+        window.location.href = "@Url.Content("~/Evaluation/List")";
+    }
+
+    function SaveRecord()
+    {
+        var evalheader = {
+            "intOlnEvaluation": "", "EvaluationDate": "", "EvaluateBy": "", "intMstEmpPersonal": "",
+            "PeriodCoveredFrom": "", "PeriodCoveredTo": "", "EffectivityDate": "", "FinalScore": "",
+            "isWithMeritIncrease": "", "isWithoutMeritIncrease": "", "isTransfer": "", "TransferOption": "",
+            "TransferTo": "", "Comments": "", "Details": []
+        };
+
+        var evaldetails = {
+            "intOlnEvaluationDetail": "", "intOlnEvaluation": "", "intMstPerformance": "", "Score": "",
+            "Comments": ""
+        };
+
+        evalheader.intOlnEvaluation = $('#Eval_intOlnEvaluation').val();
+        evalheader.EvaluationDate = $('#Eval_EvaluationDate').val();
+        evalheader.intMstEmpPersonal = $('#Eval_intMstEmpPersonal').val();
+        evalheader.PeriodCoveredFrom = $('#periodfrom').val();
+        evalheader.PeriodCoveredTo = $('#periodto').val();
+        evalheader.EffectivityDate = $('#effectivitydate').val();
+        evalheader.FinalScore = $('#final-score').val();
+        evalheader.isWithMeritIncrease = ($('#isWithMeritIncrease').prop('checked') == true) ? 1 : 0;
+        evalheader.isWithoutMeritIncrease = ($('#isWithoutMeritIncrease').prop('checked') == true) ? 1 : 0;
+        evalheader.isTransfer = ($('#transfer').prop('checked') == true) ? 1 : 0;
+        evalheader.TransferOption = $('#option-select').val();
+        evalheader.TransferTo = $('#option-data').val();
+        evalheader.Comments = $('#Comments').val();
+
+        var oTable = $('#eval-table').dataTable().fnGetData();
+
+        var x = 1;
+        for (var i = 0; i < oTable.length; i++)
+        {
+
+            evaldetails.intOlnEvaluationDetail = oTable[i][0];
+            evaldetails.intOlnEvaluation = evalheader.intOlnEvaluation;
+            evaldetails.intMstPerformance = oTable[i][2];
+            evaldetails.Score = ($('#' + x).val() == "") ? 0 : parseInt($('#' + x).val());
+            evaldetails.Comments = $('#comments-'+x).val();
+
+
+            evalheader.Details.push(evaldetails);
+            x += 1;
+            evaldetails = {
+                "intOlnEvaluationDetail": "", "intOlnEvaluation": "", "intMstPerformance": "", "Score": "",
+                "Comments": ""
+            };
+        }
+
+        //saving part
+        $.ajax({
+            url: '@Url.Action("SaveEvaluation")',
+                    data: JSON.stringify(evalheader),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (result) {
+
+                        $('#msg').addClass('active');
+                        $('#msg').removeClass('hide');
+
+                        if (result.success == "True") {
+                            $('#msg').removeClass('bg-danger');
+                            $('#msg').addClass('bg-success');
+                            setTimeout('RedirectMe()', 2000);
+                        }
+                        else {
+                            $('#msg').removeClass('bg-success');
+                            $('#msg').addClass('bg-danger');
+                        }
+
+                        $('#msg').html(result.msg);
+                    }
+                });
+
+    }
+</script>        
+}
