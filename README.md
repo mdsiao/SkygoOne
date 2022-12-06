@@ -8,13 +8,16 @@ Skygo One also serves as a login portal for other systems such as frontline,Dash
 
 * How to build and test some users without using the right password
   - Under the UserController Locate the name Login.
-
+ 
   ![2](https://user-images.githubusercontent.com/79490023/205826258-8da424c4-d3fb-46f2-8bd2-203128670e37.jpg)
+  
   ![1](https://user-images.githubusercontent.com/79490023/205826280-253da4c6-1261-4242-a8f8-24216aca8053.jpg)
   
   - uncomment this part starting if you see a comment message "COMMENT THIS WHEN YOU'RE GOING TO DEPLOY TO LIVE" all the way below until you see the comment message 
     "END COMMENT THIS WHEN YOU'RE GOING TO DEPLOY TO LIVE"    
     
+   ![3](https://user-images.githubusercontent.com/79490023/205859158-3595a5f8-cc6d-452f-a201-683042be84ac.jpg)
+   
    ![4](https://user-images.githubusercontent.com/79490023/205838212-acd9778b-6288-444e-bed2-df299896af86.jpg)
 
     
